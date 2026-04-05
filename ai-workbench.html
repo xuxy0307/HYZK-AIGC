@@ -27,10 +27,11 @@
             --gradient: linear-gradient(135deg, #3b3f9b 0%, #6366f1 50%, #8b5cf6 100%);
             --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.05);
             --hover-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.12);
+            --text-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(145deg, #fefefe 0%, #f1f5f9 100%);
             color: var(--dark);
             line-height: 1.5;
@@ -44,6 +45,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
 
         .header-content {
@@ -67,6 +69,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
         }
 
         .logo-icon {
@@ -79,6 +82,7 @@
             justify-content: center;
             color: white;
             font-size: 1.3rem;
+            box-shadow: 0 6px 12px -6px rgba(59,63,155,0.3);
         }
 
         .nav-tabs {
@@ -98,16 +102,55 @@
             font-size: 0.9rem;
             cursor: pointer;
             border-radius: 40px;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
+        .nav-tab:hover {
+            background: rgba(59,63,155,0.08);
+            color: var(--primary-dark);
+        }
+
         .nav-tab.active {
             background: var(--gradient);
             color: white;
-            box-shadow: 0 4px 8px rgba(59, 63, 155, 0.25);
+            box-shadow: 0 4px 8px rgba(59,63,155,0.25);
+        }
+
+        .api-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .api-status.error {
+            color: var(--danger);
+        }
+
+        .api-status .pulse-dot {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 currentColor;
+            }
+            70% {
+                box-shadow: 0 0 0 10px transparent;
+            }
+            100% {
+                box-shadow: 0 0 0 0 transparent;
+            }
         }
 
         .container {
@@ -126,15 +169,8 @@
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .card {
@@ -159,6 +195,7 @@
             align-items: center;
             gap: 0.7rem;
             color: var(--dark);
+            letter-spacing: -0.2px;
         }
 
         .card-title::before {
@@ -181,9 +218,12 @@
             font-size: 0.85rem;
         }
 
-        input,
-        select,
-        textarea {
+        .required::after {
+            content: ' *';
+            color: var(--danger);
+        }
+
+        input, select, textarea {
             width: 100%;
             padding: 0.8rem 1rem;
             border: 1.5px solid var(--border-light);
@@ -194,12 +234,15 @@
             font-family: inherit;
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
         }
 
         .btn-group {
@@ -215,7 +258,7 @@
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
@@ -226,18 +269,23 @@
         .btn-primary {
             background: var(--gradient);
             color: white;
-            box-shadow: 0 4px 10px rgba(59, 63, 155, 0.25);
+            box-shadow: 0 4px 10px rgba(59,63,155,0.25);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 20px -8px rgba(59, 63, 155, 0.4);
+            box-shadow: 0 12px 20px -8px rgba(59,63,155,0.4);
         }
 
         .btn-secondary {
             background: var(--light-gray);
             color: var(--dark);
             border: 1px solid var(--border-light);
+        }
+
+        .btn-secondary:hover {
+            background: #eef2ff;
+            transform: translateY(-1px);
         }
 
         .btn-success {
@@ -247,6 +295,11 @@
 
         .btn-danger {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
         }
 
@@ -264,12 +317,21 @@
             transition: all 0.25s;
             position: relative;
             background: var(--white);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .model-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px -12px rgba(0,0,0,0.15);
         }
 
         .model-card.selected {
             border-color: var(--primary);
-            background: rgba(59, 63, 155, 0.02);
-            box-shadow: 0 6px 14px rgba(59, 63, 155, 0.12);
+            background: rgba(59,63,155,0.02);
+            box-shadow: 0 6px 14px rgba(59,63,155,0.12);
         }
 
         .model-card.selected::after {
@@ -286,6 +348,36 @@
             align-items: center;
             justify-content: center;
             font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .model-provider {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .model-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .model-channel {
+            font-size: 0.7rem;
+            color: var(--primary);
+            background: rgba(59,63,155,0.1);
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            width: fit-content;
+        }
+
+        .model-desc {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
         }
 
         .model-tags {
@@ -301,6 +393,12 @@
             padding: 4px 12px;
             font-size: 0.75rem;
             color: var(--gray);
+            font-weight: 500;
+        }
+
+        .model-card.selected .model-tag {
+            background: rgba(59,63,155,0.1);
+            color: var(--primary-dark);
         }
 
         .stats-bar {
@@ -316,6 +414,7 @@
             border-radius: 28px;
             text-align: center;
             border: 1px solid var(--border-light);
+            box-shadow: var(--card-shadow);
         }
 
         .stat-value {
@@ -327,11 +426,66 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
         .task-table-container {
             overflow-x: auto;
             border-radius: 24px;
             border: 1px solid var(--border-light);
             background: var(--white);
+        }
+
+        .result-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .result-item-card {
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 1rem;
+            background: var(--white);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .result-item-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .result-item-card img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+        }
+
+        .result-item-card video {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+        }
+
+        .result-item-info {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 0.8rem;
+        }
+
+        .result-item-info p {
+            margin: 0.25rem 0;
+        }
+
+        .result-item-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .task-table {
@@ -345,12 +499,19 @@
             padding: 1rem;
             text-align: left;
             font-weight: 600;
+            color: var(--gray);
             border-bottom: 2px solid var(--border-light);
+            white-space: nowrap;
         }
 
         .task-table td {
             padding: 1rem;
             border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        .task-table tr:hover td {
+            background: rgba(59,63,155,0.02);
         }
 
         .status-badge {
@@ -363,87 +524,26 @@
             gap: 0.4rem;
         }
 
-        .status-pending {
-            background: #f1f5f9;
-            color: #64748b;
-        }
-
-        .status-running {
-            background: #dbeafe;
-            color: #2563eb;
-        }
-
-        .status-processing {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .status-completed {
-            background: #d1fae5;
-            color: #059669;
-        }
-
-        .status-failed {
-            background: #fee2e2;
-            color: #dc2626;
-        }
+        .status-pending { background: #f1f5f9; color: #64748b; }
+        .status-running { background: #dbeafe; color: #2563eb; }
+        .status-processing { background: #fef3c7; color: #d97706; }
+        .status-completed { background: #d1fae5; color: #059669; }
+        .status-failed { background: #fee2e2; color: #dc2626; }
+        .status-stopped { background: #f3f4f6; color: #6b7280; }
 
         .progress-bar {
             background: #e2e8f0;
             border-radius: 10px;
             height: 6px;
-            width: 100px;
             overflow: hidden;
+            width: 100px;
         }
 
         .progress-fill {
             height: 100%;
             background: var(--gradient);
             border-radius: 10px;
-            transition: width 0.3s;
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .result-card {
-            background: var(--white);
-            border-radius: 24px;
-            border: 1px solid var(--border-light);
-            padding: 1rem;
-        }
-
-        .result-preview {
-            max-height: 180px;
-            object-fit: cover;
-            width: 100%;
-            border-radius: 16px;
-            background: #f1f5f9;
-        }
-
-        .upload-area {
-            border: 2px dashed #cbd5e1;
-            border-radius: 16px;
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: var(--white);
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: rgba(59, 63, 155, 0.02);
-        }
-
-        .image-preview {
-            max-width: 100%;
-            max-height: 150px;
-            border-radius: 12px;
-            margin-top: 0.5rem;
+            transition: width 0.3s ease;
         }
 
         .toast {
@@ -454,93 +554,53 @@
             color: white;
             padding: 0.9rem 1.5rem;
             border-radius: 60px;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
             display: none;
             align-items: center;
             gap: 0.7rem;
             z-index: 2000;
+            font-weight: 500;
+            backdrop-filter: blur(8px);
             animation: slideIn 0.3s ease;
         }
 
-        .api-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 0.3rem 0.8rem;
-            background: #f1f5f9;
-            border-radius: 40px;
-        }
-
-        .api-status.online::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #10b981;
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
-        }
-
-        .api-status.offline::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #ef4444;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            align-items: center;
-            justify-content: center;
-            z-index: 1100;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 32px;
-            max-width: 90vw;
-            max-height: 90vh;
-            overflow: auto;
-            padding: 2rem;
-            width: 100%;
-            max-width: 700px;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width:720px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .nav-tab span:first-child {
-                display: none;
-            }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         .flex-row {
             display: flex;
             gap: 0.8rem;
-            align-items: center;
             flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .settings-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            gap: 1.2rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-wrapper label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
         }
 
         .experience-section {
@@ -561,7 +621,187 @@
             border: 2px solid var(--border-light);
             border-radius: 24px;
             padding: 1.5rem;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+        }
+
+        .experience-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .experience-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .experience-desc {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--white);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(59,63,155,0.02);
+        }
+
+        .upload-area.has-file {
+            border-color: var(--success);
+            background: rgba(16,185,129,0.05);
+        }
+
+        .upload-hint {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 12px;
+            margin-top: 0.5rem;
+        }
+
+        .config-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #f1f5f9;
+            color: var(--gray);
+        }
+
+        .config-status.saved {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .config-status.unsaved {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .inline-help {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 32px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: auto;
+            padding: 2rem;
+            width: 100%;
+            max-width: 700px;
+            animation: modalIn 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 720px) {
+            .container { padding: 1rem; }
+            .nav-tab span:first-child { display: none; }
+            .nav-tab { padding: 0.5rem 1rem; }
+            .experience-grid { grid-template-columns: 1fr; }
+            .model-grid { grid-template-columns: 1fr; }
+            .result-card-grid { grid-template-columns: 1fr; }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
         }
 
         .btn-small {
@@ -569,1216 +809,485 @@
             font-size: 0.8rem;
         }
 
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(59,63,155,0.1);
+            color: var(--primary);
+        }
+
         .error-text {
             color: var(--danger);
             font-size: 0.8rem;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .error-text:hover {
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        .contact-info {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .contact-info p {
+            font-size: 1.1rem;
+            margin: 1rem 0;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .contact-info .label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .debug-info {
+            background: #f1f5f9;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+            font-family: monospace;
+        }
+
+        .channel-config {
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .channel-config h4 {
+            margin: 0;
+        }
+
+        .result-checkbox {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            z-index: 5;
         }
     </style>
 </head>
-
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">🦅</div>
-                <span>华阳智瞰-多模态AI工作台</span>
-            </div>
-            <nav class="nav-tabs">
-                <button class="nav-tab active" onclick="switchTab('text',this)"><span>📝</span>文本</button>
-                <button class="nav-tab" onclick="switchTab('image',this)"><span>🎨</span>图像</button>
-                <button class="nav-tab" onclick="switchTab('video',this)"><span>🎬</span>视频</button>
-                <button class="nav-tab" onclick="switchTab('tasks',this)"><span>📋</span>任务队列</button>
-                <button class="nav-tab" onclick="switchTab('results',this)"><span>🏛️</span>结果库</button>
-                <button class="nav-tab" onclick="switchTab('settings',this)"><span>⚙️</span>设置</button>
-            </nav>
-            <div class="api-status offline" id="apiStatus">⚡ 未连接</div>
+<header class="header">
+    <div class="header-content">
+        <div class="logo">
+            <div class="logo-icon">🦅</div>
+            <span>华阳智瞰-多模态AI工作台</span>
         </div>
-    </header>
-    <main class="container">
-        <!-- 文本模块 -->
-        <div id="text" class="tab-content active">
-            <div class="card">
-                <div class="card-title">选择文本模型</div>
-                <div class="model-grid" id="textModelGrid"></div>
-            </div>
-            <div class="card">
-                <div class="card-title">生成参数</div>
-                <div id="textParams"></div>
-                <div class="form-group">
-                    <label class="required">提示词</label>
-                    <textarea id="textPrompt" placeholder="输入您的问题或任务描述..."></textarea>
-                </div>
-                <div class="form-group" id="textImageUploadGroup">
-                    <label>参考图片 (仅视觉模型支持)</label>
-                    <div class="upload-area" onclick="document.getElementById('textImageInput').click()" id="textUploadArea">
-                        <div>📤 点击上传图片</div>
-                        <div class="upload-hint">支持 JPG、PNG，自动Base64</div>
-                        <input type="file" id="textImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event,'textImageUrl','textImagePreview','textUploadArea')">
-                    </div>
-                    <input type="hidden" id="textImageUrl">
-                    <div id="textImagePreview"></div>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="addTextTask()">➕ 添加到任务队列</button>
-                    <button class="btn btn-success" onclick="generateTextImmediate()">⚡ 立即生成</button>
-                    <button class="btn btn-secondary" onclick="resetTextForm()">🔄 重置</button>
-                </div>
-            </div>
-            <div class="card experience-section">
-                <div class="card-title">快速体验</div>
-                <div class="experience-grid">
-                    <div class="experience-card">
-                        <div class="experience-title">🔍 图片风格反推</div>
-                        <div class="experience-desc">上传图片，AI分析并以JSON返回结构化信息</div>
-                        <div class="upload-area" onclick="document.getElementById('reverseImageInput').click()" id="reverseUploadArea">
-                            <div>📤 点击上传要分析的图片</div>
-                            <input type="file" id="reverseImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event,'reverseImageUrl','reversePreview','reverseUploadArea')">
-                        </div>
-                        <input type="hidden" id="reverseImageUrl">
-                        <div id="reversePreview"></div>
-                        <button class="btn btn-primary" onclick="startReverseAnalysis()" id="reverseBtn">🔍 开始分析</button>
-                        <div id="reverseResult" style="display:none; margin-top:1rem; background:#f8fafc; padding:1rem; border-radius:16px;">
-                            <pre id="reverseResultContent" style="white-space:pre-wrap"></pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 图像模块 -->
-        <div id="image" class="tab-content">
-            <div class="card">
-                <div class="card-title">选择图像模型</div>
-                <div class="model-grid" id="imageModelGrid"></div>
-            </div>
-            <div class="card">
-                <div class="card-title">生成参数</div>
-                <div id="imageParams"></div>
-                <div class="form-group">
-                    <label class="required">提示词</label>
-                    <textarea id="imagePrompt" placeholder="描述您想要生成的图像..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>参考图片</label>
-                    <div class="upload-area" onclick="document.getElementById('imageRefInput').click()" id="imageRefUploadArea">
-                        <div>📤 点击上传参考图</div>
-                        <input type="file" id="imageRefInput" accept="image/*" style="display:none" onchange="handleFileUpload(event,'imageRefUrl','imageRefPreview','imageRefUploadArea')">
-                    </div>
-                    <input type="hidden" id="imageRefUrl">
-                    <div id="imageRefPreview"></div>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="addImageTask()">➕ 添加到任务队列</button>
-                    <button class="btn btn-success" onclick="generateImageImmediate()">⚡ 立即生成</button>
-                    <button class="btn btn-secondary" onclick="resetImageForm()">🔄 重置</button>
-                </div>
-            </div>
-            <div class="card experience-section">
-                <div class="card-title">快速体验</div>
-                <div class="experience-grid">
-                    <div class="experience-card">
-                        <div class="experience-title">👗 一键换衣</div>
-                        <div class="experience-desc">将产品白底图中的产品替换到模特图中</div>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem">
-                            <div>
-                                <label>模特图</label>
-                                <div class="upload-area" onclick="document.getElementById('modelImageInput').click()" id="modelUploadArea">
-                                    <small>📤 上传模特图</small>
-                                    <input type="file" id="modelImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event,'modelImageUrl','modelPreview','modelUploadArea')">
-                                </div>
-                                <input type="hidden" id="modelImageUrl">
-                                <div id="modelPreview"></div>
-                            </div>
-                            <div>
-                                <label>产品白底图</label>
-                                <div class="upload-area" onclick="document.getElementById('productImageInput').click()" id="productUploadArea">
-                                    <small>📤 上传产品图</small>
-                                    <input type="file" id="productImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event,'productImageUrl','productPreview','productUploadArea')">
-                                </div>
-                                <input type="hidden" id="productImageUrl">
-                                <div id="productPreview"></div>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" onclick="startClothingSwap()" id="swapBtn">👗 开始换衣</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 视频模块 -->
-        <div id="video" class="tab-content">
-            <div class="card">
-                <div class="card-title">选择视频模型</div>
-                <div class="model-grid" id="videoModelGrid"></div>
-            </div>
-            <div class="card">
-                <div class="card-title">生成参数</div>
-                <div id="videoParams"></div>
-                <div class="form-group">
-                    <label class="required">提示词</label>
-                    <textarea id="videoPrompt" placeholder="描述您想要生成的视频内容..."></textarea>
-                </div>
-                <div class="form-group" id="videoRefGroup">
-                    <label>参考图片 (图生视频)</label>
-                    <div class="upload-area" onclick="document.getElementById('videoImageInput').click()" id="videoUploadArea">
-                        <small>📤 点击上传图片</small>
-                        <input type="file" id="videoImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event,'videoRefUrl','videoImagePreview','videoUploadArea')">
-                    </div>
-                    <input type="hidden" id="videoRefUrl">
-                    <div id="videoImagePreview"></div>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="addVideoTask()">➕ 添加到任务队列</button>
-                    <button class="btn btn-success" onclick="generateVideoImmediate()">⚡ 立即生成</button>
-                    <button class="btn btn-secondary" onclick="resetVideoForm()">🔄 重置</button>
-                </div>
-            </div>
-            <div class="card experience-section">
-                <div class="card-title">快速体验</div>
-                <div class="experience-grid">
-                    <div class="experience-card">
-                        <div class="experience-title">🎬 服饰展示视频</div>
-                        <div class="experience-desc">根据模特图生成小红书风格服饰展示视频</div>
-                        <div class="form-group">
-                            <label>模特图</label>
-                            <div class="upload-area" onclick="document.getElementById('fashionModelInput').click()" id="fashionUploadArea">
-                                <small>📤 点击上传模特图</small>
-                                <input type="file" id="fashionModelInput" accept="image/*" style="display:none" onchange="handleFileUpload(event,'fashionModelUrl','fashionPreview','fashionUploadArea')">
-                            </div>
-                            <input type="hidden" id="fashionModelUrl">
-                            <div id="fashionPreview"></div>
-                        </div>
-                        <button class="btn btn-primary" onclick="startFashionVideo()" id="fashionBtn">🎬 生成展示视频</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 任务队列 -->
-        <div id="tasks" class="tab-content">
-            <div class="stats-bar">
-                <div class="stat-box">
-                    <div class="stat-value" id="statTotal">0</div>
-                    <div class="stat-label">总任务</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="statPending">0</div>
-                    <div class="stat-label">待执行</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="statRunning">0</div>
-                    <div class="stat-label">执行中</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-value" id="statCompleted">0</div>
-                    <div class="stat-label">已完成</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="btn-group">
-                    <button class="btn btn-success" onclick="startAllTasks()">▶️ 开始全部</button>
-                    <button class="btn btn-primary" onclick="startSelectedTasks()">▶️ 开始选中</button>
-                    <button class="btn btn-danger" onclick="stopAllTasks()">⏹️ 停止全部</button>
-                    <button class="btn btn-danger" onclick="clearCompletedTasks()">🗑️ 清除已完成</button>
-                    <button class="btn btn-secondary" onclick="exportTasks()">📤 导出</button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 导入</button>
-                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importTasks(event)">
-                </div>
-                <div class="task-table-container">
-                    <table class="task-table">
-                        <thead>
-                            <tr>
-                                <th width="40"><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
-                                <th>类型</th>
-                                <th>模型</th>
-                                <th>提示词</th>
-                                <th>状态</th>
-                                <th>说明</th>
-                                <th>进度</th>
-                                <th>时间</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="taskTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <!-- 结果库 -->
-        <div id="results" class="tab-content">
-            <div class="card">
-                <div class="card-title">生成结果库</div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="downloadAllResults()">📦 批量下载所有结果</button>
-                    <button class="btn btn-secondary" onclick="clearAllResults()">🗑️ 清空结果库</button>
-                </div>
-                <div id="resultsContainer" class="results-grid"></div>
-            </div>
-        </div>
-        <!-- 设置模块：三渠道配置 -->
-        <div id="settings" class="tab-content">
-            <div class="card">
-                <div class="card-title">API 渠道配置</div>
-                <div id="channelsConfig"></div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="saveAllChannelSettings()">💾 保存所有渠道</button>
-                    <button class="btn btn-secondary" onclick="clearAllChannelSettings()">🗑️ 清空所有</button>
-                </div>
-                <div class="inline-help" style="margin-top:1rem">💡 渠道1/3使用APIMart，渠道2使用火山引擎（测试会发送最小请求验证）</div>
-            </div>
-            <div class="card">
-                <div class="card-title">关于华阳智瞰</div>
-                <p style="color:var(--gray);">“华阳”代表正统与生机，以智瞰远。我们不空谈AI概念，只聚焦真实可落地的AI解决方案。</p>
-                <div class="flex-row" style="margin-top:1rem">
-                    <a href="#" class="btn btn-primary">🌍 官网</a>
-                    <a href="#" class="btn btn-secondary">📘 实战攻略</a>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-title">联系开发</div>
-                <button class="btn btn-primary" onclick="showContactModal()">📧 联系开发</button>
-            </div>
-        </div>
-    </main>
-    <div id="toast" class="toast"><span id="toastIcon">✓</span><span id="toastMessage"></span></div>
-    <div id="modal" class="modal" onclick="if(event.target===this)closeModal()">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal()">×</button>
-            <div id="modalBody"></div>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('text', this)"><span>📝</span> 文本</button>
+            <button class="nav-tab" onclick="switchTab('image', this)"><span>🎨</span> 图像</button>
+            <button class="nav-tab" onclick="switchTab('video', this)"><span>🎬</span> 视频</button>
+            <button class="nav-tab" onclick="switchTab('tasks', this)"><span>📋</span> 任务队列</button>
+            <button class="nav-tab" onclick="switchTab('results', this)"><span>🗄️</span> 结果库</button>
+            <button class="nav-tab" onclick="switchTab('settings', this)"><span>⚙️</span> 设置</button>
+        </nav>
+        <div class="api-status" id="apiStatus">
+            <span class="pulse-dot"></span>
+            <span id="apiStatusText">就绪</span>
         </div>
     </div>
-    <script>
-        // 模型定义
-        const models = {
-            text: [{
-                    id: 'gpt-5-mini',
-                    name: 'GPT-5-mini',
-                    provider: 'OpenAI',
-                    desc: '轻量高效，多模态',
-                    tags: ['快速', '高性价比'],
-                    vision: true,
-                    channel: 'channel1',
-                    params: {
-                        temperature: {
-                            min: 0,
-                            max: 2,
-                            step: 0.1,
-                            default: 0.7,
-                            label: '温度'
-                        },
-                        maxTokens: [4096, 8192, 16384]
-                    }
-                },
-                {
-                    id: 'doubao-seed-2-0-lite-260215',
-                    name: 'Doubao-Seed-2.0-lite',
-                    provider: '火山引擎',
-                    desc: '豆包2.0轻量，多模态',
-                    tags: ['多模态', '快速'],
-                    vision: true,
-                    channel: 'channel1',
-                    params: {
-                        temperature: {
-                            min: 0,
-                            max: 1,
-                            step: 0.1,
-                            default: 0.7,
-                            label: '温度'
-                        },
-                        maxTokens: [4096, 8192]
-                    }
-                },
-                {
-                    id: 'claude-3-5-sonnet',
-                    name: 'Claude 3.5 Sonnet',
-                    provider: 'Anthropic',
-                    desc: '代码/视觉',
-                    tags: ['视觉', '200K'],
-                    vision: true,
-                    channel: 'channel1',
-                    params: {
-                        temperature: {
-                            min: 0,
-                            max: 1,
-                            step: 0.1,
-                            default: 0.5,
-                            label: '温度'
-                        },
-                        maxTokens: [4096, 8192]
-                    }
-                }
-            ],
-            image: [{
-                    id: 'nano-banana-2',
-                    name: 'Nano Banana 2',
-                    provider: 'Google',
-                    desc: '高质量图像生成',
-                    tags: ['4K'],
-                    channel: 'channel1',
-                    params: {
-                        resolution: ['2K', '4K'],
-                        aspectRatio: ['1:1', '16:9', '3:4']
-                    }
-                },
-                {
-                    id: 'seedream-5.0-lite',
-                    name: 'Seedream 5.0 Lite',
-                    provider: '字节跳动',
-                    desc: '新一代生图模型',
-                    tags: ['4K', '写实'],
-                    channel: 'channel2',
-                    params: {
-                        resolution: ['2K', '4K'],
-                        aspectRatio: ['1:1', '16:9', '9:16']
-                    }
-                },
-                {
-                    id: 'wan-2.7-image-pro',
-                    name: 'Wan2.7-Image-Pro',
-                    provider: '阿里',
-                    desc: '写实风格出色',
-                    tags: ['专业级'],
-                    channel: 'channel3',
-                    params: {
-                        resolution: ['2K', '4K'],
-                        aspectRatio: ['1:1', '16:9']
-                    }
-                }
-            ],
-            video: [{
-                    id: 'wan-2.1-t2v',
-                    name: 'Wan2.1-T2V',
-                    provider: '阿里',
-                    desc: '文生视频',
-                    type: 't2v',
-                    channel: 'channel1',
-                    params: {
-                        resolution: ['720p', '1080p'],
-                        duration: ['5s', '10s']
-                    }
-                },
-                {
-                    id: 'wan-2.1-i2v',
-                    name: 'Wan2.1-I2V',
-                    provider: '阿里',
-                    desc: '图生视频',
-                    type: 'i2v',
-                    channel: 'channel1',
-                    params: {
-                        resolution: ['720p', '1080p'],
-                        duration: ['5s', '10s']
-                    }
-                },
-                {
-                    id: 'doubao-seedance-2.0-fast',
-                    name: 'Doubao-Seedance-2.0-fast',
-                    provider: '火山引擎',
-                    desc: '快速视频生成',
-                    type: 'i2v',
-                    channel: 'channel2',
-                    params: {
-                        resolution: ['720p', '1080p'],
-                        duration: ['5s', '10s'],
-                        motion: ['小', '中', '大']
-                    }
-                }
-            ]
-        };
-        let selectedModels = {
-            text: models.text[0].id,
-            image: models.image[0].id,
-            video: models.video[0].id
-        };
-        let tasks = JSON.parse(localStorage.getItem('hyzk_tasks') || '[]');
-        let apiKeys = {
-            channel1: localStorage.getItem('hyzk_channel1_key') || '',
-            channel2: localStorage.getItem('hyzk_channel2_key') || '',
-            channel3: localStorage.getItem('hyzk_channel3_key') || ''
-        };
+</header>
 
-        function updateApiStatusIcon() {
-            const hasAny = apiKeys.channel1 || apiKeys.channel2 || apiKeys.channel3;
-            const el = document.getElementById('apiStatus');
-            if (hasAny) {
-                el.className = 'api-status online';
-                el.innerHTML = '🟢 多渠就绪';
-            } else {
-                el.className = 'api-status offline';
-                el.innerHTML = '🔴 未配置';
-            }
-        }
-
-        function saveAllChannelSettings() {
-            apiKeys.channel1 = document.getElementById('ch1_key').value;
-            apiKeys.channel2 = document.getElementById('ch2_key').value;
-            apiKeys.channel3 = document.getElementById('ch3_key').value;
-            localStorage.setItem('hyzk_channel1_key', apiKeys.channel1);
-            localStorage.setItem('hyzk_channel2_key', apiKeys.channel2);
-            localStorage.setItem('hyzk_channel3_key', apiKeys.channel3);
-            updateApiStatusIcon();
-            showToast('渠道密钥已保存');
-        }
-
-        function clearAllChannelSettings() {
-            document.getElementById('ch1_key').value = '';
-            document.getElementById('ch2_key').value = '';
-            document.getElementById('ch3_key').value = '';
-            saveAllChannelSettings();
-        }
-        // 渠道测试：渠道1（APIMart GET /models），渠道2（火山引擎 POST /responses），渠道3（wenle.ai POST /v1/chat/completions）
-        async function testChannel(channel) {
-            let key = '';
-            if (channel === 'channel1') key = document.getElementById('ch1_key').value;
-            else if (channel === 'channel2') key = document.getElementById('ch2_key').value;
-            else key = document.getElementById('ch3_key').value;
-            if (!key) {
-                showToast(`请填写渠道${channel.slice(-1)}密钥`, 'error');
-                return;
-            }
-            showToast(`测试渠道${channel.slice(-1)}...`);
-            let url, options;
-            if (channel === 'channel1') {
-                url = 'https://api.apimart.ai/v1/models';
-                options = {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${key}`,
-                        'Content-Type': 'application/json'
-                    }
-                };
-            } else if (channel === 'channel2') {
-                url = 'https://ark.cn-beijing.volces.com/api/v3/responses';
-                const testPayload = {
-                    model: "doubao-seed-2-0-lite-260215",
-                    input: "test",
-                    thinking: {
-                        type: "disabled"
-                    }
-                };
-                options = {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${key}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(testPayload)
-                };
-            } else {
-                // 渠道3：使用 wenle.ai 的 gpt-5.4-mini 模型测试
-                url = 'https://api.wenle.ai/v1/chat/completions';
-                const testPayload = {
-                    model: 'gpt-5.4-mini',
-                    messages: [{
-                        role: 'user',
-                        content: 'test'
-                    }]
-                };
-                options = {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${key}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(testPayload)
-                };
-            }
-            try {
-                const res = await fetch(url, options);
-                if (res.ok) {
-                    // 对于渠道3，额外检查返回内容是否包含 choices 以确认有效
-                    if (channel === 'channel3') {
-                        const data = await res.json();
-                        if (data.choices && data.choices.length > 0) {
-                            showToast(`渠道${channel.slice(-1)}连通成功`, 'success');
-                        } else {
-                            showToast(`渠道${channel.slice(-1)}响应异常，密钥可能无效`, 'error');
-                        }
-                    } else {
-                        showToast(`渠道${channel.slice(-1)}连通成功`, 'success');
-                    }
-                } else {
-                    const text = await res.text();
-                    showToast(`渠道${channel.slice(-1)}失败: ${res.status} ${text.substring(0, 80)}`, 'error');
-                }
-            } catch (e) {
-                showToast(`渠道${channel.slice(-1)}请求错误: ${e.message}`, 'error');
-            }
-        }
-
-        function renderSettingsChannels() {
-            document.getElementById('channelsConfig').innerHTML = `
-            <div class="form-group"><label>🔌 渠道1  API Key</label><div class="flex-row"><input type="password" id="ch1_key" placeholder="sk-..." value="${apiKeys.channel1}" style="flex:1"><button class="btn btn-secondary" onclick="testChannel('channel1')">测试连接</button></div></div>
-            <div class="form-group"><label>🔌 渠道2  API Key</label><div class="flex-row"><input type="password" id="ch2_key" placeholder="火山API Key" value="${apiKeys.channel2}" style="flex:1"><button class="btn btn-secondary" onclick="testChannel('channel2')">测试连接</button></div></div>
-            <div class="form-group"><label>🔌 渠道3  API Key</label><div class="flex-row"><input type="password" id="ch3_key" placeholder="wenle.ai API Key" value="${apiKeys.channel3}" style="flex:1"><button class="btn btn-secondary" onclick="testChannel('channel3')">测试连接</button></div></div>
-        `;
-        }
-
-        async function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        async function handleFileUpload(event, urlInputId, previewId, uploadAreaId) {
-            const file = event.target.files[0];
-            if (!file || file.size > 5 * 1024 * 1024) {
-                showToast('图片需小于5MB', 'error');
-                return;
-            }
-            const base64 = await fileToBase64(file);
-            document.getElementById(urlInputId).value = base64;
-            document.getElementById(previewId).innerHTML = `<img src="${base64}" class="image-preview">`;
-            if (uploadAreaId) document.getElementById(uploadAreaId).classList.add('has-file');
-            showToast('图片已加载');
-        }
-
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = msg;
-            document.getElementById('toastIcon').textContent = type === 'error' ? '❌' : '✓';
-            toast.style.display = 'flex';
-            setTimeout(() => toast.style.display = 'none', 3000);
-        }
-
-        function switchTab(tabName, el) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            if (el) el.classList.add('active');
-            if (tabName === 'results') renderResultsLibrary();
-            if (tabName === 'tasks') {
-                updateTaskTable();
-                updateStats();
-            }
-        }
-
-        function renderModels(type) {
-            const grid = document.getElementById(`${type}ModelGrid`);
-            if (!grid) return;
-            grid.innerHTML = models[type].map(m => `
-            <div class="model-card ${selectedModels[type] === m.id ? 'selected' : ''}" onclick="selectModel('${type}','${m.id}')">
-                <div class="model-provider">${m.provider}</div>
-                <div class="model-name">${m.name}</div>
-                <div class="model-desc">${m.desc}</div>
-                <div class="model-tags">${m.tags?.map(t => `<span class="model-tag">${t}</span>`).join('') || ''}</div>
+<main class="container">
+    <!-- 文本模块 -->
+    <div id="text" class="tab-content active">
+        <div class="card">
+            <div class="card-title">选择文本模型</div>
+            <div class="model-grid" id="textModelGrid"></div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">生成参数</div>
+            <div id="textParams" class="settings-row"></div>
+            <div class="form-group">
+                <label class="required">提示词 (Prompt)</label>
+                <textarea id="textPrompt" placeholder="输入您的问题或任务描述..."></textarea>
             </div>
-        `).join('');
-            if (type === 'text') updateTextParams();
-            if (type === 'image') updateImageParams();
-            if (type === 'video') updateVideoParams();
-        }
-
-        function selectModel(type, id) {
-            selectedModels[type] = id;
-            renderModels(type);
-        }
-
-        function updateTextParams() {
-            const model = models.text.find(m => m.id === selectedModels.text);
-            if (!model) return;
-            let html = '';
-            if (model.params.temperature) html += `<div><label>温度</label><input type="range" id="textTemp" min="0" max="2" step="0.1" value="0.7"></div>`;
-            if (model.params.maxTokens) html += `<div><label>Max Tokens</label><select id="textMaxTokens">${model.params.maxTokens.map(t => `<option>${t}</option>`).join('')}</select></div>`;
-            document.getElementById('textParams').innerHTML = html;
-            document.getElementById('textImageUploadGroup').style.display = model.vision ? 'block' : 'none';
-        }
-
-        function updateImageParams() {
-            document.getElementById('imageParams').innerHTML = '<div><label>分辨率</label><select id="imageResolution"><option>4K</option><option>2K</option></select></div><div><label>宽高比</label><select id="imageAspectRatio"><option>1:1</option><option>16:9</option></select></div><div><label>生成数量</label><input type="number" id="imageN" value="1" min="1" max="4"></div>';
-        }
-
-        function updateVideoParams() {
-            const model = models.video.find(m => m.id === selectedModels.video);
-            document.getElementById('videoParams').innerHTML = '<div><label>分辨率</label><select id="videoResolution"><option>1080p</option><option>720p</option></select></div><div><label>时长</label><select id="videoDuration"><option>5s</option><option>10s</option></select></div>';
-            document.getElementById('videoRefGroup').style.display = model?.type === 'i2v' ? 'block' : 'none';
-        }
-
-        function getChannelKeyForModel(type, modelId) {
-            const m = models[type].find(x => x.id === modelId);
-            if (m?.channel === 'channel1') return apiKeys.channel1;
-            if (m?.channel === 'channel2') return apiKeys.channel2;
-            if (m?.channel === 'channel3') return apiKeys.channel3;
-            return apiKeys.channel1;
-        }
-
-        async function executeTask(task) {
-            if (task.status === 'running' || task.status === 'processing') return;
-            task.status = 'running';
-            task.progress = 0;
-            updateTaskTable();
-            updateStats();
-            try {
-                const modelObj = models[task.type].find(m => m.id === task.model);
-                const channelKey = getChannelKeyForModel(task.type, task.model);
-                if (!channelKey) throw new Error(`未配置${modelObj?.channel || '渠道'} API密钥`);
-                if (task.type === 'text') {
-                    const endpoint = 'https://api.apimart.ai/v1/chat/completions';
-                    const res = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${channelKey}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            model: task.model,
-                            messages: [{
-                                role: 'user',
-                                content: task.params.prompt
-                            }],
-                            temperature: task.params.temperature || 0.7,
-                            max_tokens: task.params.maxTokens || 4096
-                        })
-                    });
-                    const data = await res.json();
-                    if (data.choices) {
-                        task.result = data.choices[0].message.content;
-                        task.status = 'completed';
-                        task.progress = 100;
-                    } else throw new Error('文本生成失败');
-                } else if (task.type === 'image') {
-                    if (task.model === 'seedream-5.0-lite') {
-                        const endpoint = 'https://ark.cn-beijing.volces.com/api/v3/images/generations';
-                        const res = await fetch(endpoint, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${channelKey}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                model: 'doubao-seedream-5-0-lite',
-                                prompt: task.params.prompt,
-                                size: '2K',
-                                response_format: 'url'
-                            })
-                        });
-                        const data = await res.json();
-                        if (data.data && data.data[0]?.url) {
-                            task.result = [data.data[0].url];
-                            task.status = 'completed';
-                        } else throw new Error('图像生成失败');
-                    } else {
-                        const endpoint = 'https://api.apimart.ai/v1/images/generations';
-                        const res = await fetch(endpoint, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${channelKey}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                model: task.model,
-                                prompt: task.params.prompt,
-                                n: 1
-                            })
-                        });
-                        const data = await res.json();
-                        if (data.data && data.data[0]?.url) {
-                            task.result = [data.data[0].url];
-                            task.status = 'completed';
-                        } else throw new Error('图像失败');
-                    }
-                } else if (task.type === 'video') {
-                    if (task.model === 'doubao-seedance-2.0-fast') {
-                        const endpoint = 'https://ark.cn-beijing.volces.com/api/v3/content_generation/tasks';
-                        const createRes = await fetch(endpoint, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${channelKey}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                model: 'doubao-seedance-2-0-fast',
-                                content: [{
-                                    type: 'text',
-                                    text: task.params.prompt
-                                }]
-                            })
-                        });
-                        const createData = await createRes.json();
-                        const taskId = createData.id;
-                        if (!taskId) throw new Error('视频任务提交失败');
-                        task.taskId = taskId;
-                        task.status = 'processing';
-                        updateTaskTable();
-                        let pollCount = 0;
-                        while (pollCount < 30) {
-                            await new Promise(r => setTimeout(r, 4000));
-                            const pollRes = await fetch(`${endpoint}/${taskId}`, {
-                                headers: {
-                                    'Authorization': `Bearer ${channelKey}`
-                                }
-                            });
-                            const pollData = await pollRes.json();
-                            if (pollData.status === 'succeeded') {
-                                task.result = pollData.output?.video_url || pollData.video_url;
-                                task.status = 'completed';
-                                task.progress = 100;
-                                break;
-                            } else if (pollData.status === 'failed') throw new Error('视频生成失败');
-                            pollCount++;
-                        }
-                        if (task.status !== 'completed') throw new Error('超时');
-                    } else {
-                        const endpoint = 'https://api.apimart.ai/v1/video/generations';
-                        const res = await fetch(endpoint, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${channelKey}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                model: task.model,
-                                prompt: task.params.prompt
-                            })
-                        });
-                        const data = await res.json();
-                        if (data.data && data.data.video_url) {
-                            task.result = data.data.video_url;
-                            task.status = 'completed';
-                        } else throw new Error('视频失败');
-                    }
-                }
-                saveTasks();
-                updateTaskTable();
-                updateStats();
-                showToast(`${task.type}任务完成`);
-            } catch (e) {
-                task.status = 'failed';
-                task.error = e.message;
-                showToast(`失败:${e.message}`, 'error');
-                updateTaskTable();
-                saveTasks();
-            }
-        }
-
-        function addTextTask() {
-            const prompt = document.getElementById('textPrompt').value;
-            if (!prompt) {
-                showToast('请输入提示词', 'error');
-                return;
-            }
-            const params = {
-                prompt,
-                temperature: document.getElementById('textTemp')?.value || 0.7,
-                maxTokens: document.getElementById('textMaxTokens')?.value || 4096,
-                imageUrl: document.getElementById('textImageUrl').value || ''
-            };
-            tasks.push({
-                id: Date.now(),
-                type: 'text',
-                model: selectedModels.text,
-                params,
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            });
-            saveTasks();
-            showToast('已添加文本任务');
-            resetTextForm();
-        }
-
-        function addImageTask() {
-            const prompt = document.getElementById('imagePrompt').value;
-            if (!prompt) return;
-            const params = {
-                prompt,
-                resolution: document.getElementById('imageResolution')?.value || '4K',
-                aspectRatio: document.getElementById('imageAspectRatio')?.value || '1:1',
-                n: parseInt(document.getElementById('imageN')?.value || 1),
-                refUrl: document.getElementById('imageRefUrl').value || ''
-            };
-            tasks.push({
-                id: Date.now(),
-                type: 'image',
-                model: selectedModels.image,
-                params,
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            });
-            saveTasks();
-            showToast('已添加图像任务');
-            resetImageForm();
-        }
-
-        function addVideoTask() {
-            const prompt = document.getElementById('videoPrompt').value;
-            if (!prompt) return;
-            const params = {
-                prompt,
-                resolution: document.getElementById('videoResolution')?.value || '1080p',
-                duration: document.getElementById('videoDuration')?.value || '5s',
-                refUrl: document.getElementById('videoRefUrl').value || ''
-            };
-            tasks.push({
-                id: Date.now(),
-                type: 'video',
-                model: selectedModels.video,
-                params,
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            });
-            saveTasks();
-            showToast('已添加视频任务');
-            resetVideoForm();
-        }
-
-        function generateTextImmediate() {
-            addTextTask();
-            const last = tasks[tasks.length - 1];
-            if (last) executeTask(last);
-        }
-
-        function generateImageImmediate() {
-            addImageTask();
-            const last = tasks[tasks.length - 1];
-            if (last) executeTask(last);
-        }
-
-        function generateVideoImmediate() {
-            addVideoTask();
-            const last = tasks[tasks.length - 1];
-            if (last) executeTask(last);
-        }
-
-        function updateTaskTable() {
-            const tbody = document.getElementById('taskTableBody');
-            if (!tasks.length) {
-                tbody.innerHTML = '<tr><td colspan="9" class="empty-state">暂无任务</td></tr>';
-                return;
-            }
-            tbody.innerHTML = tasks.map(t => `
-            <tr>
-                <td><input type="checkbox" class="task-checkbox" data-id="${t.id}"></td>
-                <td>${t.type}</td>
-                <td>${t.model}</td>
-                <td title="${t.params.prompt}">${t.params.prompt?.slice(0, 40)}</td>
-                <td><span class="status-badge status-${t.status}">${t.status}</span></td>
-                <td>${t.error || '-'}</td>
-                <td>${t.progress || 0}%</td>
-                <td>${new Date(t.createdAt).toLocaleTimeString()}</td>
-                <td><div class="task-actions"><button class="btn btn-primary btn-small" onclick="executeTaskById(${t.id})">▶️运行</button> <button class="btn btn-danger btn-small" onclick="deleteTask(${t.id})">删除</button> ${t.status === 'completed' ? `<button class="btn btn-success btn-small" onclick="viewResult(${t.id})">查看</button>` : ''}</div></td>
-            </tr>
-        `).join('');
-        }
-
-        function executeTaskById(id) {
-            const task = tasks.find(t => t.id === id);
-            if (task && (task.status === 'pending' || task.status === 'failed')) executeTask(task);
-        }
-
-        function deleteTask(id) {
-            tasks = tasks.filter(t => t.id !== id);
-            saveTasks();
-            updateTaskTable();
-            updateStats();
-        }
-
-        function startAllTasks() {
-            tasks.filter(t => t.status === 'pending').forEach(t => executeTask(t));
-        }
-
-        function stopAllTasks() {
-            tasks.forEach(t => {
-                if (t.status === 'running' || t.status === 'processing') t.status = 'stopped';
-            });
-            updateTaskTable();
-            updateStats();
-        }
-
-        function clearCompletedTasks() {
-            tasks = tasks.filter(t => t.status !== 'completed');
-            saveTasks();
-            updateTaskTable();
-            updateStats();
-        }
-
-        function startSelectedTasks() {
-            document.querySelectorAll('.task-checkbox:checked').forEach(cb => {
-                const id = parseInt(cb.dataset.id);
-                const task = tasks.find(t => t.id === id);
-                if (task && task.status === 'pending') executeTask(task);
-            });
-        }
-
-        function exportTasks() {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([JSON.stringify(tasks)], {
-                type: 'application/json'
-            }));
-            a.download = 'tasks.json';
-            a.click();
-        }
-
-        function importTasks(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = ev => {
-                const imported = JSON.parse(ev.target.result);
-                if (Array.isArray(imported)) {
-                    tasks.push(...imported.map(t => ({
-                        ...t,
-                        status: 'pending',
-                        taskId: null,
-                        error: null
-                    })));
-                    saveTasks();
-                    updateTaskTable();
-                    updateStats();
-                    showToast('导入成功');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function viewResult(id) {
-            const task = tasks.find(t => t.id === id);
-            if (!task?.result) return;
-            let html = '';
-            if (task.type === 'text') html = `<pre style="white-space:pre-wrap">${task.result}</pre>`;
-            else if (task.type === 'image') html = `<img src="${task.result[0]}" style="max-width:100%">`;
-            else if (task.type === 'video') html = `<video src="${task.result}" controls style="max-width:100%"></video>`;
-            document.getElementById('modalBody').innerHTML = html;
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-        }
-
-        function updateStats() {
-            document.getElementById('statTotal').innerText = tasks.length;
-            document.getElementById('statPending').innerText = tasks.filter(t => t.status === 'pending').length;
-            document.getElementById('statRunning').innerText = tasks.filter(t => t.status === 'running' || t.status === 'processing').length;
-            document.getElementById('statCompleted').innerText = tasks.filter(t => t.status === 'completed').length;
-        }
-
-        function saveTasks() {
-            localStorage.setItem('hyzk_tasks', JSON.stringify(tasks));
-        }
-
-        function toggleSelectAll() {
-            const checked = document.getElementById('selectAll').checked;
-            document.querySelectorAll('.task-checkbox').forEach(cb => cb.checked = checked);
-        }
-
-        function renderResultsLibrary() {
-            const completed = tasks.filter(t => t.status === 'completed' && t.result);
-            const container = document.getElementById('resultsContainer');
-            if (!completed.length) {
-                container.innerHTML = '<div class="empty-state">暂无已完成结果</div>';
-                return;
-            }
-            container.innerHTML = completed.map(t => `
-            <div class="result-card">
-                <div><strong>${t.type}</strong> - ${t.model}</div>
-                <div class="result-preview">${t.type === 'image' ? `<img src="${t.result[0]}" style="width:100%;border-radius:12px">` : t.type === 'video' ? `<video src="${t.result}" controls style="width:100%"></video>` : `<div style="max-height:120px;overflow:auto">${t.result.substring(0, 200)}</div>`}</div>
-                <div class="btn-group" style="margin-top:1rem"><button class="btn btn-secondary btn-small" onclick="downloadSingleResult(${t.id})">⬇️ 下载</button></div>
+            <div class="form-group" id="textImageUploadGroup">
+                <label>参考图片 (可选，仅视觉模型支持)</label>
+                <div class="upload-area" onclick="document.getElementById('textImageInput').click()" id="textUploadArea">
+                    <div>📤 点击上传图片</div>
+                    <div class="upload-hint">支持 JPG、PNG 格式，图片将自动转为 Base64 编码</div>
+                    <input type="file" id="textImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event, 'textImageUrl', 'textImagePreview', 'textUploadArea')">
+                </div>
+                <input type="hidden" id="textImageUrl">
+                <div id="textImagePreview" style="margin-top:0.5rem"></div>
             </div>
-        `).join('');
-        }
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="addTextTask()">➕ 添加到任务队列</button>
+                <button class="btn btn-success" onclick="generateTextImmediate()">⚡ 立即生成</button>
+                <button class="btn btn-secondary" onclick="resetTextForm()">🔄 重置</button>
+            </div>
+        </div>
 
-        function downloadSingleResult(id) {
-            const task = tasks.find(t => t.id === id);
-            if (!task?.result) return;
-            if (task.type === 'text') {
-                const blob = new Blob([task.result], {
-                    type: 'text/plain'
-                });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = `result_${id}.txt`;
-                a.click();
-            } else if (task.type === 'image') {
-                const a = document.createElement('a');
-                a.href = task.result[0];
-                a.download = `image_${id}.png`;
-                a.click();
-            } else if (task.type === 'video') {
-                const a = document.createElement('a');
-                a.href = task.result;
-                a.download = `video_${id}.mp4`;
-                a.click();
-            }
-        }
+        <div class="card experience-section">
+            <div class="card-title">快速体验</div>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <div class="experience-title">🔍 图片风格反推</div>
+                    <div class="experience-desc">上传图片，AI将详细分析图片内容并以JSON格式返回结构化信息</div>
+                    <div class="upload-area" onclick="document.getElementById('reverseImageInput').click()" id="reverseUploadArea">
+                        <div>📤 点击上传要分析的图片</div>
+                        <input type="file" id="reverseImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event, 'reverseImageUrl', 'reversePreview', 'reverseUploadArea')">
+                    </div>
+                    <input type="hidden" id="reverseImageUrl">
+                    <div id="reversePreview" style="margin-bottom:1rem"></div>
+                    <button class="btn btn-primary" onclick="startReverseAnalysis()" id="reverseBtn">
+                        🔍 开始分析
+                    </button>
+                    <div id="reverseResult" style="margin-top:1rem; display:none; background:#f8fafc; padding:1rem; border-radius:16px;">
+                        <pre style="white-space:pre-wrap; font-size:0.85rem; margin:0" id="reverseResultContent"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        function downloadAllResults() {
-            tasks.filter(t => t.status === 'completed' && t.result).forEach(t => downloadSingleResult(t.id));
-            showToast('已触发批量下载');
-        }
+    <!-- 图像模块 -->
+    <div id="image" class="tab-content">
+        <div class="card">
+            <div class="card-title">选择图像模型</div>
+            <div class="model-grid" id="imageModelGrid"></div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">生成参数</div>
+            <div id="imageParams" class="settings-row"></div>
+            <div class="form-group">
+                <label class="required">提示词 (Prompt)</label>
+                <textarea id="imagePrompt" placeholder="描述您想要生成的图像..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>参考图片 (可选)</label>
+                <div class="upload-area" onclick="document.getElementById('imageRefInput').click()" id="imageRefUploadArea">
+                    <div>📤 点击上传参考图</div>
+                    <input type="file" id="imageRefInput" accept="image/*" style="display:none" onchange="handleFileUpload(event, 'imageRefUrl', 'imageRefPreview', 'imageRefUploadArea')">
+                </div>
+                <input type="hidden" id="imageRefUrl">
+                <div id="imageRefPreview" style="margin-top:0.5rem"></div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="addImageTask()">➕ 添加到任务队列</button>
+                <button class="btn btn-success" onclick="generateImageImmediate()">⚡ 立即生成</button>
+                <button class="btn btn-secondary" onclick="resetImageForm()">🔄 重置</button>
+            </div>
+        </div>
 
-        function clearAllResults() {
-            tasks = tasks.filter(t => t.status !== 'completed');
-            saveTasks();
-            renderResultsLibrary();
-            updateTaskTable();
-            updateStats();
-        }
+        <div class="card experience-section">
+            <div class="card-title">快速体验</div>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <div class="experience-title">👗 一键换衣</div>
+                    <div class="experience-desc">将产品白底图中的产品替换到模特图中的模特身上，保持产品细节不变</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem">
+                        <div>
+                            <label style="font-size:0.8rem; margin-bottom:0.5rem; display:block">模特图</label>
+                            <div class="upload-area" onclick="document.getElementById('modelImageInput').click()" style="padding:1rem" id="modelUploadArea">
+                                <small>📤 上传模特图</small>
+                                <input type="file" id="modelImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event, 'modelImageUrl', 'modelPreview', 'modelUploadArea')">
+                            </div>
+                            <input type="hidden" id="modelImageUrl">
+                            <div id="modelPreview" style="margin-top:0.5rem"></div>
+                        </div>
+                        <div>
+                            <label style="font-size:0.8rem; margin-bottom:0.5rem; display:block">产品白底图</label>
+                            <div class="upload-area" onclick="document.getElementById('productImageInput').click()" style="padding:1rem" id="productUploadArea">
+                                <small>📤 上传产品图</small>
+                                <input type="file" id="productImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event, 'productImageUrl', 'productPreview', 'productUploadArea')">
+                            </div>
+                            <input type="hidden" id="productImageUrl">
+                            <div id="productPreview" style="margin-top:0.5rem"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="startClothingSwap()" id="swapBtn">
+                        👗 开始换衣
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        async function startReverseAnalysis() {
-            const url = document.getElementById('reverseImageUrl').value;
-            if (!url) {
-                showToast('请上传图片', 'error');
-                return;
-            }
-            const key = apiKeys.channel1;
-            if (!key) {
-                showToast('请配置渠道1密钥', 'error');
-                return;
-            }
-            const btn = document.getElementById('reverseBtn');
-            btn.disabled = true;
-            btn.innerHTML = '分析中...';
-            try {
-                const res = await fetch('https://api.apimart.ai/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${key}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-5-mini',
-                        messages: [{
-                            role: 'user',
-                            content: [{
-                                    type: 'image_url',
-                                    image_url: {
-                                        url
-                                    }
-                                },
-                                {
-                                    type: 'text',
-                                    text: '详细分析图片内容，以JSON格式返回结构化信息。'
-                                }
-                            ]
-                        }],
-                        max_tokens: 2000
-                    })
-                });
-                const data = await res.json();
-                const content = data.choices[0].message.content;
-                document.getElementById('reverseResult').style.display = 'block';
-                document.getElementById('reverseResultContent').innerText = content;
-            } catch (e) {
-                showToast('分析失败', 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '🔍 开始分析';
-            }
-        }
+    <!-- 视频模块 -->
+    <div id="video" class="tab-content">
+        <div class="card">
+            <div class="card-title">选择视频模型</div>
+            <div class="model-grid" id="videoModelGrid"></div>
+        </div>
+        
+        <div class="card">
+            <div class="card-title">生成参数</div>
+            <div id="videoParams" class="settings-row"></div>
+            <div class="form-group">
+                <label class="required">提示词 (Prompt)</label>
+                <textarea id="videoPrompt" placeholder="描述您想要生成的视频内容..."></textarea>
+            </div>
+            <div class="form-group" id="videoRefGroup">
+                <label>参考图片 (图生视频)</label>
+                <div class="upload-area" onclick="document.getElementById('videoImageInput').click()" style="margin-top:0.5rem; padding:1rem" id="videoUploadArea">
+                    <small>📤 点击上传图片</small>
+                    <input type="file" id="videoImageInput" accept="image/*" style="display:none" onchange="handleFileUpload(event, 'videoRefUrl', 'videoImagePreview', 'videoUploadArea')">
+                </div>
+                <input type="hidden" id="videoRefUrl">
+                <div id="videoImagePreview" style="margin-top:0.5rem"></div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="addVideoTask()">➕ 添加到任务队列</button>
+                <button class="btn btn-success" onclick="generateVideoImmediate()">⚡ 立即生成</button>
+                <button class="btn btn-secondary" onclick="resetVideoForm()">🔄 重置</button>
+            </div>
+        </div>
 
-        async function startClothingSwap() {
-            const modelUrl = document.getElementById('modelImageUrl').value;
-            const productUrl = document.getElementById('productImageUrl').value;
-            if (!modelUrl || !productUrl) {
-                showToast('请上传模特图和产品图', 'error');
-                return;
-            }
-            const key = apiKeys.channel1;
-            if (!key) {
-                showToast('请配置渠道1密钥', 'error');
-                return;
-            }
-            showToast('换衣功能通过图像生成模拟', 'success');
-        }
+        <div class="card experience-section">
+            <div class="card-title">快速体验</div>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <div class="experience-title">🎬 服饰展示视频</div>
+                    <div class="experience-desc">根据模特图生成小红书风格的服饰展示视频，包含多角度拍摄、自然动作和光影效果</div>
+                    <div class="form-group">
+                        <label>模特图</label>
+                        <div class="upload-area" onclick="document.getElementById('fashionModelInput').click()" style="padding:1rem; margin-bottom:1rem" id="fashionUploadArea">
+                            <small>📤 点击上传模特图</small>
+                            <input type="file" id="fashionModelInput" accept="image/*" style="display:none" onchange="handleFileUpload(event, 'fashionModelUrl', 'fashionPreview', 'fashionUploadArea')">
+                        </div>
+                        <input type="hidden" id="fashionModelUrl">
+                        <div id="fashionPreview" style="margin-bottom:1rem"></div>
+                    </div>
+                    <button class="btn btn-primary" onclick="startFashionVideo()" id="fashionBtn">
+                        🎬 生成展示视频
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        async function startFashionVideo() {
-            const img = document.getElementById('fashionModelUrl').value;
-            if (!img) {
-                showToast('请上传模特图', 'error');
-                return;
-            }
-            const key = apiKeys.channel2;
-            if (!key) {
-                showToast('需要渠道2密钥', 'error');
-                return;
-            }
-            const prompt = '根据提供的模特图生成服饰展示视频，小红书风格，多角度，自然动作';
-            tasks.push({
-                id: Date.now(),
-                type: 'video',
-                model: 'doubao-seedance-2.0-fast',
-                params: {
-                    prompt,
-                    refUrl: img,
-                    duration: '10s'
-                },
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            });
-            saveTasks();
-            showToast('服饰视频任务已添加');
-            switchTab('tasks');
-            updateTaskTable();
-        }
+    <!-- 任务队列 -->
+    <div id="tasks" class="tab-content">
+        <div class="stats-bar">
+            <div class="stat-box"><div class="stat-value" id="statTotal">0</div><div class="stat-label">总任务</div></div>
+            <div class="stat-box"><div class="stat-value" id="statPending">0</div><div class="stat-label">待执行</div></div>
+            <div class="stat-box"><div class="stat-value" id="statRunning">0</div><div class="stat-label">执行中</div></div>
+            <div class="stat-box"><div class="stat-value" id="statCompleted">0</div><div class="stat-label">已完成</div></div>
+        </div>
+        <div class="card">
+            <div class="btn-group" style="margin-bottom:1.2rem">
+                <button class="btn btn-success" onclick="startAllTasks()">▶️ 开始全部</button>
+                <button class="btn btn-primary" onclick="startSelectedTasks()">▶️ 开始选中</button>
+                <button class="btn btn-danger" onclick="stopAllTasks()">⏹️ 停止全部</button>
+                <button class="btn btn-secondary" onclick="clearCompletedTasks()">🗑️ 清除已完成</button>
+                <button class="btn btn-secondary" onclick="exportTasks()">📤 导出</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 导入</button>
+                <input type="file" id="importFile" accept=".json" style="display:none" onchange="importTasks(event)">
+            </div>
+            <div class="task-table-container">
+                <table class="task-table">
+                    <thead>
+                        <tr><th width="40"><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th><th>类型</th><th>模型</th><th>提示词</th><th>状态</th><th>说明</th><th>进度</th><th>时间</th><th>操作</th></tr>
+                    </thead>
+                    <tbody id="taskTableBody"><tr><td colspan="9" class="empty-state">暂无任务</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-        function showContactModal() {
-            document.getElementById('modalBody').innerHTML = '<h3>联系开发</h3><p>邮箱: winnoe@126.com<br>微信: Ss_310318</p><p>工作日9:00-18:00</p>';
-            document.getElementById('modal').classList.add('active');
-        }
+    <!-- 结果库 -->
+    <div id="results" class="tab-content">
+        <div class="card">
+            <div class="card-title">生成结果库</div>
+            <div class="btn-group" style="margin-bottom: 1rem;">
+                <button class="btn btn-success" onclick="saveSelectedResultsToLibrary()">💾 保存选中已完成任务到结果库</button>
+                <button class="btn btn-primary" onclick="downloadSelectedResults()">📥 批量下载选中结果</button>
+                <button class="btn btn-danger" onclick="clearSelectedResults()">🗑️ 清除选中结果</button>
+            </div>
+            <div id="resultCardGrid" class="result-card-grid"><div class="empty-state">暂无保存的结果</div></div>
+        </div>
+    </div>
 
-        function resetTextForm() {
-            document.getElementById('textPrompt').value = '';
-            document.getElementById('textImageUrl').value = '';
-            document.getElementById('textImagePreview').innerHTML = '';
-            document.getElementById('textUploadArea').classList.remove('has-file');
-        }
+    <div id="settings" class="tab-content">
+        <div class="card">
+            <div class="card-title">API 渠道配置</div>
+            <!-- 渠道1 -->
+            <div class="channel-config">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4>渠道 1 (推荐)</h4>
+                    <div class="config-status unsaved" id="configStatus1"><span>●</span> 未保存</div>
+                </div>
+                <div class="form-group">
+                    <label class="required">API 密钥</label>
+                    <div class="flex-row">
+                        <input type="password" id="apiKey1" placeholder="sk-..." style="flex:1">
+                        <button class="btn btn-secondary" onclick="toggleApiKeyVisibility(1)">👁️ 显示</button>
+                        <button class="btn btn-success" onclick="testApiConnection(1)">🔌 测试连接</button>
+                    </div>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label>API 端点 (自定义留空使用默认)</label>
+                    <input type="text" id="endpoint1" placeholder="https://api.apimart.ai/v1">
+                </div>
+            </div>
+            <!-- 渠道2 -->
+            <div class="channel-config">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4>渠道 2 (稳定)</h4>
+                    <div class="config-status unsaved" id="configStatus2"><span>●</span> 未保存</div>
+                </div>
+                <div class="form-group">
+                    <label class="required">API 密钥</label>
+                    <div class="flex-row">
+                        <input type="password" id="apiKey2" placeholder="..." style="flex:1">
+                        <button class="btn btn-secondary" onclick="toggleApiKeyVisibility(2)">👁️ 显示</button>
+                        <button class="btn btn-success" onclick="testApiConnection(2)">🔌 测试连接</button>
+                    </div>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label>API 端点 (自定义留空使用默认)</label>
+                    <input type="text" id="endpoint2" placeholder="https://ark.cn-beijing.volces.com/api/v3">
+                </div>
+            </div>
+            <!-- 渠道3 -->
+            <div class="channel-config">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4>渠道 3 (性价比高)</h4>
+                    <div class="config-status unsaved" id="configStatus3"><span>●</span> 未保存</div>
+                </div>
+                <div class="form-group">
+                    <label class="required">API 密钥</label>
+                    <div class="flex-row">
+                        <input type="password" id="apiKey3" placeholder="sk-..." style="flex:1">
+                        <button class="btn btn-secondary" onclick="toggleApiKeyVisibility(3)">👁️ 显示</button>
+                        <button class="btn btn-success" onclick="testApiConnection(3)">🔌 测试连接</button>
+                    </div>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label>API 端点 (自定义留空使用默认)</label>
+                    <input type="text" id="endpoint3" placeholder="https://api.wenle.ai/v1">
+                </div>
+            </div>
+            <div class="btn-group" style="align-items:center">
+                <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
+                <button class="btn btn-secondary" onclick="clearSettings()">🗑️ 清除</button>
+                <span class="inline-help">网页下滑联系开发获取API KEY</span>
+            </div>
+        </div>
 
-        function resetImageForm() {
-            document.getElementById('imagePrompt').value = '';
-            document.getElementById('imageRefUrl').value = '';
-            document.getElementById('imageRefPreview').innerHTML = '';
-            document.getElementById('imageRefUploadArea').classList.remove('has-file');
-        }
+        <div class="card">
+            <div class="card-title">关于 华阳智瞰</div>
+            <p style="color: var(--gray); line-height: 1.7; margin-bottom: 1.2rem;">
+                “华阳”代表正统与生机，也代表两位创始人，以名起誓，以智瞰远。“智瞰”则直指 AI 时代的俯察洞见。
+                我们不空谈AI概念，只聚焦一件事：用真实可落地的AI解决方案，帮企业解决经营中的实际问题。
+            </p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items:center">
+                <a href="https://www.huayangzhikan.com/" target="_blank" class="btn btn-primary">🌍访问官网</a>
+                <div style="display:flex; align-items:center; gap:0.5rem">
+                    <a href="https://ccnf5cag2rok.feishu.cn/drive/folder/MXj0febgnlymZ6ddyRVcqbosnhe" target="_blank" class="btn btn-secondary">📘 更多实战攻略</a>
+                    <span class="inline-help">网页下滑联系开发获取密码解锁攻略</span>
+                </div>
+            </div>
+        </div>
 
-        function resetVideoForm() {
-            document.getElementById('videoPrompt').value = '';
-            document.getElementById('videoRefUrl').value = '';
-            document.getElementById('videoImagePreview').innerHTML = '';
-            document.getElementById('videoUploadArea').classList.remove('has-file');
-        }
+        <div class="card">
+            <div class="card-title">联系开发</div>
+            <p style="color: var(--gray); margin-bottom: 1rem;">
+                如需技术支持、获取API密钥或解锁实战攻略，请通过以下方式联系我们：
+            </p>
+            <button class="btn btn-primary" onclick="showContactModal()">
+                📧 联系开发
+            </button>
+        </div>
+    </div>
+</main>
 
-        window.onload = () => {
-            renderSettingsChannels();
-            renderModels('text');
-            renderModels('image');
-            renderModels('video');
-            updateTaskTable();
-            updateStats();
-            updateApiStatusIcon();
-        };
-        // 全局导出
-        window.switchTab = switchTab;
-        window.selectModel = selectModel;
-        window.addTextTask = addTextTask;
-        window.generateTextImmediate = generateTextImmediate;
-        window.addImageTask = addImageTask;
-        window.generateImageImmediate = generateImageImmediate;
-        window.addVideoTask = addVideoTask;
-        window.generateVideoImmediate = generateVideoImmediate;
-        window.executeTaskById = executeTaskById;
-        window.deleteTask = deleteTask;
-        window.startAllTasks = startAllTasks;
-        window.startSelectedTasks = startSelectedTasks;
-        window.stopAllTasks = stopAllTasks;
-        window.clearCompletedTasks = clearCompletedTasks;
-        window.exportTasks = exportTasks;
-        window.importTasks = importTasks;
-        window.viewResult = viewResult;
-        window.closeModal = closeModal;
-        window.handleFileUpload = handleFileUpload;
-        window.testChannel = testChannel;
-        window.saveAllChannelSettings = saveAllChannelSettings;
-        window.clearAllChannelSettings = clearAllChannelSettings;
-        window.downloadSingleResult = downloadSingleResult;
-        window.downloadAllResults = downloadAllResults;
-        window.clearAllResults = clearAllResults;
-        window.startReverseAnalysis = startReverseAnalysis;
-        window.startClothingSwap = startClothingSwap;
-        window.startFashionVideo = startFashionVideo;
-        window.showContactModal = showContactModal;
-        window.toggleSelectAll = toggleSelectAll;
-        window.resetTextForm = resetTextForm;
-        window.resetImageForm = resetImageForm;
-        window.resetVideoForm = resetVideoForm;
-    </script>
+<div id="toast" class="toast"><span id="toastIcon">✓</span><span id="toastMessage"></span></div>
+<div id="modal" class="modal" onclick="if(event.target===this) closeModal()"><div class="modal-content"><button class="close-btn" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
+
+<script>
+    // 模型定义 (与原内容完全一致)
+    const models = { text: [{ id: 'gpt-mini', name: 'GPT-mini', provider: 'OpenAI', channel: 1, desc: '轻量快速的多模态模型，适合日常任务', tags: ['多模态', '快速', '经济'], vision: true, params: { temperature: { min: 0, max: 2, step: 0.1, default: 0.7, label: '温度 (创造性)' }, maxTokens: [4096, 8192, 16384], topP: { min: 0, max: 1, step: 0.05, default: 1, label: 'Top P' }, presencePenalty: { min: -2, max: 2, step: 0.1, default: 0, label: '存在惩罚' } } }, { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', provider: 'Anthropic', channel: 1, desc: '卓越的代码和文本能力，视觉理解优秀', tags: ['代码强', '视觉', '200K'], vision: true, params: { temperature: { min: 0, max: 1, step: 0.1, default: 0.5, label: '温度' }, maxTokens: [4096, 8192, 16384, 200000], topP: { min: 0, max: 1, step: 0.05, default: 0.9, label: 'Top P' } } }, { id: 'gemini-1-5-pro', name: 'Gemini 1.5 Pro', provider: 'Google', channel: 1, desc: '超长上下文窗口，多模态理解能力突出', tags: ['超长上下文', '多模态', '2M'], vision: true, params: { temperature: { min: 0, max: 2, step: 0.1, default: 0.7, label: '温度' }, maxTokens: [8192, 32768, 131072, 2097152], topK: [1, 10, 40, 100], topP: { min: 0, max: 1, step: 0.05, default: 0.95, label: 'Top P' } } }, { id: 'doubao-seed-2-0-lite', name: 'Doubao-Seed-2.0-lite', provider: '字节跳动', channel: 1, desc: '豆包2.0轻量版，支持多模态，快速响应', tags: ['多模态', '快速', '轻量'], vision: true, params: { temperature: { min: 0, max: 1, step: 0.1, default: 0.7, label: '温度' }, maxTokens: [4096, 8192, 16384] } } ], image: [{ id: 'nano-banana-2', name: 'Nano Banana 2', provider: 'Google', channel: 1, desc: '高质量图像生成，细节丰富', tags: ['4K', '高质量', '快速'], params: { resolution: ['1K', '2K', '4K'], aspectRatio: ['1:1', '3:2', '2:3', '3:4', '4:3', '16:9', '9:16'], style: ['写实', '动漫', '油画', '水彩', '素描'], negativePrompt: true } }, { id: 'seeddream-5-0-lite', name: 'Seedream 5.0 Lite', provider: 'ByteDance', channel: 2, desc: '字节跳动出品，中文理解力强，文字渲染优秀', tags: ['4K', '文字渲染', '中文优', '轻量'], params: { resolution: ['1K', '2K', '4K'], aspectRatio: ['1:1', '3:4', '4:3', '16:9', '9:16', '2:3'], textRendering: ['优化', '标准'], cnStrength: ['弱', '中', '强'] } }, { id: 'wan-2-7-image-pro', name: 'Wan2.7-Image-Pro', provider: 'Alibaba', channel: 3, desc: '阿里万相最新图像模型，写实风格出色', tags: ['写实', '专业级', '4K'], params: { resolution: ['2K', '4K'], aspectRatio: ['1:1', '16:9', '9:16', '3:4', '4:3'], style: ['写实', '艺术', '商业'], seed: 'number' } } ], video: [{ id: 'wan-2-1-t2v', name: 'Wan2.1-T2V', provider: 'Alibaba', channel: 3, desc: '阿里万相文生视频，运动幅度大，物理规律准确', tags: ['文生视频', 'SOTA', '物理准确'], type: 't2v', params: { resolution: ['720p', '1080p'], duration: ['5s', '10s'], fps: [24, 30, 60], motion: ['小', '中', '大'], seed: 'random' } }, { id: 'wan-2-1-i2v', name: 'Wan2.1-I2V', provider: 'Alibaba', channel: 3, desc: '阿里万相图生视频，镜头控制精准', tags: ['图生视频', '镜头控制', '商用级'], type: 'i2v', params: { resolution: ['720p', '1080p'], duration: ['5s', '10s'], motion: ['小', '中', '大'], camera: ['推近', '拉远', '左移', '右移', '上移', '下移', '旋转'] } }, { id: 'hunyuan-video', name: 'HunyuanVideo', provider: 'Tencent', channel: 1, desc: '腾讯混元视频大模型，细节丰富，动作流畅', tags: ['开源SOTA', '高分辨率', '多场景'], type: 't2v', params: { resolution: ['720p', '1080p'], duration: ['5s'], steps: [30, 50, 100], guidance: ['低', '中', '高'] } }, { id: 'doubao-seedance-2-0-fast', name: 'Doubao-Seedance-2.0-fast', provider: 'ByteDance', channel: 2, desc: '字节跳动豆包视频生成，快速稳定，效果出色', tags: ['快速生成', '稳定', '中文友好'], type: 't2v', params: { resolution: ['720p', '1080p'], duration: ['5s', '10s'], fps: [24, 30], motion: ['小', '中', '大'] } } ] };
+    let selectedModels = { text: models.text[0].id, image: models.image[0].id, video: models.video[0].id };
+    let tasks = JSON.parse(localStorage.getItem('hyzk_tasks') || '[]');
+    let savedResults = JSON.parse(localStorage.getItem('hyzk_saved_results') || '[]');
+    let apiConfig = JSON.parse(localStorage.getItem('hyzk_api_config') || '{}');
+    document.addEventListener('DOMContentLoaded', () => { for(let i = 1; i <= 3; i++) { if(apiConfig[`apiKey${i}`]) document.getElementById(`apiKey${i}`).value = apiConfig[`apiKey${i}`]; if(apiConfig[`endpoint${i}`]) document.getElementById(`endpoint${i}`).value = apiConfig[`endpoint${i}`]; updateConfigStatus(i, !!apiConfig[`apiKey${i}`]); } updateOverallApiStatus(); renderTextModels(); renderImageModels(); renderVideoModels(); updateTaskTable(); updateStats(); renderResultLibrary(); });
+    function updateConfigStatus(channel, saved) { const statusEl = document.getElementById(`configStatus${channel}`); if (saved) { statusEl.className = 'config-status saved'; statusEl.innerHTML = '<span>●</span> 已保存'; } else { statusEl.className = 'config-status unsaved'; statusEl.innerHTML = '<span>●</span> 未保存'; } }
+    function updateOverallApiStatus() { let hasAnyKey = false; for(let i=1;i<=3;i++) if(apiConfig[`apiKey${i}`] && apiConfig[`apiKey${i}`].trim()) hasAnyKey=true; const statusEl = document.getElementById('apiStatus'); const textEl = document.getElementById('apiStatusText'); if(hasAnyKey) { statusEl.classList.remove('error'); textEl.textContent = '就绪'; } else { statusEl.classList.add('error'); textEl.textContent = '未配置'; } }
+    async function fileToBase64(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
+    async function handleFileUpload(event, urlInputId, previewId, uploadAreaId) { const file = event.target.files[0]; if (!file) return; if (file.size > 5 * 1024 * 1024) { showToast('图片大小不能超过5MB', 'error'); return; } try { showToast('正在处理图片...'); const base64 = await fileToBase64(file); document.getElementById(urlInputId).value = base64; const previewDiv = document.getElementById(previewId); previewDiv.innerHTML = `<img src="${base64}" class="image-preview">`; if (uploadAreaId) document.getElementById(uploadAreaId).classList.add('has-file'); showToast('图片已加载'); } catch (e) { showToast('图片处理失败: ' + e.message, 'error'); } }
+    function updateTextParams() { const model = models.text.find(m => m.id === selectedModels.text); const container = document.getElementById('textParams'); if (!model || !model.params) return; let html = ''; const p = model.params; if (p.temperature) html += `<div class="form-group"><label>${p.temperature.label} (0-${p.temperature.max})</label><input type="range" id="textTemp" min="${p.temperature.min}" max="${p.temperature.max}" step="${p.temperature.step}" value="${p.temperature.default}" oninput="document.getElementById('tempValue').textContent=this.value"><div style="text-align:center; font-size:0.85rem;"><span id="tempValue">${p.temperature.default}</span></div></div>`; if (p.maxTokens) html += `<div class="form-group"><label>最大 Tokens</label><select id="textMaxTokens">${p.maxTokens.map(t => `<option value="${t}" ${t === 4096 ? 'selected' : ''}>${t.toLocaleString()}</option>`).join('')}</select></div>`; if (p.topP) html += `<div class="form-group"><label>${p.topP.label}</label><input type="number" id="textTopP" min="${p.topP.min}" max="${p.topP.max}" step="${p.topP.step}" value="${p.topP.default}"></div>`; if (p.topK) html += `<div class="form-group"><label>Top K</label><select id="textTopK">${p.topK.map(k => `<option value="${k}">${k}</option>`).join('')}</select></div>`; if (p.presencePenalty) html += `<div class="form-group"><label>${p.presencePenalty.label}</label><input type="range" id="textPresence" min="${p.presencePenalty.min}" max="${p.presencePenalty.max}" step="${p.presencePenalty.step}" value="${p.presencePenalty.default}" oninput="document.getElementById('presenceValue').textContent=this.value"><div style="text-align:center;"><span id="presenceValue">${p.presencePenalty.default}</span></div></div>`; container.innerHTML = html; document.getElementById('textImageUploadGroup').style.display = model.vision ? 'block' : 'none'; }
+    function updateImageParams() { const model = models.image.find(m => m.id === selectedModels.image); const container = document.getElementById('imageParams'); if (!model || !model.params) return; let html = ''; const p = model.params; if (p.resolution) html += `<div class="form-group"><label>分辨率</label><select id="imageResolution">${p.resolution.map(r => `<option value="${r}" ${r === '4K' ? 'selected' : ''}>${r}</option>`).join('')}</select></div>`; if (p.aspectRatio) html += `<div class="form-group"><label>宽高比</label><select id="imageAspectRatio">${p.aspectRatio.map(r => `<option value="${r}" ${r === '3:4' ? 'selected' : ''}>${r}</option>`).join('')}</select></div>`; if (p.style) html += `<div class="form-group"><label>风格</label><select id="imageStyle">${p.style.map(s => `<option value="${s}">${s}</option>`).join('')}</select></div>`; if (p.textRendering) html += `<div class="form-group"><label>文字渲染</label><select id="imageTextRender">${p.textRendering.map(t => `<option value="${t}">${t}</option>`).join('')}</select></div>`; if (p.cnStrength) html += `<div class="form-group"><label>中文理解强度</label><select id="imageCnStrength">${p.cnStrength.map(c => `<option value="${c}">${c}</option>`).join('')}</select></div>`; if (p.negativePrompt) html += `<div class="form-group"><label>反向提示词 (Negative Prompt)</label><input type="text" id="imageNegative" placeholder="不想出现的内容..."></div>`; if (p.seed === 'number') html += `<div class="form-group"><label>随机种子 (Seed)</label><input type="number" id="imageSeed" placeholder="留空则随机"></div>`; html += `<div class="form-group"><label>生成数量</label><input type="number" id="imageN" min="1" max="4" value="1"></div>`; container.innerHTML = html; }
+    function updateVideoParams() { const model = models.video.find(m => m.id === selectedModels.video); const container = document.getElementById('videoParams'); if (!model || !model.params) return; let html = ''; const p = model.params; if (p.resolution) html += `<div class="form-group"><label>分辨率</label><select id="videoResolution">${p.resolution.map(r => `<option value="${r}">${r}</option>`).join('')}</select></div>`; if (p.duration) html += `<div class="form-group"><label>时长</label><select id="videoDuration">${p.duration.map(d => `<option value="${d}">${d}</option>`).join('')}</select></div>`; if (p.fps) html += `<div class="form-group"><label>帧率 (FPS)</label><select id="videoFps">${p.fps.map(f => `<option value="${f}">${f}fps</option>`).join('')}</select></div>`; if (p.motion) html += `<div class="form-group"><label>运动幅度</label><select id="videoMotion">${p.motion.map(m => `<option value="${m}">${m}</option>`).join('')}</select></div>`; if (p.camera) html += `<div class="form-group"><label>镜头运动</label><select id="videoCamera">${p.camera.map(c => `<option value="${c}">${c}</option>`).join('')}</select></div>`; if (p.steps) html += `<div class="form-group"><label>推理步数</label><select id="videoSteps">${p.steps.map(s => `<option value="${s}" ${s === 50 ? 'selected' : ''}>${s}</option>`).join('')}</select></div>`; if (p.guidance) html += `<div class="form-group"><label>提示词遵循度</label><select id="videoGuidance">${p.guidance.map(g => `<option value="${g}">${g}</option>`).join('')}</select></div>`; container.innerHTML = html; document.getElementById('videoRefGroup').style.display = model.type === 'i2v' ? 'block' : 'none'; }
+    function renderTextModels() { const grid = document.getElementById('textModelGrid'); grid.innerHTML = models.text.map(m => `<div class="model-card ${selectedModels.text === m.id ? 'selected' : ''}" onclick="selectModel('text', '${m.id}')"><div class="model-provider">${m.provider}</div><div class="model-name">${m.name}</div><div class="model-channel">渠道 ${m.channel}</div><div class="model-desc">${m.desc}</div><div class="model-tags">${m.tags.map(t => `<span class="model-tag">${t}</span>`).join('')}</div></div>`).join(''); updateTextParams(); }
+    function renderImageModels() { const grid = document.getElementById('imageModelGrid'); grid.innerHTML = models.image.map(m => `<div class="model-card ${selectedModels.image === m.id ? 'selected' : ''}" onclick="selectModel('image', '${m.id}')"><div class="model-provider">${m.provider}</div><div class="model-name">${m.name}</div><div class="model-channel">渠道 ${m.channel}</div><div class="model-desc">${m.desc}</div><div class="model-tags">${m.tags.map(t => `<span class="model-tag">${t}</span>`).join('')}</div></div>`).join(''); updateImageParams(); }
+    function renderVideoModels() { const grid = document.getElementById('videoModelGrid'); grid.innerHTML = models.video.map(m => `<div class="model-card ${selectedModels.video === m.id ? 'selected' : ''}" onclick="selectModel('video', '${m.id}')"><div class="model-provider">${m.provider}</div><div class="model-name">${m.name}</div><div class="model-channel">渠道 ${m.channel}</div><div class="model-desc">${m.desc}</div><div class="model-tags">${m.tags.map(t => `<span class="model-tag">${t}</span>`).join('')}</div></div>`).join(''); updateVideoParams(); }
+    function selectModel(type, id) { selectedModels[type] = id; if (type === 'text') { renderTextModels(); updateTextParams(); } if (type === 'image') { renderImageModels(); updateImageParams(); } if (type === 'video') { renderVideoModels(); updateVideoParams(); } }
+    function switchTab(tabName, el) { document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active')); document.getElementById(tabName).classList.add('active'); if(el) el.classList.add('active'); if(tabName === 'tasks') { updateTaskTable(); updateStats(); } if(tabName === 'results') renderResultLibrary(); }
+    function toggleApiKeyVisibility(channel) { const input = document.getElementById(`apiKey${channel}`); input.type = input.type === 'password' ? 'text' : 'password'; }
+    async function testApiConnection(channel) { const key = document.getElementById(`apiKey${channel}`).value.trim(); if(!key) { showToast('请先输入API密钥', 'error'); return; } showToast('测试中...'); try { let endpoint = document.getElementById(`endpoint${channel}`).value.trim(); if(channel === 1) { if(!endpoint) endpoint = 'https://api.apimart.ai/v1'; const res = await fetch(`${endpoint}/models`, { headers: { 'Authorization': `Bearer ${key}` } }); if(res.ok) showToast('✅ API密钥有效', 'success'); else { const data = await res.json(); showToast(`❌ 无效: ${data.error?.message || '密钥无效'}`, 'error'); } } else if(channel === 2) { if(!endpoint) endpoint = 'https://ark.cn-beijing.volces.com/api/v3'; const res = await fetch(`${endpoint}/responses`, { method: 'POST', headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: "doubao-seed-2-0-lite-260215", input: "test", thinking: { type: "disabled" } }) }); if(res.ok) showToast('✅ API密钥有效', 'success'); else { const data = await res.json(); showToast(`❌ 无效: ${data.error?.message || '密钥无效'}`, 'error'); } } else if(channel === 3) { if(!endpoint) endpoint = 'https://api.wenle.ai/v1'; const res = await fetch(`${endpoint}/chat/completions`, { method: 'POST', headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'gpt-5.4-mini', messages: [{ role: 'user', content: 'test' }] }) }); if(res.ok) showToast('✅ API密钥有效', 'success'); else showToast(`❌ 无效: ${res.status}`, 'error'); } } catch(e) { showToast('测试失败: ' + e.message, 'error'); } }
+    function saveSettings() { for(let i=1;i<=3;i++) { apiConfig[`apiKey${i}`] = document.getElementById(`apiKey${i}`).value.trim(); apiConfig[`endpoint${i}`] = document.getElementById(`endpoint${i}`).value.trim(); updateConfigStatus(i, !!apiConfig[`apiKey${i}`]); } localStorage.setItem('hyzk_api_config', JSON.stringify(apiConfig)); updateOverallApiStatus(); showToast('设置已保存'); }
+    function clearSettings() { for(let i=1;i<=3;i++) { document.getElementById(`apiKey${i}`).value = ''; document.getElementById(`endpoint${i}`).value = ''; apiConfig[`apiKey${i}`] = ''; apiConfig[`endpoint${i}`] = ''; updateConfigStatus(i, false); } localStorage.removeItem('hyzk_api_config'); updateOverallApiStatus(); showToast('设置已清除'); }
+    function showContactModal() { document.getElementById('modalBody').innerHTML = `<div class="contact-info"><h3 style="margin-bottom:1.5rem;">联系开发</h3><div style="background:#f8fafc;padding:1.5rem;border-radius:16px;margin:1rem 0"><div class="label">邮箱地址</div><p>winnoe@126.com</p></div><div style="background:#f8fafc;padding:1.5rem;border-radius:16px;margin:1rem 0"><div class="label">微信</div><p>Ss_310318</p></div><p style="margin-top:1.5rem;font-size:0.9rem;">工作日 9:00-18:00 在线</p></div>`; document.getElementById('modal').classList.add('active'); }
+    function createTask(type, params) { return { id: Date.now(), type, model: selectedModels[type], params, status: 'pending', progress: 0, result: null, error: null, createdAt: new Date().toISOString(), taskId: null }; }
+    function getModelChannel(modelId, type) { const model = models[type].find(m => m.id === modelId); return model ? model.channel : 1; }
+    function getApiConfigForChannel(channel) { let apiKey = apiConfig[`apiKey${channel}`]; let endpoint = apiConfig[`endpoint${channel}`]; if(!endpoint) { if(channel === 1) endpoint = 'https://api.apimart.ai/v1'; else if(channel === 2) endpoint = 'https://ark.cn-beijing.volces.com/api/v3'; else if(channel === 3) endpoint = 'https://api.wenle.ai/v1'; } return { apiKey, endpoint }; }
+    async function safeApiRequest(url, options) { const res = await fetch(url, options); const contentType = res.headers.get('content-type'); if (!contentType || !contentType.includes('application/json')) { const text = await res.text(); throw new Error(`API返回非JSON格式: ${text.substring(0,100)}`); } const data = await res.json(); if (!res.ok) throw new Error(data.error?.message || `HTTP错误 ${res.status}`); return data; }
+    async function executeTask(task) { if (task.status === 'running' || task.status === 'processing') return; task.status = 'running'; task.error = null; updateTaskTable(); updateStats(); try { const channel = getModelChannel(task.model, task.type); const { apiKey, endpoint } = getApiConfigForChannel(channel); if(!apiKey) throw new Error(`渠道 ${channel} 未配置API密钥`); if (task.type === 'text') { const messages = []; if (task.params.imageUrl) messages.push({ role: 'user', content: [{ type: 'image_url', image_url: { url: task.params.imageUrl } }, { type: 'text', text: task.params.prompt }] }); else messages.push({ role: 'user', content: task.params.prompt }); let payload = { model: task.model, messages, temperature: parseFloat(task.params.temperature) || 0.7, max_tokens: parseInt(task.params.maxTokens) || 4096 }; if (task.params.topP) payload.top_p = parseFloat(task.params.topP); if (task.params.topK) payload.top_k = parseInt(task.params.topK); if (task.params.presencePenalty) payload.presence_penalty = parseFloat(task.params.presencePenalty); const data = await safeApiRequest(`${endpoint}/chat/completions`, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); if (data.choices && data.choices[0]) { task.status = 'completed'; task.result = data.choices[0].message.content; task.progress = 100; showToast('文本生成完成'); } else throw new Error('未知的API响应格式'); } else if (task.type === 'image') { let payload = { model: task.model, prompt: task.params.prompt, n: parseInt(task.params.n) || 1 }; if (task.params.resolution) payload.size = task.params.resolution; if (task.params.aspectRatio) payload.aspect_ratio = task.params.aspectRatio; if (task.params.negativePrompt) payload.negative_prompt = task.params.negativePrompt; if (task.params.seed) payload.seed = parseInt(task.params.seed); if (task.params.refUrl) payload.image = task.params.refUrl; const data = await safeApiRequest(`${endpoint}/images/generations`, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); if (data.data && (data.data[0]?.task_id || data.data.task_id)) { task.taskId = data.data[0]?.task_id || data.data.task_id; task.status = 'processing'; pollTaskStatus(task); } else if (data.data && data.data.url) { task.status = 'completed'; task.result = [data.data.url]; task.progress = 100; showToast('图像生成完成'); } else throw new Error('未知的图像API响应格式'); } else if (task.type === 'video') { let payload = { model: task.model, prompt: task.params.prompt }; if (task.params.refUrl) payload.image = task.params.refUrl; if (task.params.resolution) payload.resolution = task.params.resolution; if (task.params.duration) payload.duration = task.params.duration; if (task.params.fps) payload.fps = parseInt(task.params.fps); if (task.params.motion) payload.motion_strength = task.params.motion; const data = await safeApiRequest(`${endpoint}/video/generations`, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); if (data.data && (data.data[0]?.task_id || data.data.task_id)) { task.taskId = data.data[0]?.task_id || data.data.task_id; task.status = 'processing'; pollTaskStatus(task); } else if (data.data && data.data.video_url) { task.status = 'completed'; task.result = data.data.video_url; task.progress = 100; showToast('视频生成完成'); } else throw new Error('未知的视频API响应格式'); } updateTaskTable(); updateStats(); } catch (e) { console.error(e); task.status = 'failed'; task.error = e.message; showToast(`任务失败: ${e.message}`, 'error'); updateTaskTable(); updateStats(); } }
+    async function pollTaskStatus(task) { if(task.status === 'stopped') return; await new Promise(r => setTimeout(r, 5000)); try { const channel = getModelChannel(task.model, task.type); const { apiKey, endpoint } = getApiConfigForChannel(channel); const data = await safeApiRequest(`${endpoint}/tasks/${task.taskId}`, { headers: { 'Authorization': `Bearer ${apiKey}` } }); const tData = data.data || data; if(tData.status === 'completed' || tData.status === 'success') { task.status = 'completed'; task.progress = 100; if(task.type === 'image') task.result = tData.output?.image_url ? [tData.output.image_url] : (tData.result?.images?.map(img=>img.url||img.image_url) || (tData.image_url ? [tData.image_url] : [])); else if(task.type === 'video') task.result = tData.output?.video_url || tData.result?.video_url || tData.video_url; showToast(`${task.type === 'image' ? '图像' : '视频'}生成完成！`); } else if(tData.status === 'failed' || tData.status === 'error') { task.status = 'failed'; task.error = tData.error?.message || '生成失败'; showToast('生成失败: ' + task.error, 'error'); } else { task.progress = Math.min(tData.progress ? parseInt(tData.progress) : task.progress + 5, 95); updateTaskTable(); setTimeout(() => pollTaskStatus(task), 5000); return; } updateTaskTable(); updateStats(); } catch(e) { if (task.status !== 'stopped') setTimeout(() => pollTaskStatus(task), 5000); } }
+    function updateTaskTable() { const tbody = document.getElementById('taskTableBody'); if(!tasks.length) { tbody.innerHTML = '<tr><td colspan="9" class="empty-state">暂无任务，请在各模块添加任务</td></tr>'; return; } tbody.innerHTML = tasks.map(task => { const typeIcon = { text:'📝', image:'🎨', video:'🎬' }[task.type]; const statusConfig = { pending:{class:'status-pending',text:'待执行'}, running:{class:'status-running',text:'提交中'}, processing:{class:'status-processing',text:`处理中 ${task.progress}%`}, completed:{class:'status-completed',text:'完成'}, failed:{class:'status-failed',text:'失败'}, stopped:{class:'status-stopped',text:'已停止'} }; const s = statusConfig[task.status] || statusConfig.pending; const modelName = models[task.type].find(m=>m.id===task.model)?.name || task.model; let noteContent = '-'; if (task.status === 'failed' && task.error) noteContent = `<div class="error-text" title="${task.error}">${task.error}</div>`; else if (task.status === 'processing') noteContent = '正在处理中...'; else if (task.status === 'completed') noteContent = '生成成功'; else if (task.status === 'running') noteContent = '正在提交...'; return `<tr><td><input type="checkbox" class="task-checkbox" data-id="${task.id}"></td><td>${typeIcon}</td><td><div style="font-weight:600">${modelName}</div><div style="font-size:0.75rem;color:var(--gray)">${task.type.toUpperCase()}</div></td><td title="${task.params.prompt}">${task.params.prompt.slice(0,40)}${task.params.prompt.length>40?'...':''}</td><td><span class="status-badge ${s.class}">${s.text}</span></td><td>${noteContent}</td><td>${task.status === 'processing' ? `<div class="progress-bar"><div class="progress-fill" style="width:${task.progress}%"></div></div>` : '-'}</td><td>${new Date(task.createdAt).toLocaleString()}</td><td><div class="task-actions">${(task.status === 'pending' || task.status === 'failed') ? `<button class="btn btn-primary btn-small" onclick="executeTaskById(${task.id})">▶️ 运行</button>` : ''}${(task.status === 'processing' || task.status === 'running') ? `<button class="btn btn-danger btn-small" onclick="stopTask(${task.id})">⏹️ 停止</button>` : ''}<button class="btn btn-secondary btn-small" onclick="deleteTask(${task.id})">🗑️ 删除</button>${task.status === 'completed' ? `<button class="btn btn-success btn-small" onclick="viewResult(${task.id})">👁️ 查看</button>` : ''}</div></td></tr>`; }).join(''); }
+    function updateStats() { document.getElementById('statTotal').textContent = tasks.length; document.getElementById('statPending').textContent = tasks.filter(t => t.status === 'pending').length; document.getElementById('statRunning').textContent = tasks.filter(t => t.status === 'running' || t.status === 'processing').length; document.getElementById('statCompleted').textContent = tasks.filter(t => t.status === 'completed').length; }
+    function executeTaskById(id) { const task = tasks.find(t => t.id === id); if(task) executeTask(task); }
+    function stopTask(id) { const task = tasks.find(t => t.id === id); if(task && (task.status === 'running' || task.status === 'processing')) task.status = 'stopped'; updateTaskTable(); updateStats(); }
+    function deleteTask(id) { tasks = tasks.filter(t => t.id !== id); saveTasks(); updateTaskTable(); updateStats(); }
+    function toggleSelectAll() { const checked = document.getElementById('selectAll').checked; document.querySelectorAll('.task-checkbox').forEach(cb => cb.checked = checked); }
+    function getSelectedTaskIds() { return Array.from(document.querySelectorAll('.task-checkbox:checked')).map(cb => parseInt(cb.dataset.id)); }
+    function startAllTasks() { tasks.filter(t => t.status === 'pending').forEach(t => executeTask(t)); showToast('开始执行所有待处理任务'); }
+    function startSelectedTasks() { getSelectedTaskIds().forEach(id => { const task = tasks.find(t => t.id === id); if(task && task.status === 'pending') executeTask(task); }); showToast('开始执行选中任务'); }
+    function stopAllTasks() { tasks.forEach(t => { if(t.status === 'running' || t.status === 'processing') t.status = 'stopped'; }); updateTaskTable(); updateStats(); showToast('已停止运行中的任务'); }
+    function clearCompletedTasks() { tasks = tasks.filter(t => t.status !== 'completed'); saveTasks(); updateTaskTable(); updateStats(); showToast('已清除已完成任务'); }
+    function exportTasks() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(tasks,null,2)], {type:'application/json'})); a.download = `hyzk-tasks-${new Date().toISOString().slice(0,10)}.json`; a.click(); }
+    function importTasks(e) { const file = e.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = ev => { try { const imported = JSON.parse(ev.target.result); if(Array.isArray(imported)) { imported.forEach(t => { t.status = 'pending'; t.taskId = null; t.error = null; }); tasks = [...tasks, ...imported]; saveTasks(); updateTaskTable(); updateStats(); showToast(`导入${imported.length}个任务`); } } catch(err) { showToast('导入失败', 'error'); } }; reader.readAsText(file); }
+    function viewResult(taskId) { const task = tasks.find(t => t.id === taskId) || savedResults.find(r => r.id === taskId); if(!task || !task.result) return; let content = ''; if(task.type === 'text') content = `<div style="background:#f8fafc;padding:1.5rem;border-radius:16px;white-space:pre-wrap;max-height:60vh;overflow:auto">${escapeHtml(task.result)}</div>`; else if(task.type === 'image') { const urls = Array.isArray(task.result) ? task.result : [task.result]; content = `<div style="display:grid;gap:1rem">${urls.map(url => `<img src="${url}" style="max-width:100%;border-radius:16px" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22><rect fill=%22%23f1f5f9%22 width=%22400%22 height=%22300%22/><text fill=%22%2364748b%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22>加载失败</text></svg>'">`).join('')}</div>`; } else if(task.type === 'video') { const url = Array.isArray(task.result) ? task.result[0] : task.result; content = `<video src="${url}" controls style="max-width:100%;border-radius:16px"></video>`; } document.getElementById('modalBody').innerHTML = `<h3 style="margin-bottom:1rem">任务结果 #${taskId}</h3>${content}`; document.getElementById('modal').classList.add('active'); }
+    function closeModal() { document.getElementById('modal').classList.remove('active'); }
+    function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+    function addTextTask() { const prompt = document.getElementById('textPrompt').value.trim(); if(!checkApiConfigForSelectedModel('text')) return; if(!prompt) { showToast('请输入提示词', 'error'); return; } const model = models.text.find(m => m.id === selectedModels.text); const imageUrl = model.vision ? document.getElementById('textImageUrl').value : ''; const params = { prompt, imageUrl, temperature: parseFloat(document.getElementById('textTemp')?.value || 0.7), maxTokens: parseInt(document.getElementById('textMaxTokens')?.value || 4096) }; if (document.getElementById('textTopP')) params.topP = document.getElementById('textTopP').value; if (document.getElementById('textTopK')) params.topK = document.getElementById('textTopK').value; if (document.getElementById('textPresence')) params.presencePenalty = document.getElementById('textPresence').value; const task = createTask('text', params); tasks.push(task); saveTasks(); showToast('文本任务已添加'); resetTextForm(); }
+    function addImageTask() { const prompt = document.getElementById('imagePrompt').value.trim(); if(!checkApiConfigForSelectedModel('image')) return; if(!prompt) { showToast('请输入提示词', 'error'); return; } const params = { prompt, refUrl: document.getElementById('imageRefUrl').value || '', resolution: document.getElementById('imageResolution')?.value, aspectRatio: document.getElementById('imageAspectRatio')?.value, n: parseInt(document.getElementById('imageN')?.value || 1) }; if (document.getElementById('imageStyle')) params.style = document.getElementById('imageStyle').value; if (document.getElementById('imageTextRender')) params.textRendering = document.getElementById('imageTextRender').value; if (document.getElementById('imageCnStrength')) params.cnStrength = document.getElementById('imageCnStrength').value; if (document.getElementById('imageNegative')) params.negativePrompt = document.getElementById('imageNegative').value; if (document.getElementById('imageSeed')) params.seed = document.getElementById('imageSeed').value; const task = createTask('image', params); tasks.push(task); saveTasks(); showToast('图像任务已添加'); resetImageForm(); }
+    function addVideoTask() { const prompt = document.getElementById('videoPrompt').value.trim(); if(!checkApiConfigForSelectedModel('video')) return; const model = models.video.find(m => m.id === selectedModels.video); const params = { prompt, refUrl: model.type === 'i2v' ? (document.getElementById('videoRefUrl').value || '') : '', type: model.type }; if (document.getElementById('videoResolution')) params.resolution = document.getElementById('videoResolution').value; if (document.getElementById('videoDuration')) params.duration = document.getElementById('videoDuration').value; if (document.getElementById('videoFps')) params.fps = document.getElementById('videoFps').value; if (document.getElementById('videoMotion')) params.motion = document.getElementById('videoMotion').value; if (document.getElementById('videoCamera')) params.camera = document.getElementById('videoCamera').value; if (document.getElementById('videoSteps')) params.steps = document.getElementById('videoSteps').value; if (document.getElementById('videoGuidance')) params.guidance = document.getElementById('videoGuidance').value; const task = createTask('video', params); tasks.push(task); saveTasks(); showToast('视频任务已添加'); resetVideoForm(); }
+    function checkApiConfigForSelectedModel(type) { const modelId = selectedModels[type]; const channel = getModelChannel(modelId, type); if(!apiConfig[`apiKey${channel}`] || !apiConfig[`apiKey${channel}`].trim()) { showToast(`请先在设置中配置渠道 ${channel} 的API密钥`, 'error'); switchTab('settings', document.querySelectorAll('.nav-tab')[5]); return false; } return true; }
+    async function generateTextImmediate() { addTextTask(); const task = tasks[tasks.length-1]; if(task) await executeTask(task); }
+    async function generateImageImmediate() { addImageTask(); const task = tasks[tasks.length-1]; if(task) await executeTask(task); }
+    async function generateVideoImmediate() { addVideoTask(); const task = tasks[tasks.length-1]; if(task) await executeTask(task); }
+    function saveTasks() { localStorage.setItem('hyzk_tasks', JSON.stringify(tasks)); }
+    async function startReverseAnalysis() { const url = document.getElementById('reverseImageUrl').value; if(!url) { showToast('请上传图片', 'error'); return; } if(!checkApiConfigForSelectedModel('text')) return; const btn = document.getElementById('reverseBtn'); btn.disabled = true; btn.innerHTML = '<span class="loading-spinner"></span> 分析中...'; try { const channel = getModelChannel(selectedModels.text, 'text'); const { apiKey, endpoint } = getApiConfigForChannel(channel); const data = await safeApiRequest(`${endpoint}/chat/completions`, { method: 'POST', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: selectedModels.text, messages: [{ role: 'user', content: [{ type: 'image_url', image_url: { url } }, { type: 'text', text: '详细分析图片中内容，json格式返回。' }] }], temperature: 0.3, max_tokens: 4096 }) }); const result = data.choices[0].message.content; document.getElementById('reverseResult').style.display = 'block'; document.getElementById('reverseResultContent').textContent = result; } catch(e) { showToast('分析失败: ' + e.message, 'error'); } finally { btn.disabled = false; btn.innerHTML = '🔍 开始分析'; } }
+    async function startClothingSwap() { const modelUrl = document.getElementById('modelImageUrl').value; const productUrl = document.getElementById('productImageUrl').value; if(!modelUrl || !productUrl) { showToast('请提供模特图和产品图', 'error'); return; } if(!checkApiConfigForSelectedModel('image')) return; const btn = document.getElementById('swapBtn'); btn.disabled = true; btn.innerHTML = '<span class="loading-spinner"></span> 处理中...'; const task = createTask('image', { prompt: '将产品白底图中的产品替换到模特图中的模特身上，保持产品细节不变。', refUrl: modelUrl, productUrl, isSwap: true, resolution: '4K', aspectRatio: '3:4', n: 1 }); task.model = 'gpt-4o-image-generation'; tasks.push(task); saveTasks(); try { await executeTask(task); } finally { btn.disabled = false; btn.innerHTML = '👗 开始换衣'; } }
+    async function startFashionVideo() { const url = document.getElementById('fashionModelUrl').value; if(!url) { showToast('请提供模特图', 'error'); return; } if(!checkApiConfigForSelectedModel('video')) return; const prompt = `根据提供的模特图生成服饰展示视频，整体风格参考小红书网红穿搭视频分享风格。人物脸部多表情、四肢多动作，拍摄多角度，展示服饰整体和细节。人脸细节保持一致，人物随机看向镜头或其他方向，脸部表情要有情绪变化，随机眨眼，随机微笑。服饰展示动作自然、松弛、真实，动作不要重复。镜头有轻微晃动，像真人实拍的感觉。视频中光影效果细节真实，符合场景中自然科学规律。背景音乐轻快时尚、节奏感舒适。不要添加文字！`; const task = createTask('video', { prompt, refUrl: url, type: 'i2v', resolution: '1080p', duration: '10s', motion: '大' }); tasks.push(task); saveTasks(); await executeTask(task); showToast('服饰展示视频任务已添加'); }
+    function showToast(msg, type='success') { const toast = document.getElementById('toast'); document.getElementById('toastMessage').textContent = msg; document.getElementById('toastIcon').textContent = type === 'error' ? '❌' : '✓'; toast.style.display = 'flex'; setTimeout(() => toast.style.display = 'none', 3000); }
+    function resetTextForm() { document.getElementById('textPrompt').value = ''; document.getElementById('textImageUrl').value = ''; document.getElementById('textImagePreview').innerHTML = ''; document.getElementById('textImageInput').value = ''; if(document.getElementById('textUploadArea')) document.getElementById('textUploadArea').classList.remove('has-file'); updateTextParams(); }
+    function resetImageForm() { document.getElementById('imagePrompt').value = ''; document.getElementById('imageRefUrl').value = ''; document.getElementById('imageRefPreview').innerHTML = ''; document.getElementById('imageRefInput').value = ''; if(document.getElementById('imageRefUploadArea')) document.getElementById('imageRefUploadArea').classList.remove('has-file'); updateImageParams(); }
+    function resetVideoForm() { document.getElementById('videoPrompt').value = ''; document.getElementById('videoRefUrl').value = ''; document.getElementById('videoImagePreview').innerHTML = ''; document.getElementById('videoImageInput').value = ''; if(document.getElementById('videoUploadArea')) document.getElementById('videoUploadArea').classList.remove('has-file'); updateVideoParams(); }
+    function renderResultLibrary() { const container = document.getElementById('resultCardGrid'); if(savedResults.length === 0) { container.innerHTML = '<div class="empty-state">暂无保存的结果</div>'; return; } let html = ''; savedResults.forEach(result => { const typeLabel = { text:'📝 文本', image:'🎨 图像', video:'🎬 视频' }; const modelName = models[result.type]?.find(m=>m.id===result.model)?.name || result.model; html += `<div class="result-item-card"><input type="checkbox" class="result-checkbox" data-id="${result.id}">`; if(result.type === 'image' && Array.isArray(result.result)) result.result.forEach(url => { html += `<img src="${url}" alt="result" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23f1f5f9%22 width=%22300%22 height=%22200%22/><text fill=%22%2364748b%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22>加载失败</text></svg>'">`; }); else if(result.type === 'image') html += `<img src="${result.result[0] || result.result}" alt="result" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23f1f5f9%22 width=%22300%22 height=%22200%22/><text fill=%22%2364748b%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22>加载失败</text></svg>'">`; else if(result.type === 'video') html += `<video src="${result.result}" controls></video>`; html += `<div class="result-item-info"><p><strong>${typeLabel[result.type]} | ${modelName}</strong></p><p>${result.params.prompt ? result.params.prompt.slice(0,50)+(result.params.prompt.length>50?'...':'') : '-'}</p><p>${new Date(result.createdAt).toLocaleString()}</p></div><div class="result-item-actions"><button class="btn btn-small btn-primary" onclick="viewResult(${result.id})">👁️ 查看</button><button class="btn btn-small btn-success" onclick="downloadSingleResult(${result.id})">📥 下载</button><button class="btn btn-small btn-danger" onclick="deleteSingleResult(${result.id})">🗑️ 删除</button></div></div>`; }); container.innerHTML = html; }
+    function saveSelectedResultsToLibrary() { const ids = getSelectedTaskIds(); let count = 0; ids.forEach(id => { const task = tasks.find(t => t.id === id); if(task && task.status === 'completed' && task.result && !savedResults.find(r => r.id === id)) { savedResults.push({...task}); count++; } }); if(count===0) { showToast('请先选择已完成且未保存的任务', 'error'); return; } saveResults(); renderResultLibrary(); showToast(`已保存 ${count} 个结果到结果库`); }
+    function getSelectedResultIds() { return Array.from(document.querySelectorAll('.result-checkbox:checked')).map(cb => parseInt(cb.dataset.id)); }
+    function downloadSelectedResults() { getSelectedResultIds().forEach(id => downloadSingleResult(id)); showToast('开始下载选中结果'); }
+    function downloadSingleResult(resultId) { const result = savedResults.find(r => r.id === resultId); if(!result) return; if(result.type === 'text') { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([result.result], {type:'text/plain'})); a.download = `result-text-${resultId}.txt`; a.click(); URL.revokeObjectURL(a.href); } else if(result.type === 'image') { const urls = Array.isArray(result.result) ? result.result : [result.result]; urls.forEach((url, idx) => { if(url.startsWith('data:')) { const a = document.createElement('a'); a.href = url; a.download = `result-image-${resultId}-${idx+1}.png`; a.click(); } else { fetch(url).then(r=>r.blob()).then(blob=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`result-image-${resultId}-${idx+1}.png`; a.click(); URL.revokeObjectURL(a.href); }); } }); } else if(result.type === 'video') { const a = document.createElement('a'); a.href = result.result; a.download = `result-video-${resultId}.mp4`; a.click(); } }
+    function deleteSingleResult(resultId) { savedResults = savedResults.filter(r => r.id !== resultId); saveResults(); renderResultLibrary(); }
+    function clearSelectedResults() { const ids = getSelectedResultIds(); if(ids.length===0) { showToast('请先选择要清除的结果', 'error'); return; } savedResults = savedResults.filter(r => !ids.includes(r.id)); saveResults(); renderResultLibrary(); showToast(`已清除 ${ids.length} 个结果`); }
+    function saveResults() { localStorage.setItem('hyzk_saved_results', JSON.stringify(savedResults)); }
+    window.switchTab=switchTab; window.selectModel=selectModel; window.toggleApiKeyVisibility=toggleApiKeyVisibility; window.testApiConnection=testApiConnection; window.saveSettings=saveSettings; window.clearSettings=clearSettings; window.showContactModal=showContactModal; window.handleFileUpload=handleFileUpload; window.addTextTask=addTextTask; window.generateTextImmediate=generateTextImmediate; window.addImageTask=addImageTask; window.generateImageImmediate=generateImageImmediate; window.addVideoTask=addVideoTask; window.generateVideoImmediate=generateVideoImmediate; window.startReverseAnalysis=startReverseAnalysis; window.startClothingSwap=startClothingSwap; window.startFashionVideo=startFashionVideo; window.executeTaskById=executeTaskById; window.stopTask=stopTask; window.deleteTask=deleteTask; window.toggleSelectAll=toggleSelectAll; window.startAllTasks=startAllTasks; window.startSelectedTasks=startSelectedTasks; window.stopAllTasks=stopAllTasks; window.clearCompletedTasks=clearCompletedTasks; window.exportTasks=exportTasks; window.importTasks=importTasks; window.viewResult=viewResult; window.closeModal=closeModal; window.resetTextForm=resetTextForm; window.resetImageForm=resetImageForm; window.resetVideoForm=resetVideoForm; window.saveSelectedResultsToLibrary=saveSelectedResultsToLibrary; window.downloadSelectedResults=downloadSelectedResults; window.downloadSingleResult=downloadSingleResult; window.deleteSingleResult=deleteSingleResult; window.clearSelectedResults=clearSelectedResults;
+</script>
 </body>
-
 </html>
