@@ -279,7 +279,31 @@
     </main>
     <div class="toast-container" id="toastContainer"></div>
     <script>
-        const CONFIG = { COST: 12, MODEL: 'banana2' };
+        // 从URL参数读取配置
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                channel: params.get('channel') || 'channel3',
+                channelName: params.get('channel_name') || '渠道3 - 经济版',
+                apiKey: params.get('api_key') || 'sk-wcu5MMpIVS6PejN6rk3i6uKjQ1USl6JY5p5zJaeoJ61SHiPd',
+                baseUrl: params.get('base_url') || 'https://api.wenle.ai/v1',
+                model: params.get('model') || 'grok-imagine-1.0',
+                type: params.get('type') || 'video',
+                cost: parseInt(params.get('cost')) || 5
+            };
+        }
+        
+        const urlConfig = getUrlParams();
+        
+        const CONFIG = { 
+            COST: urlConfig.cost, 
+            MODEL: urlConfig.model,
+            CHANNEL: urlConfig.channel,
+            CHANNEL_NAME: urlConfig.channelName,
+            API_BASE_URL: urlConfig.baseUrl,
+            API_KEY: urlConfig.apiKey,
+            TYPE: urlConfig.type
+        };
         let state = { url: '', videoFile: null, platform: 'douyin', option: 'full' };
         function pasteUrl() {
             navigator.clipboard.readText().then(text => {
@@ -305,6 +329,30 @@
             el.classList.add('selected');
             state.option = el.dataset.option;
         }
+        // ==================== 历史日志同步 ====================
+        function addTaskLogToMain(task) {
+            try {
+                const existingLogs = JSON.parse(localStorage.getItem('ai_workbench_task_logs') || '[]');
+                const log = {
+                    id: Date.now(),
+                    timestamp: new Date().toISOString(),
+                    type: task.type || 'video',
+                    model: task.model || 'grok-imagine-1.0',
+                    channel: task.channel || '渠道3 - 经济版',
+                    input: task.input || '爆款视频复刻',
+                    output: task.output || '',
+                    status: task.status || 'success',
+                    cost: task.cost || CONFIG.COST,
+                    error: null
+                };
+                existingLogs.unshift(log);
+                if (existingLogs.length > 100) existingLogs.pop();
+                localStorage.setItem('ai_workbench_task_logs', JSON.stringify(existingLogs));
+            } catch (e) {
+                console.warn('无法同步任务日志:', e);
+            }
+        }
+
         async function analyzeAndReplicate() {
             if (!state.url && !state.videoFile) {
                 showToast('请输入视频链接或上传视频', 'error');
@@ -323,6 +371,18 @@
             document.getElementById('creditAmount').textContent = (credits - CONFIG.COST).toLocaleString();
             document.getElementById('generateBtn').disabled = false;
             document.getElementById('generateBtn').innerHTML = '<span>🔍</span><span>分析并复刻</span><span style="font-size: 14px; opacity: 0.8;">（消耗 12 积分）</span>';
+            
+            // 同步到主页面历史日志
+            addTaskLogToMain({
+                type: 'video',
+                model: CONFIG.MODEL,
+                channel: CONFIG.CHANNEL_NAME,
+                input: `爆款视频复刻 - ${state.url ? '链接解析' : '本地视频'}`,
+                output: state.url || (state.videoFile ? state.videoFile.name : ''),
+                status: 'success',
+                cost: CONFIG.COST
+            });
+            
             showToast('🔥 爆款视频复刻功能开发中，API对接后可正常使用', 'warning');
         }
         function goBack() { window.location.href = 'ai-workbench-20260415_162800.html'; }
