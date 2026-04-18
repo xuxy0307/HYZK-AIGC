@@ -23,6 +23,119 @@
             --border: rgba(148, 163, 184, 0.2);
         }
 
+        /* 弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 24px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* 输入框样式 */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: var(--bg-dark);
@@ -1004,6 +1117,259 @@
             color: #fbbf24;
         }
 
+        /* 历史日志样式 */
+        .logs-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+        }
+
+        .logs-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .log-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .log-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .log-icon {
+            font-size: 20px;
+        }
+
+        .log-type {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .log-model {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+        }
+
+        .log-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .log-status.pending {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+        }
+
+        .log-status.processing {
+            background: rgba(99, 102, 241, 0.1);
+            color: #818cf8;
+        }
+
+        .log-status.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .log-status.failed {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .log-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .log-preview {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        .log-input {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .log-output {
+            color: var(--text-primary);
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .log-error {
+            color: #ef4444;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: transparent;
+        }
+
+        /* 弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10002;
+            transition: opacity 0.2s;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 25px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .detail-section {
+            margin-bottom: 25px;
+        }
+
+        .detail-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detail-row span:first-child {
+            color: var(--text-secondary);
+        }
+
+        .detail-row span:last-child {
+            color: var(--text-primary);
+        }
+
+        .detail-content {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .output-content {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .error-content {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
         /* 充值面板 */
         .recharge-panel {
             background: var(--bg-card);
@@ -1275,8 +1641,28 @@
                 </div>
                 <div class="nav-item" onclick="switchTab('share', this)">
                     <span class="nav-icon">🌟</span>
-                    <span>创意分享</span>
+                    <span>创意工具箱</span>
                     <span class="nav-badge">NEW</span>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">快捷入口</div>
+                <div class="nav-item" onclick="openEcommerceTool('video-replica.html')">
+                    <span class="nav-icon">🔥</span>
+                    <span>爆款视频复刻</span>
+                </div>
+                <div class="nav-item" onclick="openEcommerceTool('emotional-video.html')">
+                    <span class="nav-icon">💕</span>
+                    <span>情感视频生产</span>
+                </div>
+                <div class="nav-item" onclick="openEcommerceTool('comic-drama.html')">
+                    <span class="nav-icon">🎭</span>
+                    <span>漫剧一键生产</span>
+                </div>
+                <div class="nav-item" onclick="openEcommerceTool('watermark-remover.html')">
+                    <span class="nav-icon">💧</span>
+                    <span>一键去水印</span>
                 </div>
             </div>
 
@@ -1285,6 +1671,11 @@
                 <div class="nav-item" onclick="switchTab('models', this)">
                     <span class="nav-icon">🏛️</span>
                     <span>模型广场</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('logs', this)">
+                    <span class="nav-icon">📋</span>
+                    <span>历史日志</span>
+                    <span class="nav-badge" id="logsBadge" style="display: none;">0</span>
                 </div>
                 <div class="nav-item" onclick="toggleRechargePanel()">
                     <span class="nav-icon">💎</span>
@@ -1420,6 +1811,50 @@
                 </div>
             </div>
 
+            <!-- 历史任务日志 -->
+            <div class="logs-panel hidden" id="logsPanel">
+                <div class="plaza-header">
+                    <h3 class="plaza-title">📋 历史任务日志</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="exportLogs()">
+                            <span>📥</span> 导出日志
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearAllLogs()">
+                            <span>🗑️</span> 清除全部
+                        </button>
+                    </div>
+                </div>
+                <div class="logs-stats" id="logsStats" style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <div class="stat-card" style="flex: 1; min-width: 150px; padding: 20px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.2);">
+                        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 5px;">总任务数</div>
+                        <div style="font-size: 28px; font-weight: bold; color: var(--text-primary);" id="totalTasks">0</div>
+                    </div>
+                    <div class="stat-card" style="flex: 1; min-width: 150px; padding: 20px; background: rgba(16, 185, 129, 0.1); border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 5px;">成功</div>
+                        <div style="font-size: 28px; font-weight: bold; color: #10b981;" id="successTasks">0</div>
+                    </div>
+                    <div class="stat-card" style="flex: 1; min-width: 150px; padding: 20px; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 5px;">失败</div>
+                        <div style="font-size: 28px; font-weight: bold; color: #ef4444;" id="failedTasks">0</div>
+                    </div>
+                    <div class="stat-card" style="flex: 1; min-width: 150px; padding: 20px; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.2);">
+                        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 5px;">总消耗积分</div>
+                        <div style="font-size: 28px; font-weight: bold; color: #fbbf24;" id="totalCost">0</div>
+                    </div>
+                </div>
+                <div class="logs-filter" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="filter-btn active" onclick="filterLogs('all', this)" data-filter="all">全部</button>
+                    <button class="filter-btn" onclick="filterLogs('text', this)" data-filter="text">📝 文本</button>
+                    <button class="filter-btn" onclick="filterLogs('image', this)" data-filter="image">🎨 图片</button>
+                    <button class="filter-btn" onclick="filterLogs('video', this)" data-filter="video">🎬 视频</button>
+                    <button class="filter-btn" onclick="filterLogs('success', this)" data-filter="success">✅ 成功</button>
+                    <button class="filter-btn" onclick="filterLogs('failed', this)" data-filter="failed">❌ 失败</button>
+                </div>
+                <div class="logs-list" id="taskLogsList">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
             <!-- 功能卡片区域 -->
             <div class="features-grid" id="featuresArea">
                 <!-- 文本创作 -->
@@ -1435,7 +1870,7 @@
                         </div>
                     </div>
                     <div class="feature-content">
-                        <!-- 多模态上传区域（仅渠道2 Doubao模型显示） -->
+                        <!-- 多模态上传区域 -->
                         <div class="multimodal-upload hidden" id="multimodalUpload">
                             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
                                 <div class="upload-icon">📎</div>
@@ -1446,7 +1881,22 @@
                             <div class="uploaded-files" id="uploadedFiles"></div>
                         </div>
                         <div class="input-wrapper">
-                            <textarea class="feature-input" id="textInput" placeholder="输入你的需求，例如：帮我写一篇关于人工智能发展的科技文章，800字左右...&#10;&#10;提示：选择渠道2的Doubao-Seed-2.0-lite模型可上传图片、文档、视频进行多模态理解"></textarea>
+                            <textarea class="feature-input" id="textInput" placeholder="输入你的需求，例如：帮我写一篇关于人工智能发展的科技文章，800字左右..."></textarea>
+                        </div>
+                        <!-- 模式选项 -->
+                        <div class="mode-options" id="modeOptions" style="display: flex; gap: 20px; margin-top: 15px; flex-wrap: wrap;">
+                            <label class="mode-toggle" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" id="thinkingMode" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                                <span style="color: var(--text-secondary); font-size: 14px;">🧠 思考模式</span>
+                            </label>
+                            <label class="mode-toggle" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" id="webSearchMode" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                                <span style="color: var(--text-secondary); font-size: 14px;">🌐 联网模式</span>
+                            </label>
+                        </div>
+                        <!-- 模型说明 -->
+                        <div class="model-hint" id="modelHint" style="margin-top: 10px; padding: 10px 15px; background: rgba(99, 102, 241, 0.1); border-radius: 10px; font-size: 13px; color: var(--text-secondary);">
+                            <span id="modelHintText">选择模型后显示支持的特性</span>
                         </div>
                         <div class="result-area" id="textResult">
                             <div class="result-placeholder">
@@ -1474,10 +1924,42 @@
                                 AI图片创作
                                 <span class="cost-badge premium" id="imagePriceBadge">💎 5积分/次</span>
                             </h3>
-                            <p class="feature-desc">集成Midjourney V6、DALL-E 3、Stable Diffusion 3，支持多种艺术风格，最高4K分辨率</p>
+                            <p class="feature-desc">集成Doubao-Image等模型，支持多种艺术风格，可调节比例和风格</p>
                         </div>
                     </div>
                     <div class="feature-content">
+                        <!-- 图片参数面板 -->
+                        <div class="image-params-panel" id="imageParamsPanel" style="display: none; margin-bottom: 20px; padding: 20px; background: rgba(99, 102, 241, 0.1); border-radius: 16px; border: 1px solid rgba(99, 102, 241, 0.2);">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                                <div class="param-group">
+                                    <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 13px;">📐 图片比例</label>
+                                    <select id="imageRatio" class="param-select" style="width: 100%; padding: 10px 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary);">
+                                        <option value="1:1" selected>1:1 (方形)</option>
+                                        <option value="16:9">16:9 (横版)</option>
+                                        <option value="9:16">9:16 (竖版)</option>
+                                    </select>
+                                </div>
+                                <div class="param-group">
+                                    <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 13px;">🎨 生成风格</label>
+                                    <select id="imageStyle" class="param-select" style="width: 100%; padding: 10px 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary);">
+                                        <option value="写实">写实</option>
+                                        <option value="动漫">动漫</option>
+                                        <option value="插画">插画</option>
+                                        <option value="摄影">摄影</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 参考图上传 -->
+                            <div class="ref-image-upload hidden" id="refImageUpload" style="margin-top: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 13px;">🖼️ 参考图 (可选)</label>
+                                <div class="upload-area-small" onclick="document.getElementById('refImageInput').click()" style="padding: 15px; border: 2px dashed rgba(99, 102, 241, 0.3); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s;">
+                                    <span style="font-size: 24px;">📷</span>
+                                    <p style="margin: 8px 0 0; font-size: 13px; color: var(--text-secondary);">点击上传参考图片</p>
+                                </div>
+                                <input type="file" id="refImageInput" accept="image/*" style="display: none;" onchange="handleRefImageSelect(event)">
+                                <div id="refImagePreview" style="margin-top: 10px;"></div>
+                            </div>
+                        </div>
                         <div class="input-wrapper">
                             <textarea class="feature-input" id="imageInput" placeholder="描述你想要的图像，例如：赛博朋克风格的中国古代山水，霓虹灯光，未来与传统融合，8k高清，超精细细节..."></textarea>
                         </div>
@@ -1492,8 +1974,8 @@
                         <button class="btn btn-primary" onclick="processFeature('image')">
                             <span>🎨</span> 生成图像
                         </button>
-                        <button class="btn btn-secondary" onclick="showToast('🎭 风格选择器开发中', 'warning')">
-                            <span>🎭</span> 风格选择
+                        <button class="btn btn-secondary" onclick="toggleImageParams()">
+                            <span>⚙️</span> 参数设置
                         </button>
                     </div>
                 </div>
@@ -1507,10 +1989,35 @@
                                 AI视频创作
                                 <span class="cost-badge premium" id="videoPriceBadge">💎 10积分/次</span>
                             </h3>
-                            <p class="feature-desc">基于Sora、Runway Gen-2、Pika Labs，文本生成高清视频，支持多种风格，最长60秒</p>
+                            <p class="feature-desc">基于Doubao-Seedance模型，文本生成高清视频，支持多种分辨率</p>
                         </div>
                     </div>
                     <div class="feature-content">
+                        <!-- 视频参数面板 -->
+                        <div class="video-params-panel" id="videoParamsPanel" style="display: none; margin-bottom: 20px; padding: 20px; background: rgba(139, 92, 246, 0.1); border-radius: 16px; border: 1px solid rgba(139, 92, 246, 0.2);">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                                <div class="param-group">
+                                    <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 13px;">⏱️ 视频时长</label>
+                                    <select id="videoDuration" class="param-select" style="width: 100%; padding: 10px 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary);">
+                                        <option value="5">5秒</option>
+                                        <option value="10" selected>10秒</option>
+                                    </select>
+                                </div>
+                                <div class="param-group">
+                                    <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 13px;">📺 分辨率</label>
+                                    <select id="videoResolution" class="param-select" style="width: 100%; padding: 10px 15px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary);">
+                                        <option value="720P">720P (HD)</option>
+                                        <option value="1080P" selected>1080P (FHD)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 视频描述提示 -->
+                            <div style="margin-top: 15px; padding: 12px; background: rgba(139, 92, 246, 0.1); border-radius: 10px;">
+                                <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">
+                                    💡 提示：详细的场景描述能生成更优质的视频，建议包含：主体、动作、环境、光线、镜头运动等要素。
+                                </p>
+                            </div>
+                        </div>
                         <div class="input-wrapper">
                             <textarea class="feature-input" id="videoInput" placeholder="详细描述你想要的视频场景，例如：一只橘猫在樱花树下打盹，阳光透过花瓣洒下，微风轻拂，镜头缓慢推进，电影级画质..."></textarea>
                         </div>
@@ -1525,8 +2032,8 @@
                         <button class="btn btn-primary" onclick="processFeature('video')">
                             <span>✨</span> 生成视频
                         </button>
-                        <button class="btn btn-secondary" onclick="showToast('📜 历史记录已加载', 'success')">
-                            <span>📜</span> 历史记录
+                        <button class="btn btn-secondary" onclick="toggleVideoParams()">
+                            <span>⚙️</span> 参数设置
                         </button>
                     </div>
                 </div>
@@ -1544,97 +2051,66 @@
                         </div>
                     </div>
                     <div class="ecommerce-submenu">
-                        <div class="ecommerce-item" onclick="processEcommerce('main-image')">
+                        <div class="ecommerce-item" onclick="openEcommerceTool('ecommerce-main-image.html')">
                             <div class="ecommerce-item-icon">🖼️</div>
                             <h4>爆款主图</h4>
                             <p>一键生成高点击率商品主图</p>
                         </div>
-                        <div class="ecommerce-item" onclick="processEcommerce('detail-page')">
+                        <div class="ecommerce-item" onclick="openEcommerceTool('ecommerce-detail-page.html')">
                             <div class="ecommerce-item-icon">📄</div>
                             <h4>详情页图片</h4>
                             <p>智能生成商品详情页全套素材</p>
                         </div>
-                        <div class="ecommerce-item" onclick="processEcommerce('brand-video')">
+                        <div class="ecommerce-item" onclick="openEcommerceTool('ecommerce-brand-video.html')">
                             <div class="ecommerce-item-icon">🎥</div>
                             <h4>品宣视频</h4>
                             <p>自动生成品牌宣传短视频</p>
                         </div>
-                        <div class="ecommerce-item" onclick="processEcommerce('model-video')">
+                        <div class="ecommerce-item" onclick="openEcommerceTool('ecommerce-model-video.html')">
                             <div class="ecommerce-item-icon">👗</div>
                             <h4>模特展示视频</h4>
                             <p>AI模特试穿展示视频生成</p>
                         </div>
+                        <div class="ecommerce-item" onclick="openEcommerceTool('xiaohongshu-4img1text.html')">
+                            <div class="ecommerce-item-icon">📕</div>
+                            <h4>小红书四图一文</h4>
+                            <p>一键生成小红书爆款图文内容</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 创意分享 -->
+                <!-- 创意工具 -->
                 <div class="feature-card hidden" id="shareCard">
                     <div class="feature-header">
                         <div class="feature-icon-wrap icon-share">🌟</div>
                         <div class="feature-title-group">
                             <h3>
-                                创意分享广场
-                                <span class="cost-badge">🆓 免费浏览</span>
+                                创意工具箱
+                                <span class="cost-badge">⚡ 一键生成</span>
                             </h3>
-                            <p class="feature-desc">探索社区精选创意作品，获取灵感，分享你的AI创作成果</p>
+                            <p class="feature-desc">爆款视频复刻、情感视频生产、去水印、漫剧生成，全套创意工具一站式使用</p>
                         </div>
                     </div>
-                    <div class="share-grid">
-                        <div class="share-card" onclick="showToast('🎨 查看作品详情', 'success')">
-                            <div class="share-preview">🎨</div>
-                            <div class="share-info">
-                                <h4>赛博朋克城市夜景</h4>
-                                <p>使用Midjourney V6创作的科幻风格城市景观...</p>
-                                <div class="share-meta">
-                                    <div class="share-author">
-                                        <div class="share-avatar">A</div>
-                                        <span>ArtMaster</span>
-                                    </div>
-                                    <span>👍 2.3k</span>
-                                </div>
-                            </div>
+                    <div class="ecommerce-submenu">
+                        <div class="ecommerce-item" onclick="openEcommerceTool('video-replica.html')">
+                            <div class="ecommerce-item-icon">🔥</div>
+                            <h4>爆款视频复刻</h4>
+                            <p>分析爆款视频，一键复刻同款内容</p>
                         </div>
-                        <div class="share-card" onclick="showToast('🎬 查看作品详情', 'success')">
-                            <div class="share-preview">🎬</div>
-                            <div class="share-info">
-                                <h4>古风舞蹈短视频</h4>
-                                <p>AI生成的汉服舞蹈视频，动作流畅自然...</p>
-                                <div class="share-meta">
-                                    <div class="share-author">
-                                        <div class="share-avatar">D</div>
-                                        <span>DanceAI</span>
-                                    </div>
-                                    <span>👍 1.8k</span>
-                                </div>
-                            </div>
+                        <div class="ecommerce-item" onclick="openEcommerceTool('emotional-video.html')">
+                            <div class="ecommerce-item-icon">💕</div>
+                            <h4>情感类视频生产</h4>
+                            <p>一键生成感人情感类短视频</p>
                         </div>
-                        <div class="share-card" onclick="showToast('📝 查看作品详情', 'success')">
-                            <div class="share-preview">📝</div>
-                            <div class="share-info">
-                                <h4>产品营销文案集</h4>
-                                <p>精选高转化率电商文案模板，适用于各类目...</p>
-                                <div class="share-meta">
-                                    <div class="share-author">
-                                        <div class="share-avatar">C</div>
-                                        <span>CopyPro</span>
-                                    </div>
-                                    <span>👍 3.1k</span>
-                                </div>
-                            </div>
+                        <div class="ecommerce-item" onclick="openEcommerceTool('watermark-remover.html')">
+                            <div class="ecommerce-item-icon">💧</div>
+                            <h4>一键去水印</h4>
+                            <p>支持抖音/快手/小红书等平台去水印</p>
                         </div>
-                        <div class="share-card" onclick="showToast('🖼️ 查看作品详情', 'success')">
-                            <div class="share-preview">🖼️</div>
-                            <div class="share-info">
-                                <h4>极简主义Logo设计</h4>
-                                <p>品牌标识设计作品集，涵盖科技、时尚、餐饮...</p>
-                                <div class="share-meta">
-                                    <div class="share-author">
-                                        <div class="share-avatar">L</div>
-                                        <span>LogoLab</span>
-                                    </div>
-                                    <span>👍 956</span>
-                                </div>
-                            </div>
+                        <div class="ecommerce-item" onclick="openEcommerceTool('comic-drama.html')">
+                            <div class="ecommerce-item-icon">🎭</div>
+                            <h4>漫剧一键生产</h4>
+                            <p>文本转漫画风格短剧视频</p>
                         </div>
                     </div>
                 </div>
@@ -1652,82 +2128,215 @@
             currentChannel: 'channel1',
             currentModel: 'gpt-4',
             isProcessing: false,
-            uploadedFiles: []
+            uploadedFiles: [],
+            // 历史任务日志
+            taskLogs: []
+        };
+        
+        // 任务状态枚举
+        const TaskStatus = {
+            PENDING: 'pending',
+            PROCESSING: 'processing',
+            SUCCESS: 'success',
+            FAILED: 'failed'
         };
 
         // 渠道配置
         const channelConfig = {
             channel1: {
-                name: '渠道1 - 标准版',
+                name: '渠道1 - 标准版 (APIMart)',
                 textPrice: 1,
                 imagePrice: 5,
                 videoPrice: 10,
+                apiKey: 'sk-jxRehKFvNWdK4AubjMKTVjyJJHHpUYAJLiipVYWyZ2ia0vrL',
+                baseUrl: 'https://api.apimart.ai/v1',
                 models: {
                     text: [
-                        { name: 'GPT-4 Turbo', value: 'gpt-4' },
-                        { name: 'Claude 3 Opus', value: 'claude-3' },
-                        { name: '文心一言 4.0', value: 'wenxin' },
-                        { name: '通义千问 Max', value: 'qwen' }
+                        // GPT系列 (OpenAI) - 支持多模态
+                        { name: 'GPT-4o', value: 'gpt-4o', multimodal: true },
+                        { name: 'GPT-4o-mini', value: 'gpt-4o-mini', multimodal: true },
+                        // GPT-5系列 - 支持多模态
+                        { name: 'GPT-5', value: 'gpt-5', multimodal: true },
+                        { name: 'GPT-5 Mini', value: 'gpt-5-mini', multimodal: true },
+                        { name: 'GPT-5 Nano', value: 'gpt-5-nano', multimodal: true },
+                        { name: 'GPT-5.4', value: 'gpt-5.4', multimodal: true },
+                        { name: 'GPT-5.4 Mini', value: 'gpt-5.4-mini', multimodal: true },
+                        { name: 'GPT-4.1', value: 'gpt-4.1' },
+                        { name: 'GPT-4.1 Mini', value: 'gpt-4.1-mini' },
+                        { name: 'GPT-5.1', value: 'gpt-5.1' },
+                        { name: 'GPT-5.1 Codex', value: 'gpt-5.1-codex' },
+                        { name: 'GPT-5.1 Codex Mini', value: 'gpt-5.1-codex-mini' },
+                        { name: 'GPT-5 Codex High', value: 'gpt-5-codex-high' },
+                        // Claude系列 - 支持多模态
+                        { name: 'Claude Sonnet 4.5', value: 'claude-sonnet-4-5-20250929', multimodal: true },
+                        { name: 'Claude Sonnet 4.5 Thinking', value: 'claude-sonnet-4-5-20250929-thinking', multimodal: true },
+                        { name: 'Claude Haiku 4.5', value: 'claude-haiku-4-5-20251001', multimodal: true },
+                        { name: 'Claude 4 Sonnet', value: 'claude-sonnet-4-20250514', multimodal: true },
+                        { name: 'Claude Opus 4.1', value: 'claude-opus-4-1-20250805', multimodal: true },
+                        // Gemini系列 - 支持多模态
+                        { name: 'Gemini 3 Pro Preview', value: 'gemini-3-pro-preview', multimodal: true },
+                        { name: 'Gemini 3 Pro Preview Thinking', value: 'gemini-3-pro-preview-thinking', multimodal: true },
+                        { name: 'Gemini 2.5 Pro', value: 'gemini-2.5-pro', multimodal: true },
+                        { name: 'Gemini 2.5 Flash', value: 'gemini-2.5-flash', multimodal: true },
+                        // Grok系列 - 支持全网模式
+                        { name: 'Grok 4', value: 'grok-4' },
+                        { name: 'Grok 3', value: 'grok-3' },
+                        { name: 'Grok 4 All (全网模式)', value: 'grok-4-all', allNetwork: true },
+                        { name: 'Grok 3 All (全网模式)', value: 'grok-3-all', allNetwork: true },
+                        { name: 'Grok 4 Fast Reasoning', value: 'grok-4-fast-reasoning' },
+                        { name: 'Grok 4 Fast Non-Reasoning', value: 'grok-4-fast-non-reasoning' },
+                        { name: 'Grok Code Fast 1', value: 'grok-code-fast-1' },
+                        // DeepSeek系列
+                        { name: 'DeepSeek V3.2 Exp', value: 'deepseek-v3.2-exp' },
+                        { name: 'DeepSeek V3.1', value: 'deepseek-v3.1-250821' },
+                        { name: 'DeepSeek R1', value: 'deepseek-r1' },
+                        // GLM系列
+                        { name: 'GLM-4.6', value: 'glm-4.6' },
+                        { name: 'GLM-4.5', value: 'glm-4.5' },
+                        // Qwen系列
+                        { name: 'Qwen Max', value: 'qwen-max' },
+                        { name: 'Qwen Plus', value: 'qwen-plus' },
+                        // Kimi系列
+                        { name: 'Kimi K2 正式版', value: 'kimi-k2-250711' }
                     ],
                     image: [
-                        { name: 'Midjourney V6', value: 'mj-v6' },
-                        { name: 'DALL-E 3', value: 'dalle3' },
-                        { name: 'Stable Diffusion 3', value: 'sd3' }
+                        // 图片生成模型
+                        { name: 'GPT-Image-1', value: 'gpt-image-1' },
+                        { name: 'GPT-4o Image', value: 'gpt-4o-image' },
+                        { name: 'Gemini 2.5 Flash Image', value: 'gemini-2.5-flash-image-preview' },
+                        { name: 'Gemini 3.1 Flash Image', value: 'gemini-3.1-flash-image-preview' },
+                        { name: 'Gemini 3 Pro Image', value: 'gemini-3-pro-image-preview' },
+                        { name: 'Seedream 4.0', value: 'seedream-4.0' },
+                        { name: 'Seedream 4.5', value: 'seedream-4.5' },
+                        { name: 'Seedream 5.0 Lite', value: 'seedream-5.0-lite' },
+                        { name: 'Flux Kontext', value: 'flux-kontext' },
+                        { name: 'Flux 2.0', value: 'flux-2.0' },
+                        { name: 'Qwen Image 2.0', value: 'qwen-image-2.0' },
+                        { name: 'Z-Image Turbo', value: 'z-image-turbo' },
+                        { name: 'Grok Imagine 1.0', value: 'grok-imagine-1.0' }
                     ],
                     video: [
-                        { name: 'Sora', value: 'sora' },
-                        { name: 'Runway Gen-2', value: 'runway' },
-                        { name: 'Pika Labs', value: 'pika' }
+                        // 视频生成模型
+                        { name: 'Sora 2 (竖屏)', value: 'sora2' },
+                        { name: 'Sora 2 (横屏)', value: 'sora2-landscape' },
+                        { name: 'Sora 2 Pro', value: 'sora-2-pro-all' },
+                        { name: 'VEO 3', value: 'veo3' },
+                        { name: 'Doubao Seedance 1.0 Pro', value: 'doubao-seedance-1-0-pro' },
+                        { name: 'Doubao Seedance 1.5 Pro', value: 'doubao-seedance-1-5-pro' },
+                        { name: 'Doubao Seedance 2.0', value: 'doubao-seedance-2-0' },
+                        { name: 'MiniMax Hailuo 02', value: 'minimax-hailuo-02' },
+                        { name: 'MiniMax Hailuo 2.3', value: 'minimax-hailuo-2.3' },
+                        { name: 'Wan 2.5', value: 'wan-2.5' },
+                        { name: 'Wan 2.6', value: 'wan-2.6' },
+                        { name: 'Kling v3', value: 'kling-v3' },
+                        { name: 'Kling 2.6', value: 'kling-2.6' },
+                        { name: 'Kling v3 Omni', value: 'kling-v3-omni' },
+                        { name: 'Kling Video O1', value: 'kling-video-o1' },
+                        { name: 'Vidu Q3 Pro/Turbo', value: 'vidu-q3-pro-turbo' },
+                        { name: 'Vidu Q3 Mix/Standard', value: 'vidu-q3-mix-standard' }
                     ]
                 }
             },
             channel2: {
-                name: '渠道2 - 专业版',
+                name: '渠道2 - 专业版 (火山方舟)',
                 textPrice: 1,
-                imagePrice: 5,
-                videoPrice: 10,
+                imagePrice: 3,
+                videoPrice: 5,
                 apiKey: 'd426574e-2254-4af1-b429-3c91d68f9326',
                 baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
                 models: {
                     text: [
-                        { name: 'GPT-4o', value: 'gpt-4o' },
-                        { name: 'Claude 3.5 Sonnet', value: 'claude-3.5' },
-                        { name: 'Doubao-Seed-2.0-lite', value: 'doubao-seed-2-0-lite-260215', multimodal: true },
-                        { name: 'Gemini Pro', value: 'gemini' }
+                        { name: 'Doubao-Seed-2.0-mini', value: 'doubao-seed-2-0-mini-260215', multimodal: true, contextWindow: '256K' },
+                        { name: 'Doubao-Seed-2.0-pro', value: 'doubao-seed-2-0-pro-260215', multimodal: true, contextWindow: '256K' },
+                        { name: 'Doubao-Seed-2.0-lite', value: 'doubao-seed-2-0-lite-260215', multimodal: true, contextWindow: '256K' },
+                        { name: 'Doubao-Seed-2.0-code', value: 'doubao-seed-2-0-code-preview-260215', multimodal: false, contextWindow: '128K' },
+                        { name: 'DeepSeek-V3.2', value: 'deepseek-v3-2-251201', multimodal: false, contextWindow: '128K' },
+                        { name: 'GLM-4.7', value: 'glm-4-7-251222', multimodal: false, contextWindow: '128K' },
+                        { name: 'Kimi-K2.5', value: 'kimi-k2-thinking-251104', multimodal: false, contextWindow: '128K' }
                     ],
                     image: [
-                        { name: 'Midjourney V6.1', value: 'mj-v6-1' },
-                        { name: 'DALL-E 3 HD', value: 'dalle3-hd' },
-                        { name: 'Stable Diffusion XL', value: 'sdxl' }
+                        { name: 'Doubao-Seedream-4.5', value: 'doubao-seedream-4-5-251128' },
+                        { name: 'Doubao-Seedream-5.0', value: 'doubao-seedream-5-0-260128' }
                     ],
                     video: [
-                        { name: 'Sora Turbo', value: 'sora-turbo' },
-                        { name: 'Runway Gen-3', value: 'runway-g3' },
-                        { name: 'Luma Dream Machine', value: 'luma' }
+                        { name: 'Doubao-Seedance-1.5-pro', value: 'doubao-seedance-1-5-pro-25121', maxDuration: 10 },
+                        { name: 'Doubao-Seedance-2.0', value: 'doubao-seedance-2-0-260128', maxDuration: 10 },
+                        { name: 'Doubao-Seedance-2.0-fast', value: 'doubao-seedance-2-0-fast-260128', maxDuration: 5 }
                     ]
                 }
             },
             channel3: {
-                name: '渠道3 - 经济版',
+                name: '渠道3 - 经济版 (WenLe AI)',
                 textPrice: 1,
                 imagePrice: 3,
                 videoPrice: 5,
+                apiKey: 'sk-wcu5MMpIVS6PejN6rk3i6uKjQ1USl6JY5p5zJaeoJ61SHiPd',
+                baseUrl: 'https://api.wenle.ai/v1',
                 models: {
                     text: [
-                        { name: 'GPT-3.5 Turbo', value: 'gpt-3.5' },
-                        { name: 'Claude 3 Haiku', value: 'claude-haiku' },
-                        { name: '文心一言 3.5', value: 'wenxin-3.5' },
-                        { name: '通义千问 Plus', value: 'qwen-plus' }
+                        // GPT系列 - 支持多模态
+                        { name: 'GPT-4o', value: 'gpt-4o', multimodal: true },
+                        { name: 'GPT-4o-mini', value: 'gpt-4o-mini', multimodal: true },
+                        // GPT-5系列 - 支持多模态
+                        { name: 'GPT-5', value: 'gpt-5', multimodal: true },
+                        { name: 'GPT-5 Mini', value: 'gpt-5-mini', multimodal: true },
+                        { name: 'GPT-5 Nano', value: 'gpt-5-nano', multimodal: true },
+                        { name: 'GPT-5.4', value: 'gpt-5.4', multimodal: true },
+                        { name: 'GPT-5.4 Mini', value: 'gpt-5.4-mini', multimodal: true },
+                        { name: 'GPT-5.1', value: 'gpt-5.1' },
+                        { name: 'GPT-5.1 Chat Latest', value: 'gpt-5.1-chat-latest' },
+                        { name: 'GPT-5 Chat Latest', value: 'gpt-5-chat-latest' },
+                        { name: 'GPT-4.1', value: 'gpt-4.1' },
+                        { name: 'GPT-4.1 Mini', value: 'gpt-4.1-mini' },
+                        { name: 'GPT-5.1 Codex', value: 'gpt-5.1-codex' },
+                        { name: 'GPT-5.1 Codex Mini', value: 'gpt-5.1-codex-mini' },
+                        { name: 'GPT-5 Codex High', value: 'gpt-5-codex-high' },
+                        // o系列
+                        { name: 'o3', value: 'o3' },
+                        { name: 'o4-mini', value: 'o4-mini' },
+                        // Claude系列 - 支持多模态
+                        { name: 'Claude Sonnet 4.5', value: 'claude-sonnet-4-5-20250929', multimodal: true },
+                        { name: 'Claude Sonnet 4.5 Thinking', value: 'claude-sonnet-4-5-20250929-thinking', multimodal: true },
+                        { name: 'Claude Haiku 4.5', value: 'claude-haiku-4-5-20251001', multimodal: true },
+                        { name: 'Claude 4 Sonnet', value: 'claude-sonnet-4-20250514', multimodal: true },
+                        { name: 'Claude Opus 4.1', value: 'claude-opus-4-1-20250805', multimodal: true },
+                        // Gemini系列 - 支持多模态
+                        { name: 'Gemini 3 Pro Preview', value: 'gemini-3-pro-preview', multimodal: true },
+                        { name: 'Gemini 3 Pro Preview Thinking', value: 'gemini-3-pro-preview-thinking', multimodal: true },
+                        { name: 'Gemini 2.5 Pro', value: 'gemini-2.5-pro', multimodal: true },
+                        { name: 'Gemini 2.5 Flash', value: 'gemini-2.5-flash', multimodal: true },
+                        // Grok系列 - 支持全网模式
+                        { name: 'Grok 4', value: 'grok-4' },
+                        { name: 'Grok 3', value: 'grok-3' },
+                        { name: 'Grok 4 All (全网模式)', value: 'grok-4-all', allNetwork: true },
+                        { name: 'Grok 3 All (全网模式)', value: 'grok-3-all', allNetwork: true },
+                        { name: 'Grok 4 Fast Reasoning', value: 'grok-4-fast-reasoning' },
+                        { name: 'Grok 4 Fast Non-Reasoning', value: 'grok-4-fast-non-reasoning' },
+                        { name: 'Grok Code Fast 1', value: 'grok-code-fast-1' },
+                        // DeepSeek系列
+                        { name: 'DeepSeek V3.2 Exp', value: 'deepseek-v3.2-exp' },
+                        { name: 'DeepSeek V3.1', value: 'deepseek-v3.1-250821' },
+                        { name: 'DeepSeek R1', value: 'deepseek-r1' },
+                        { name: 'DeepSeek V3', value: 'deepseek-v3' },
+                        // GLM系列
+                        { name: 'GLM-4.6', value: 'glm-4.6' },
+                        { name: 'GLM-4.5', value: 'glm-4.5' },
+                        // Qwen系列
+                        { name: 'Qwen Max', value: 'qwen-max' },
+                        { name: 'Qwen Plus', value: 'qwen-plus' },
+                        // Kimi系列
+                        { name: 'Kimi K2 正式版', value: 'kimi-k2-250711' }
                     ],
                     image: [
-                        { name: 'Stable Diffusion 3', value: 'sd3' },
-                        { name: 'DALL-E 2', value: 'dalle2' },
-                        { name: 'Playground V2.5', value: 'playground' }
+                        // 图片生成模型
+                        { name: 'GPT-Image-1', value: 'gpt-image-1' },
+                        { name: 'Seedream 4.0', value: 'seedream-4-0-250828' }
                     ],
                     video: [
-                        { name: 'Pika Labs', value: 'pika' },
-                        { name: 'Genmo', value: 'genmo' },
-                        { name: 'ModelScope', value: 'modelscope' }
+                        // 视频生成模型
+                        { name: 'Sora 2 竖屏', value: 'sora_video' },
+                        { name: 'Sora 2 横屏', value: 'sora_video2-landscape' },
+                        { name: 'Sora 2 Pro', value: 'sora-2-pro-all' }
                     ]
                 }
             }
@@ -1742,13 +2351,13 @@
             },
             image: {
                 title: 'AI图片创作',
-                badge: 'MJ + DALL-E',
-                desc: '集成Midjourney V6、DALL-E 3、Stable Diffusion 3，支持多种艺术风格'
+                badge: 'Doubao-Image',
+                desc: '集成Doubao-Image等模型，支持多种艺术风格和比例调节'
             },
             video: {
                 title: 'AI视频创作',
-                badge: 'Sora + Runway',
-                desc: '基于Sora、Runway Gen-2、Pika Labs，文本生成高清视频'
+                badge: 'Doubao-Seedance',
+                desc: '基于Doubao-Seedance模型，文本生成高清视频，支持多种分辨率'
             },
             ecommerce: {
                 title: '电商AI助手',
@@ -1756,14 +2365,19 @@
                 desc: '专为电商卖家打造，快速生成爆款主图、详情页、品宣视频'
             },
             share: {
-                title: '创意分享广场',
-                badge: '灵感社区',
-                desc: '探索社区精选创意作品，获取灵感，分享你的AI创作成果'
+                title: '创意工具箱',
+                badge: '一键生成',
+                desc: '爆款视频复刻、情感视频生产、一键去水印、漫剧一键生产，全套创意工具一站式使用'
             },
             models: {
                 title: '模型广场',
                 badge: '价格透明',
                 desc: '查看所有渠道支持的模型及对应价格，选择最适合您的方案'
+            },
+            logs: {
+                title: '历史任务日志',
+                badge: 'API调用记录',
+                desc: '查看所有API调用情况和生成结果，支持筛选和导出'
             }
         };
 
@@ -1791,6 +2405,8 @@
 
         // 切换标签
         function switchTab(tab, element) {
+            window.currentTab = tab;
+            
             // 更新导航状态
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
@@ -1800,6 +2416,7 @@
             // 隐藏所有面板
             document.getElementById('rechargePanel').classList.remove('active');
             document.getElementById('modelPlaza').classList.add('hidden');
+            document.getElementById('logsPanel').classList.add('hidden');
 
             // 隐藏所有功能卡片
             ['text', 'image', 'video', 'ecommerce', 'share'].forEach(type => {
@@ -1812,15 +2429,25 @@
 
             // 更新页面配置
             const config = pageConfig[tab];
-            document.getElementById('pageTitle').textContent = config.title;
-            document.getElementById('pageBadge').textContent = config.badge;
-            document.getElementById('pageDesc').textContent = config.desc;
+            if (config) {
+                document.getElementById('pageTitle').textContent = config.title;
+                document.getElementById('pageBadge').textContent = config.badge;
+                document.getElementById('pageDesc').textContent = config.desc;
+            }
 
             // 显示对应内容
             if (tab === 'models') {
                 document.getElementById('selectorArea').classList.add('hidden');
                 document.getElementById('modelPlaza').classList.remove('hidden');
                 renderModelPlaza(1);
+            } else if (tab === 'logs') {
+                document.getElementById('selectorArea').classList.add('hidden');
+                document.getElementById('logsPanel').classList.remove('hidden');
+                document.getElementById('pageTitle').textContent = '历史任务日志';
+                document.getElementById('pageBadge').textContent = 'API调用记录';
+                document.getElementById('pageDesc').textContent = '查看所有API调用情况和生成结果，支持筛选和导出';
+                renderTaskLogs();
+                updateLogsStats();
             } else {
                 document.getElementById('selectorArea').classList.remove('hidden');
                 const card = document.getElementById(tab + 'Card');
@@ -1829,6 +2456,22 @@
                     card.classList.add('active-card');
                     if (['text', 'image', 'video'].includes(tab)) {
                         updateModelSelect(tab);
+                        
+                        // 显示对应参数面板
+                        if (tab === 'image') {
+                            const paramsPanel = document.getElementById('imageParamsPanel');
+                            if (paramsPanel) {
+                                paramsPanel.style.display = 'block';
+                                updateImageParams();
+                            }
+                        }
+                        if (tab === 'video') {
+                            const paramsPanel = document.getElementById('videoParamsPanel');
+                            if (paramsPanel) {
+                                paramsPanel.style.display = 'block';
+                                updateVideoParams();
+                            }
+                        }
                     }
                 }
             }
@@ -1850,12 +2493,119 @@
                     if (card) card.classList.add('hidden');
                 });
                 document.getElementById('modelPlaza').classList.add('hidden');
+                document.getElementById('logsPanel').classList.add('hidden');
                 document.getElementById('selectorArea').classList.add('hidden');
                 
                 panel.classList.add('active');
                 document.getElementById('pageTitle').textContent = '积分充值';
                 document.getElementById('pageBadge').textContent = '安全支付';
                 document.getElementById('pageDesc').textContent = '选择适合您的充值套餐，积分永久有效，支持多种支付方式';
+            }
+        }
+        
+        // 切换图片参数面板
+        function toggleImageParams() {
+            const panel = document.getElementById('imageParamsPanel');
+            if (panel) {
+                if (panel.style.display === 'none') {
+                    panel.style.display = 'block';
+                    updateImageParams();
+                } else {
+                    panel.style.display = 'none';
+                }
+            }
+        }
+        
+        // 切换视频参数面板
+        function toggleVideoParams() {
+            const panel = document.getElementById('videoParamsPanel');
+            if (panel) {
+                if (panel.style.display === 'none') {
+                    panel.style.display = 'block';
+                    updateVideoParams();
+                } else {
+                    panel.style.display = 'none';
+                }
+            }
+        }
+        
+        // 处理参考图上传
+        function handleRefImageSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const preview = document.getElementById('refImagePreview');
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(99, 102, 241, 0.1); border-radius: 10px;">
+                            <img src="${e.target.result}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />
+                            <div>
+                                <div style="font-size: 13px; color: var(--text-primary);">${file.name}</div>
+                                <button onclick="removeRefImage()" style="background: none; border: none; color: #ef4444; font-size: 12px; cursor: pointer; padding: 0;">移除</button>
+                            </div>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // 移除参考图
+        function removeRefImage() {
+            document.getElementById('refImageInput').value = '';
+            document.getElementById('refImagePreview').innerHTML = '';
+        }
+        
+        // 筛选日志
+        let currentLogFilter = 'all';
+        function filterLogs(filter, element) {
+            currentLogFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            renderFilteredLogs();
+        }
+        
+        // 渲染筛选后的日志
+        function renderFilteredLogs() {
+            let filteredLogs = userData.taskLogs;
+            
+            if (currentLogFilter === 'text' || currentLogFilter === 'image' || currentLogFilter === 'video') {
+                filteredLogs = filteredLogs.filter(log => log.type === currentLogFilter);
+            } else if (currentLogFilter === 'success') {
+                filteredLogs = filteredLogs.filter(log => log.status === TaskStatus.SUCCESS);
+            } else if (currentLogFilter === 'failed') {
+                filteredLogs = filteredLogs.filter(log => log.status === TaskStatus.FAILED);
+            }
+            
+            // 临时替换渲染
+            const originalLogs = userData.taskLogs;
+            userData.taskLogs = filteredLogs;
+            renderTaskLogs();
+            userData.taskLogs = originalLogs;
+            
+            // 更新统计数据
+            updateLogsStats();
+        }
+        
+        // 更新日志统计
+        function updateLogsStats() {
+            const total = userData.taskLogs.length;
+            const success = userData.taskLogs.filter(l => l.status === TaskStatus.SUCCESS).length;
+            const failed = userData.taskLogs.filter(l => l.status === TaskStatus.FAILED).length;
+            const cost = userData.taskLogs.reduce((sum, l) => sum + l.cost, 0);
+            
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('successTasks').textContent = success;
+            document.getElementById('failedTasks').textContent = failed;
+            document.getElementById('totalCost').textContent = cost;
+            
+            // 更新日志徽章
+            const badge = document.getElementById('logsBadge');
+            if (total > 0) {
+                badge.style.display = 'inline';
+                badge.textContent = total > 99 ? '99+' : total;
+            } else {
+                badge.style.display = 'none';
             }
         }
 
@@ -1899,6 +2649,22 @@
                 
                 // 更新data-cost
                 activeCard.dataset.cost = price;
+                
+                // 更新参数面板显示（图片和视频）
+                if (type === 'image') {
+                    const paramsPanel = document.getElementById('imageParamsPanel');
+                    if (paramsPanel) {
+                        paramsPanel.style.display = 'block';
+                        updateImageParams();
+                    }
+                }
+                if (type === 'video') {
+                    const paramsPanel = document.getElementById('videoParamsPanel');
+                    if (paramsPanel) {
+                        paramsPanel.style.display = 'block';
+                        updateVideoParams();
+                    }
+                }
             }
             
             // 更新模型选择器
@@ -1921,7 +2687,10 @@
             const select = document.getElementById('modelSelect');
             
             select.innerHTML = models.map(m => 
-                `<option value="${m.value}" ${m.multimodal ? 'data-multimodal="true"' : ''}>${m.name}</option>`
+                `<option value="${m.value}" 
+                    ${m.multimodal ? 'data-multimodal="true"' : ''}
+                    ${m.allNetwork ? 'data-all-network="true"' : ''}
+                >${m.name}</option>`
             ).join('');
             
             // 检查多模态支持
@@ -1931,17 +2700,227 @@
         // 检查多模态支持
         function checkMultimodalSupport() {
             const channel = document.getElementById('channelSelect').value;
-            const model = document.getElementById('modelSelect').value;
+            const modelSelect = document.getElementById('modelSelect');
+            const model = modelSelect.value;
             const uploadArea = document.getElementById('multimodalUpload');
             
-            // 只有渠道2的Doubao-Seed-2.0-lite支持多模态
-            if (channel === 'channel2' && model === 'doubao-seed-2-0-lite-260215') {
+            // 获取模型配置信息
+            const config = channelConfig[channel];
+            const models = config.models.text;
+            const modelConfig = models.find(m => m.value === model);
+            
+            // 判断是否支持多模态（通过配置或模型名判断）
+            const isMultimodalModel = modelConfig && modelConfig.multimodal;
+            
+            if (isMultimodalModel) {
                 uploadArea.classList.remove('hidden');
             } else {
                 uploadArea.classList.add('hidden');
                 // 清空已上传文件
                 userData.uploadedFiles = [];
                 document.getElementById('uploadedFiles').innerHTML = '';
+            }
+            
+            // 更新模型说明
+            updateModelHint(modelConfig, channel, model);
+            
+            // 更新图片创作参数面板
+            updateImageParams();
+            
+            // 更新视频创作参数面板
+            updateVideoParams();
+        }
+        
+        // 更新模型说明
+        function updateModelHint(modelConfig, channel, model) {
+            const hintText = document.getElementById('modelHintText');
+            const modelName = modelConfig ? modelConfig.name : model;
+            const hints = [];
+            
+            if (modelConfig && modelConfig.multimodal) {
+                hints.push('📎 支持上传文件');
+            }
+            if (modelConfig && modelConfig.thinking) {
+                hints.push('🧠 支持思考模式');
+            }
+            if (modelConfig && modelConfig.webSearch) {
+                hints.push('🌐 支持联网搜索');
+            }
+            if (modelConfig && modelConfig.allNetwork) {
+                hints.push('🔍 全网搜索模式');
+            }
+            
+            // 渠道2豆包特殊判断
+            if (channel === 'channel2' && model.toLowerCase().includes('doubao-seed')) {
+                hints.push('📎 支持上传文件');
+                hints.push('🧠 支持思考模式');
+                hints.push('🌐 支持联网搜索');
+            }
+            
+            // Grok全网模式
+            if (modelConfig && modelConfig.allNetwork) {
+                hints.push('🔍 全网搜索模式');
+            }
+            
+            if (hints.length > 0) {
+                hintText.innerHTML = `<strong>${modelName}</strong>: ${hints.join(' | ')}`;
+            } else {
+                hintText.innerHTML = `<strong>${modelName}</strong>: 标准对话模式`;
+            }
+        }
+        
+        // 图片创作参数配置
+        const imageParamsConfig = {
+            'doubao-seedream-4-5-251128': {
+                ratio: ['1:1', '16:9', '9:16'],
+                defaultRatio: '1:1',
+                style: ['写实', '动漫', '插画'],
+                defaultStyle: '写实',
+                hasImageUpload: false
+            },
+            'doubao-seedream-5-0-260128': {
+                ratio: ['1:1', '16:9', '9:16', '3:2', '4:3'],
+                defaultRatio: '1:1',
+                style: ['写实', '动漫', '插画', '摄影', '3D渲染'],
+                defaultStyle: '写实',
+                hasImageUpload: true
+            }
+        };
+        
+        // 更新图片创作参数面板
+        function updateImageParams() {
+            const channel = userData.currentChannel;
+            const model = document.getElementById('modelSelect').value;
+            const imageCard = document.getElementById('imageCard');
+            
+            // 查找图片参数配置
+            let params = null;
+            if (channel === 'channel2') {
+                // 渠道2使用Doubao图片模型（不区分大小写匹配）
+                const modelLower = model.toLowerCase();
+                if (modelLower.includes('doubao-seedream')) {
+                    params = imageParamsConfig[model];
+                }
+            } else if (channel === 'channel1') {
+                // 渠道1使用其他模型
+                params = {
+                    ratio: ['1:1', '2:1', '1:2'],
+                    defaultRatio: '1:1',
+                    style: ['写实', '艺术'],
+                    defaultStyle: '写实',
+                    hasImageUpload: false
+                };
+            } else {
+                // 渠道3经济版
+                params = {
+                    ratio: ['1:1', '16:9'],
+                    defaultRatio: '1:1',
+                    style: ['写实', '动漫'],
+                    defaultStyle: '写实',
+                    hasImageUpload: false
+                };
+            }
+            
+            // 更新UI
+            const paramsPanel = document.getElementById('imageParamsPanel');
+            if (paramsPanel && params) {
+                // 更新比例选择
+                const ratioSelect = document.getElementById('imageRatio');
+                if (ratioSelect && params.ratio) {
+                    ratioSelect.innerHTML = params.ratio.map(r => 
+                        `<option value="${r}" ${r === params.defaultRatio ? 'selected' : ''}>${r}</option>`
+                    ).join('');
+                }
+                
+                // 更新风格选择
+                const styleSelect = document.getElementById('imageStyle');
+                if (styleSelect && params.style) {
+                    styleSelect.innerHTML = params.style.map(s => 
+                        `<option value="${s}">${s}</option>`
+                    ).join('');
+                    if (params.defaultStyle) {
+                        styleSelect.value = params.defaultStyle;
+                    }
+                }
+                
+                // 控制参考图上传显示
+                const refUpload = document.getElementById('refImageUpload');
+                if (refUpload) {
+                    if (params.hasRefImage) {
+                        refUpload.classList.remove('hidden');
+                    } else {
+                        refUpload.classList.add('hidden');
+                    }
+                }
+            }
+        }
+        
+        // 视频创作参数配置
+        const videoParamsConfig = {
+            'doubao-seedance-1-5-pro-25121': {
+                duration: [5, 10],
+                defaultDuration: 10,
+                resolution: ['720P', '1080P'],
+                defaultResolution: '1080P',
+                hasImageUpload: false,
+                hasStyleSelect: false
+            },
+            'doubao-seedance-2-0-260128': {
+                duration: [5, 10],
+                defaultDuration: 10,
+                resolution: ['720P', '1080P'],
+                defaultResolution: '1080P',
+                hasImageUpload: true,
+                hasStyleSelect: false
+            },
+            'doubao-seedance-2-0-fast-260128': {
+                duration: [3, 5],
+                defaultDuration: 5,
+                resolution: ['720P', '1080P'],
+                defaultResolution: '720P',
+                hasImageUpload: true,
+                hasStyleSelect: false
+            }
+        };
+        
+        // 更新视频创作参数面板
+        function updateVideoParams() {
+            const channel = userData.currentChannel;
+            const model = document.getElementById('modelSelect').value;
+            
+            // 查找视频参数配置（不区分大小写匹配）
+            let params = null;
+            if (channel === 'channel2' && model.toLowerCase().includes('doubao-seedance')) {
+                params = videoParamsConfig[model];
+            } else {
+                // 默认配置
+                params = {
+                    duration: [5, 10, 15],
+                    defaultDuration: 10,
+                    resolution: ['720P', '1080P'],
+                    defaultResolution: '1080P',
+                    hasImageUpload: false
+                };
+            }
+            
+            // 更新UI
+            const paramsPanel = document.getElementById('videoParamsPanel');
+            if (paramsPanel && params) {
+                // 更新时长选择
+                const durationSelect = document.getElementById('videoDuration');
+                if (durationSelect && params.duration) {
+                    durationSelect.innerHTML = params.duration.map(d => 
+                        `<option value="${d}" ${d === params.defaultDuration ? 'selected' : ''}>${d}秒</option>`
+                    ).join('');
+                }
+                
+                // 更新分辨率选择
+                const resolutionSelect = document.getElementById('videoResolution');
+                if (resolutionSelect && params.resolution) {
+                    resolutionSelect.innerHTML = params.resolution.map(r => 
+                        `<option value="${r}" ${r === params.defaultResolution ? 'selected' : ''}>${r}</option>`
+                    ).join('');
+                }
             }
         }
 
@@ -2054,27 +3033,9 @@
             renderModelPlaza(channelNum);
         }
 
-        // 电商功能处理
-        function processEcommerce(type) {
-            const costs = {
-                'main-image': 5,
-                'detail-page': 10,
-                'brand-video': 15,
-                'model-video': 20
-            };
-            const names = {
-                'main-image': '爆款主图',
-                'detail-page': '详情页图片',
-                'brand-video': '品宣视频',
-                'model-video': '模特展示视频'
-            };
-            
-            if (!deductCredits(costs[type])) return;
-            
-            showToast(`🛒 正在生成${names[type]}，请稍候...`, 'success');
-            setTimeout(() => {
-                showToast(`✅ ${names[type]}生成完成！`, 'success');
-            }, 2000);
+        // 打开电商工具页面
+        function openEcommerceTool(pageUrl) {
+            window.open(pageUrl, '_blank');
         }
 
         // 扣除积分
@@ -2114,8 +3075,8 @@
             requestAnimationFrame(update);
         }
 
-        // 处理功能
-        function processFeature(type) {
+        // 处理功能 - 真正的API调用
+        async function processFeature(type) {
             if (userData.isProcessing) {
                 showToast('⏳ 请等待当前任务完成', 'warning');
                 return;
@@ -2125,6 +3086,9 @@
             const cost = parseInt(card.dataset.cost);
             const input = document.getElementById(type + 'Input').value;
             const resultArea = document.getElementById(type + 'Result');
+            const model = document.getElementById('modelSelect').value;
+            const channel = userData.currentChannel;
+            const config = channelConfig[channel];
 
             if (!input.trim() && userData.uploadedFiles.length === 0) {
                 showToast('⚠️ 请输入内容或上传文件后再提交', 'warning');
@@ -2136,11 +3100,21 @@
 
             userData.isProcessing = true;
             
+            // 获取模型名称和配置
+            const modelConfig = config.models.text.find(m => m.value === model);
+            const modelName = modelConfig ? modelConfig.name : model;
+            
+            // 获取思考模式和联网模式
+            const thinkingMode = document.getElementById('thinkingMode')?.checked || false;
+            const webSearchMode = document.getElementById('webSearchMode')?.checked || false;
+            
             // 构建处理信息
-            let processingInfo = `消耗积分：${cost} 💎 | 渠道：${channelConfig[userData.currentChannel].name}`;
+            let processingInfo = `消耗积分：${cost} 💎 | 渠道：${config.name} | 模型：${modelName}`;
             if (userData.uploadedFiles.length > 0) {
                 processingInfo += ` | 已上传${userData.uploadedFiles.length}个文件`;
             }
+            if (thinkingMode) processingInfo += ' | 🧠 思考模式';
+            if (webSearchMode) processingInfo += ' | 🌐 联网模式';
             
             // 显示加载状态
             resultArea.classList.add('show');
@@ -2151,26 +3125,528 @@
                     <p style="font-size: 13px; margin-top: 10px; opacity: 0.7;">${processingInfo}</p>
                 </div>
             `;
+            
+            // 添加任务日志
+            const taskId = addTaskLog({
+                type: type,
+                model: modelName,
+                channel: config.name,
+                input: input,
+                cost: cost
+            });
+            
+            // 更新任务状态为处理中
+            updateTaskLog(taskId, { status: TaskStatus.PROCESSING });
 
-            // 模拟处理（实际使用时这里调用API）
-            setTimeout(() => {
+            try {
+                let result;
+                
+                // 根据渠道和类型调用不同的API
+                if (type === 'text') {
+                    // 文本模型：按渠道选择正确的API函数
+                    if (channel === 'channel2') {
+                        // 渠道2（火山方舟）使用 /responses 端点
+                        result = await callDoubaoAPI(input, model, userData.uploadedFiles, {
+                            thinking: thinkingMode,
+                            webSearch: webSearchMode
+                        });
+                    } else if (config.apiKey) {
+                        // 渠道1/3使用OpenAI兼容格式（/chat/completions）
+                        result = await callOpenAICompatibleAPI(input, config, model, userData.uploadedFiles, {
+                            thinking: thinkingMode,
+                            webSearch: webSearchMode
+                        });
+                    } else {
+                        throw new Error(`请先在设置中配置 ${config.name} 的 API Key`);
+                    }
+                } else if (type === 'image') {
+                    // 图片生成
+                    const ratio = document.getElementById('imageRatio')?.value || '1:1';
+                    const style = document.getElementById('imageStyle')?.value || '写实';
+                    
+                    if (channel === 'channel2' && model.toLowerCase().includes('doubao-seedream')) {
+                        // 渠道2的Doubao图片模型
+                        result = await callDoubaoImageAPI(input, model, ratio, style);
+                    } else if (config.apiKey) {
+                        // 其他渠道使用通用图片API
+                        result = await callImageGenerationAPI(input, config, model, ratio, style);
+                    } else {
+                        throw new Error(`请先在设置中配置 ${config.name} 的 API Key`);
+                    }
+                } else if (type === 'video') {
+                    // 视频生成
+                    const duration = document.getElementById('videoDuration')?.value || 10;
+                    const resolution = document.getElementById('videoResolution')?.value || '1080P';
+                    
+                    if (channel === 'channel2' && model.toLowerCase().includes('doubao-seedance')) {
+                        // 渠道2的Doubao视频模型
+                        result = await callDoubaoVideoAPI(input, model, duration, resolution);
+                    } else if (config.apiKey) {
+                        // 其他渠道使用通用视频API
+                        result = await callVideoGenerationAPI(input, config, model, duration, resolution);
+                    } else {
+                        throw new Error(`请先在设置中配置 ${config.name} 的 API Key`);
+                    }
+                }
+                
+                // 处理成功
                 userData.isProcessing = false;
+                updateTaskLog(taskId, { 
+                    status: TaskStatus.SUCCESS, 
+                    output: result.output || result 
+                });
+                
+                // 显示结果
                 resultArea.innerHTML = `
-                    <div style="padding: 30px;">
-                        <div style="font-size: 48px; margin-bottom: 15px;">✅</div>
-                        <h4 style="margin-bottom: 10px; color: var(--text-primary);">创作完成！</h4>
-                        <p style="color: var(--text-secondary); margin-bottom: 20px;">${getSuccessText(type)}</p>
-                        <button class="btn btn-primary" onclick="downloadResult('${type}')">
-                            <span>⬇️</span> 立即下载
-                        </button>
+                    <div style="padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <span style="font-size: 24px;">${getSuccessIcon(type)}</span>
+                            <span style="color: #10b981; font-weight: 600;">任务完成</span>
+                        </div>
+                        ${result.imageUrl ? `
+                            <img src="${result.imageUrl}" style="max-width: 100%; border-radius: 12px; margin-bottom: 15px;" />
+                        ` : ''}
+                        ${result.videoUrl ? `
+                            <video src="${result.videoUrl}" controls style="max-width: 100%; border-radius: 12px; margin-bottom: 15px;"></video>
+                        ` : ''}
+                        <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 12px; text-align: left; max-height: 400px; overflow-y: auto;">
+                            <pre style="white-space: pre-wrap; word-break: break-word; margin: 0; font-family: inherit; color: var(--text-primary);">${result.output || result}</pre>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="copyResult('${type}', '${taskId}')">
+                                <span>📋</span> 复制结果
+                            </button>
+                            ${result.imageUrl || result.videoUrl ? `
+                                <button class="btn btn-secondary" onclick="downloadMedia('${type}', '${result.imageUrl || result.videoUrl}')">
+                                    <span>⬇️</span> 下载
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
                 `;
                 showToast('🎉 任务处理完成！', 'success');
                 
-                // 清空上传的文件
-                userData.uploadedFiles = [];
-                document.getElementById('uploadedFiles').innerHTML = '';
-            }, 2000);
+            } catch (error) {
+                // 处理失败
+                userData.isProcessing = false;
+                const errorMessage = error.message || '未知错误';
+                updateTaskLog(taskId, { 
+                    status: TaskStatus.FAILED, 
+                    error: errorMessage 
+                });
+                
+                resultArea.innerHTML = `
+                    <div style="padding: 30px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">❌</div>
+                        <h4 style="margin-bottom: 10px; color: #ef4444;">处理失败</h4>
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">${errorMessage}</p>
+                        <button class="btn btn-primary" onclick="retryTask('${type}')">
+                            <span>🔄</span> 重试
+                        </button>
+                    </div>
+                `;
+                showToast('❌ ' + errorMessage, 'error');
+            }
+            
+            // 清空上传的文件
+            userData.uploadedFiles = [];
+            document.getElementById('uploadedFiles').innerHTML = '';
+        }
+        
+        // 获取成功图标
+        function getSuccessIcon(type) {
+            const icons = { text: '📝', image: '🎨', video: '🎬' };
+            return icons[type] || '✅';
+        }
+        
+        // 调用通用OpenAI兼容格式文本API（支持多模态）
+        async function callOpenAICompatibleAPI(prompt, config, model, files = [], options = {}) {
+            const { thinking = false, webSearch = false } = options;
+            
+            // 构建消息内容
+            const messages = [
+                {
+                    role: 'user',
+                    content: []
+                }
+            ];
+            
+            // 添加文本内容
+            messages[0].content.push({
+                type: 'text',
+                text: prompt
+            });
+            
+            // 添加上传的文件（多模态支持）
+            for (const file of files) {
+                const base64 = await fileToBase64(file);
+                const mediaType = getMediaType(file.type);
+                messages[0].content.push({
+                    type: mediaType,
+                    url: `data:${file.type};base64,${base64}`
+                });
+            }
+            
+            // 构建请求体
+            const requestBody = {
+                model: model,
+                messages: messages,
+                stream: false
+            };
+            
+            // 添加思考模式（部分模型支持）
+            if (thinking) {
+                requestBody.thinking = {
+                    type: 'enabled'
+                };
+            }
+            
+            // 添加联网搜索工具（部分模型支持）
+            if (webSearch) {
+                requestBody.tools = [
+                    {
+                        type: 'web_search_preview',
+                        search_engine: 'baidu'
+                    }
+                ];
+            }
+            
+            // 调用API
+            const response = await fetch(`${config.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.apiKey}`
+                },
+                body: JSON.stringify(requestBody)
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API调用失败: ${response.status} - ${error}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.choices && data.choices[0] && data.choices[0].message) {
+                return { output: data.choices[0].message.content };
+            }
+            
+            throw new Error('API返回格式错误');
+        }
+        
+        // 调用通用图片生成API
+        async function callImageGenerationAPI(prompt, config, model, ratio, style) {
+            // 通用图片生成API调用
+            const response = await fetch(`${config.baseUrl}/images/generations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: model,
+                    prompt: prompt,
+                    n: 1,
+                    size: ratio,
+                    style: style || 'vivid'
+                })
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API调用失败: ${response.status} - ${error}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.data && data.data[0]) {
+                return { 
+                    output: `图片生成成功!\n提示词: ${prompt}\n比例: ${ratio}\n风格: ${style}`,
+                    imageUrl: data.data[0].url || data.data[0].b64_json
+                };
+            }
+            
+            throw new Error('API返回格式错误');
+        }
+        
+        // 调用通用视频生成API
+        async function callVideoGenerationAPI(prompt, config, model, duration, resolution) {
+            // 通用视频生成API调用
+            const response = await fetch(`${config.baseUrl}/video/generations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: model,
+                    prompt: prompt,
+                    duration: duration,
+                    resolution: resolution
+                })
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API调用失败: ${response.status} - ${error}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.data && data.data[0]) {
+                return { 
+                    output: `视频生成成功!\n提示词: ${prompt}\n时长: ${duration}秒\n分辨率: ${resolution}\n视频ID: ${data.data[0].id || 'N/A'}`,
+                    videoUrl: data.data[0].url || data.data[0].video_url,
+                    taskId: data.data[0].id
+                };
+            }
+            
+            throw new Error('API返回格式错误');
+        }
+        
+        // 调用火山方舟 /responses 端点（豆包、DeepSeek、GLM、Kimi 统一使用）
+        async function callDoubaoAPI(prompt, model, files = [], options = {}) {
+            const { thinking = false, webSearch = false } = options;
+            const config = channelConfig['channel2'];
+            
+            // 判断是否为支持多模态的豆包模型
+            const isMultimodal = model.startsWith('doubao-seed-2-0-mini') ||
+                                 model.startsWith('doubao-seed-2-0-pro') ||
+                                 model.startsWith('doubao-seed-2-0-lite');
+            
+            // 构建消息内容（按火山方舟 /responses 格式）
+            const content = [];
+            
+            // 仅多模态模型支持图片输入
+            if (isMultimodal && files.length > 0) {
+                for (const file of files) {
+                    const base64 = await fileToBase64(file);
+                    content.push({
+                        type: 'input_image',
+                        image_url: `data:${file.type};base64,${base64}`
+                    });
+                }
+            }
+            
+            // 添加文本内容
+            content.push({
+                type: 'input_text',
+                text: prompt
+            });
+            
+            // 构建请求体
+            const requestBody = {
+                model: model,
+                input: [
+                    {
+                        role: 'user',
+                        content: content
+                    }
+                ]
+            };
+            
+            // 添加思考模式（豆包模型支持）
+            if (thinking) {
+                requestBody.thinking = {
+                    type: 'enabled'
+                };
+            }
+            
+            // 添加联网搜索工具（豆包模型支持）
+            if (webSearch) {
+                requestBody.tools = [
+                    {
+                        type: 'web_search',
+                        max_keyword: 3
+                    }
+                ];
+            }
+            
+            // 调用 /responses 端点
+            const response = await fetch(`${config.baseUrl}/responses`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.apiKey}`
+                },
+                body: JSON.stringify(requestBody)
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API调用失败: ${response.status} - ${error}`);
+            }
+            
+            const data = await response.json();
+            
+            // 解析 /responses 格式的返回
+            if (data.output && Array.isArray(data.output)) {
+                for (const item of data.output) {
+                    if (item.type === 'message' && item.content) {
+                        const textContent = item.content.find(c => c.type === 'output_text' || c.type === 'text');
+                        if (textContent) return { output: textContent.text || textContent.output_text };
+                    }
+                    // 兼容直接 text 字段
+                    if (item.text) return { output: item.text };
+                }
+            }
+            // 兼容旧格式（output 直接是字符串）
+            if (typeof data.output === 'string') return { output: data.output };
+            
+            throw new Error('API返回格式错误：' + JSON.stringify(data).substring(0, 200));
+        }
+        
+        // 调用Doubao图片API (火山方舟)
+        async function callDoubaoImageAPI(prompt, model, ratio, style) {
+            const config = channelConfig['channel2'];
+            
+            // 映射比例到实际尺寸
+            const sizeMap = {
+                '1:1': '1024x1024',
+                '16:9': '1536x1024',
+                '9:16': '1024x1536',
+                '4:3': '1024x768'
+            };
+            const size = sizeMap[ratio] || '1024x1024';
+            
+            const response = await fetch(`${config.baseUrl}/images/generations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: model,
+                    prompt: prompt,
+                    size: size,
+                    style: style,
+                    response_format: 'url'
+                })
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API调用失败: ${response.status} - ${error}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.data && data.data[0]) {
+                return { 
+                    output: `图片生成成功!\n提示词: ${prompt}\n比例: ${ratio}\n风格: ${style}`,
+                    imageUrl: data.data[0].url 
+                };
+            }
+            
+            throw new Error('API返回格式错误');
+        }
+        
+        // 调用Doubao视频API (火山方舟)
+        async function callDoubaoVideoAPI(prompt, model, duration, resolution) {
+            const config = channelConfig['channel2'];
+            
+            const response = await fetch(`${config.baseUrl}/videos/generations`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: model,
+                    prompt: prompt,
+                    duration: parseInt(duration),
+                    resolution: resolution
+                })
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`API调用失败: ${response.status} - ${error}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.data && data.data[0]) {
+                return { 
+                    output: `视频生成请求已提交!\n提示词: ${prompt}\n时长: ${duration}秒\n分辨率: ${resolution}`,
+                    videoUrl: data.data[0].url 
+                };
+            }
+            
+            throw new Error('API返回格式错误');
+        }
+        
+        // 模拟API响应（用于测试或不支持的场景）
+        async function simulateAPIResponse(type, input) {
+            // 模拟网络延迟
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            if (type === 'text') {
+                return {
+                    output: `【模拟响应】已收到您的请求: "${input.substring(0, 50)}${input.length > 50 ? '...' : ''}"\n\n这是一条模拟的AI回复。在实际部署时，请选择渠道2并使用Doubao模型来获取真实的大模型回复。\n\n当前支持的模型:\n- Doubao-Seed-2.0-lite (轻量版)\n- Doubao-Seed-2.0-pro (专业版)`
+                };
+            } else if (type === 'image') {
+                return {
+                    output: `【模拟响应】图片生成请求已记录\n\n提示词: "${input.substring(0, 50)}..."\n\n请选择渠道2的Doubao-Image模型来生成真实图片。`
+                };
+            } else if (type === 'video') {
+                return {
+                    output: `【模拟响应】视频生成请求已记录\n\n提示词: "${input.substring(0, 50)}..."\n\n请选择渠道2的Doubao-Seedance模型来生成真实视频。`
+                };
+            }
+            
+            return { output: '请求已处理（模拟）' };
+        }
+        
+        // 文件转Base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // 获取媒体类型
+        function getMediaType(mimeType) {
+            if (mimeType.startsWith('image/')) return 'image';
+            if (mimeType.startsWith('video/')) return 'video';
+            if (mimeType === 'application/pdf') return 'document';
+            return 'text';
+        }
+        
+        // 复制结果
+        function copyResult(type, taskId) {
+            const log = userData.taskLogs.find(l => l.id == taskId);
+            if (log && log.output) {
+                navigator.clipboard.writeText(log.output).then(() => {
+                    showToast('✅ 结果已复制到剪贴板', 'success');
+                }).catch(() => {
+                    showToast('❌ 复制失败', 'error');
+                });
+            }
+        }
+        
+        // 下载媒体
+        function downloadMedia(type, url) {
+            if (url.startsWith('data:')) {
+                showToast('📋 请右键图片选择"另存为"下载', 'info');
+                return;
+            }
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ai_result_${Date.now()}.${type === 'video' ? 'mp4' : 'png'}`;
+            a.click();
+        }
+        
+        // 重试任务
+        function retryTask(type) {
+            processFeature(type);
         }
 
         function getProcessingText(type) {
@@ -2204,7 +3680,8 @@
             const icons = {
                 success: '✅',
                 error: '❌',
-                warning: '⚠️'
+                warning: '⚠️',
+                info: 'ℹ️'
             };
             
             toast.innerHTML = `
@@ -2220,13 +3697,309 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
+        
+        // ========== 历史任务日志模块 ==========
+        
+        // 添加任务日志
+        function addTaskLog(task) {
+            const log = {
+                id: Date.now(),
+                timestamp: new Date().toISOString(),
+                type: task.type,
+                model: task.model,
+                channel: task.channel,
+                input: task.input,
+                output: '',
+                status: TaskStatus.PENDING,
+                cost: task.cost,
+                error: null
+            };
+            
+            userData.taskLogs.unshift(log); // 添加到列表开头
+            
+            // 限制保存数量
+            if (userData.taskLogs.length > 100) {
+                userData.taskLogs = userData.taskLogs.slice(0, 100);
+            }
+            
+            // 持久化到localStorage
+            saveTaskLogs();
+            
+            // 如果当前在日志页面，刷新显示
+            if (window.currentTab === 'logs') {
+                renderTaskLogs();
+            }
+            
+            return log.id;
+        }
+        
+        // 更新任务日志
+        function updateTaskLog(id, updates) {
+            const log = userData.taskLogs.find(l => l.id === id);
+            if (log) {
+                Object.assign(log, updates);
+                saveTaskLogs();
+                
+                // 如果当前在日志页面，刷新显示
+                if (window.currentTab === 'logs') {
+                    renderTaskLogs();
+                }
+            }
+        }
+        
+        // 保存任务日志到localStorage
+        function saveTaskLogs() {
+            try {
+                localStorage.setItem('ai_workbench_task_logs', JSON.stringify(userData.taskLogs));
+            } catch (e) {
+                console.warn('无法保存任务日志:', e);
+            }
+        }
+        
+        // 加载任务日志
+        function loadTaskLogs() {
+            try {
+                const saved = localStorage.getItem('ai_workbench_task_logs');
+                if (saved) {
+                    userData.taskLogs = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.warn('无法加载任务日志:', e);
+            }
+        }
+        
+        // 渲染任务日志列表
+        function renderTaskLogs() {
+            const container = document.getElementById('taskLogsList');
+            if (!container) return;
+            
+            if (userData.taskLogs.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                        <div style="font-size: 48px; margin-bottom: 15px;">📋</div>
+                        <p>暂无任务记录</p>
+                        <p style="font-size: 13px; margin-top: 8px;">开始创作后将在此显示任务日志</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = userData.taskLogs.map(log => {
+                const statusIcon = {
+                    [TaskStatus.PENDING]: '⏳',
+                    [TaskStatus.PROCESSING]: '🔄',
+                    [TaskStatus.SUCCESS]: '✅',
+                    [TaskStatus.FAILED]: '❌'
+                }[log.status] || '❓';
+                
+                const statusText = {
+                    [TaskStatus.PENDING]: '等待中',
+                    [TaskStatus.PROCESSING]: '处理中',
+                    [TaskStatus.SUCCESS]: '成功',
+                    [TaskStatus.FAILED]: '失败'
+                }[log.status] || '未知';
+                
+                const typeIcon = {
+                    text: '📝',
+                    image: '🎨',
+                    video: '🎬'
+                }[log.type] || '📋';
+                
+                const time = new Date(log.timestamp).toLocaleString('zh-CN', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                
+                const preview = log.input.length > 60 ? log.input.substring(0, 60) + '...' : log.input;
+                
+                return `
+                    <div class="log-item" data-id="${log.id}" onclick="toggleLogDetail(${log.id})">
+                        <div class="log-header">
+                            <div class="log-title">
+                                <span class="log-icon">${typeIcon}</span>
+                                <span class="log-type">${getTypeName(log.type)}</span>
+                                <span class="log-model">${log.model}</span>
+                            </div>
+                            <div class="log-status ${log.status}">
+                                <span>${statusIcon}</span>
+                                <span>${statusText}</span>
+                            </div>
+                        </div>
+                        <div class="log-meta">
+                            <span>⏰ ${time}</span>
+                            <span>💎 ${log.cost}积分</span>
+                            <span>📡 ${log.channel}</span>
+                        </div>
+                        <div class="log-preview">
+                            <div class="log-input">💬 ${preview}</div>
+                            ${log.output ? `<div class="log-output">📤 ${log.output.substring(0, 100)}${log.output.length > 100 ? '...' : ''}</div>` : ''}
+                            ${log.error ? `<div class="log-error">⚠️ ${log.error}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // 获取类型名称
+        function getTypeName(type) {
+            const names = {
+                text: '文本创作',
+                image: '图片生成',
+                video: '视频生成'
+            };
+            return names[type] || type;
+        }
+        
+        // 切换日志详情显示
+        function toggleLogDetail(id) {
+            const log = userData.taskLogs.find(l => l.id === id);
+            if (!log) return;
+            
+            // 显示详情弹窗
+            showLogDetailModal(log);
+        }
+        
+        // 显示日志详情弹窗
+        function showLogDetailModal(log) {
+            // 移除已存在的弹窗
+            const existingModal = document.getElementById('logDetailModal');
+            if (existingModal) existingModal.remove();
+            
+            const modal = document.createElement('div');
+            modal.id = 'logDetailModal';
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>📋 任务详情</h3>
+                        <button class="modal-close" onclick="closeLogDetailModal()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="detail-section">
+                            <div class="detail-label">任务信息</div>
+                            <div class="detail-row">
+                                <span>类型：</span>
+                                <span>${getTypeName(log.type)}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>模型：</span>
+                                <span>${log.model}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>渠道：</span>
+                                <span>${log.channel}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>时间：</span>
+                                <span>${new Date(log.timestamp).toLocaleString('zh-CN')}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span>消耗：</span>
+                                <span>${log.cost} 积分</span>
+                            </div>
+                        </div>
+                        <div class="detail-section">
+                            <div class="detail-label">输入内容</div>
+                            <div class="detail-content">${log.input || '(无)'}</div>
+                        </div>
+                        ${log.output ? `
+                            <div class="detail-section">
+                                <div class="detail-label">输出结果</div>
+                                <div class="detail-content output-content">${log.output}</div>
+                                <button class="btn btn-secondary" onclick="copyLogOutput('${log.id}')" style="margin-top: 10px;">
+                                    <span>📋</span> 复制结果
+                                </button>
+                            </div>
+                        ` : ''}
+                        ${log.error ? `
+                            <div class="detail-section">
+                                <div class="detail-label">错误信息</div>
+                                <div class="detail-content error-content">${log.error}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // 点击外部关闭
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeLogDetailModal();
+            });
+        }
+        
+        // 关闭日志详情弹窗
+        function closeLogDetailModal() {
+            const modal = document.getElementById('logDetailModal');
+            if (modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => modal.remove(), 200);
+            }
+        }
+        
+        // 复制日志输出
+        function copyLogOutput(id) {
+            const log = userData.taskLogs.find(l => l.id === id);
+            if (log && log.output) {
+                navigator.clipboard.writeText(log.output).then(() => {
+                    showToast('✅ 结果已复制到剪贴板', 'success');
+                }).catch(() => {
+                    showToast('❌ 复制失败', 'error');
+                });
+            }
+        }
+        
+        // 清除所有日志
+        function clearAllLogs() {
+            if (confirm('确定要清除所有任务日志吗？此操作不可恢复。')) {
+                userData.taskLogs = [];
+                saveTaskLogs();
+                renderTaskLogs();
+                showToast('🗑️ 已清除所有日志', 'success');
+            }
+        }
+        
+        // 导出日志
+        function exportLogs() {
+            if (userData.taskLogs.length === 0) {
+                showToast('📋 暂无日志可导出', 'warning');
+                return;
+            }
+            
+            const data = JSON.stringify(userData.taskLogs, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ai_workbench_logs_${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('📥 日志导出成功', 'success');
+        }
 
         // 回车登录
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('password')?.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
             });
+            
+            // 加载任务日志
+            loadTaskLogs();
         });
     </script>
 </body>
+        // 回车登录
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('password')?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleLogin();
+            });
+            
+            // 加载任务日志
+            loadTaskLogs();
+        });
+    </script>
 </html>
