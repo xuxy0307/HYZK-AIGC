@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模特展示视频生成 - 华阳智瞰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: rgba(148, 163, 184, 0.2);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            animation: bgPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .header {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .credit-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-area input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+        }
+
+        .upload-placeholder .icon {
+            font-size: 48px;
+            opacity: 0.6;
+        }
+
+        .upload-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .model-option {
+            padding: 16px 8px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .model-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .model-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .model-option .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .model-option .name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .model-option .desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .pose-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .pose-option {
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .pose-option:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .pose-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .pose-option .emoji {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .pose-option .name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .param-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .param-option {
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .param-option:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .param-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .param-option .label {
+            font-weight: 600;
+        }
+
+        .param-option .desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .result-placeholder {
+            flex: 1;
+            min-height: 500px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-placeholder .icon {
+            font-size: 80px;
+            opacity: 0.4;
+        }
+
+        .progress-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 30px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-status {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .result-display {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .result-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .result-action-btn {
+            padding: 8px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .result-action-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .result-video-container {
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+        }
+
+        .result-video {
+            width: 100%;
+            max-width: 720px;
+            border-radius: 12px;
+            background: #000;
+        }
+
+        .result-info {
+            padding: 20px 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .result-info-item {
+            text-align: center;
+        }
+
+        .result-info-item .label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .result-info-item .value {
+            font-weight: 600;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 14px 24px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .model-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .result-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="goBack()">
+                <span>←</span>
+                <span>返回工作台</span>
+            </button>
+            <h1 class="header-title">👗 模特展示视频生成</h1>
+        </div>
+        <div class="header-right">
+            <div class="credit-display">
+                <span>💎</span>
+                <span id="creditAmount">2,580</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="input-section">
+            <!-- 服装图片上传 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">👔</div>
+                    <span>服装/商品图片</span>
+                </div>
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('clothingImage').click()">
+                    <input type="file" id="clothingImage" accept="image/*" onchange="handleImageUpload(event)">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <span class="icon">📤</span>
+                        <p>上传服装或商品图片</p>
+                        <p style="font-size: 13px; opacity: 0.7;">支持 JPG、PNG 格式</p>
+                    </div>
+                    <img class="upload-preview" id="uploadPreview" style="display: none;">
+                </div>
+            </div>
+
+            <!-- 商品信息 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">📝</div>
+                    <span>商品信息</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">商品名称</label>
+                    <input type="text" class="form-input" id="productName" placeholder="例如：法式碎花连衣裙">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">商品描述</label>
+                    <textarea class="form-textarea" id="productDesc" placeholder="描述商品特点、材质、风格等..."></textarea>
+                </div>
+            </div>
+
+            <!-- 选择模特 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">👤</div>
+                    <span>选择AI模特</span>
+                </div>
+                <div class="model-grid">
+                    <div class="model-option selected" data-model="asian-female-young" onclick="selectModel(this)">
+                        <div class="avatar">👩</div>
+                        <div class="name">亚洲年轻女</div>
+                        <div class="desc">20-25岁</div>
+                    </div>
+                    <div class="model-option" data-model="asian-female-mature" onclick="selectModel(this)">
+                        <div class="avatar">👩‍💼</div>
+                        <div class="name">亚洲成熟女</div>
+                        <div class="desc">30-35岁</div>
+                    </div>
+                    <div class="model-option" data-model="asian-male-young" onclick="selectModel(this)">
+                        <div class="avatar">👨</div>
+                        <div class="name">亚洲年轻男</div>
+                        <div class="desc">20-25岁</div>
+                    </div>
+                    <div class="model-option" data-model="asian-male-mature" onclick="selectModel(this)">
+                        <div class="avatar">👨‍💼</div>
+                        <div class="name">亚洲成熟男</div>
+                        <div class="desc">30-35岁</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 展示姿势 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">🎭</div>
+                    <span>展示姿势</span>
+                </div>
+                <div class="pose-grid">
+                    <div class="pose-option selected" data-pose="standing" onclick="selectPose(this)">
+                        <div class="emoji">🧍</div>
+                        <div class="name">站立展示</div>
+                    </div>
+                    <div class="pose-option" data-pose="walking" onclick="selectPose(this)">
+                        <div class="emoji">🚶</div>
+                        <div class="name">行走动态</div>
+                    </div>
+                    <div class="pose-option" data-pose="posing" onclick="selectPose(this)">
+                        <div class="emoji">💃</div>
+                        <div class="name">造型摆拍</div>
+                    </div>
+                    <div class="pose-option" data-pose="detail" onclick="selectPose(this)">
+                        <div class="emoji">✨</div>
+                        <div class="name">细节特写</div>
+                    </div>
+                    <div class="pose-option" data-pose="turning" onclick="selectPose(this)">
+                        <div class="emoji">🔄</div>
+                        <div class="name">360°旋转</div>
+                    </div>
+                    <div class="pose-option" data-pose="sitting" onclick="selectPose(this)">
+                        <div class="emoji">🪑</div>
+                        <div class="name">坐姿展示</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 视频参数 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">⚙️</div>
+                    <span>视频参数</span>
+                </div>
+                <div class="param-row" style="margin-bottom: 16px;">
+                    <div>
+                        <label class="form-label">视频时长</label>
+                        <div class="param-option selected" data-duration="10" onclick="selectDuration(this)">
+                            <div class="label">10秒</div>
+                            <div class="desc">快速展示</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">场景背景</label>
+                        <div class="param-option selected" data-background="studio" onclick="selectBackground(this)">
+                            <div class="label">摄影棚</div>
+                            <div class="desc">纯色背景</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="param-row">
+                    <div>
+                        <div class="param-option" data-duration="15" onclick="selectDuration(this)">
+                            <div class="label">15秒</div>
+                            <div class="desc">完整展示</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="param-option" data-background="street" onclick="selectBackground(this)">
+                            <div class="label">街拍场景</div>
+                            <div class="desc">户外环境</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="generate-btn" id="generateBtn" onclick="generateVideo()">
+                <span>🎬</span>
+                <span>生成模特展示视频</span>
+                <span style="font-size: 14px; opacity: 0.8;">（消耗 20 积分）</span>
+            </button>
+        </section>
+
+        <section class="result-section">
+            <div class="result-placeholder" id="resultPlaceholder">
+                <span class="icon">👗</span>
+                <h3>准备生成模特展示视频</h3>
+                <p>上传服装图片并选择模特和姿势后，AI将为您生成专业的模特试穿展示视频</p>
+            </div>
+
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-text" id="progressPercent">0%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-status" id="progressStatus">正在分析服装...</div>
+            </div>
+
+            <div class="result-display" id="resultDisplay" style="display: none;">
+                <div class="result-header">
+                    <span class="result-title">🎬 生成结果</span>
+                    <div class="result-actions">
+                        <button class="result-action-btn" onclick="downloadVideo()">
+                            <span>⬇️</span>
+                            <span>下载</span>
+                        </button>
+                        <button class="result-action-btn" onclick="regenerate()">
+                            <span>🔄</span>
+                            <span>重新生成</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="result-video-container">
+                    <video class="result-video" id="resultVideo" controls>
+                        <source src="" type="video/mp4">
+                        您的浏览器不支持视频播放
+                    </video>
+                </div>
+                <div class="result-info">
+                    <div class="result-info-item">
+                        <div class="label">视频时长</div>
+                        <div class="value" id="videoDuration">10秒</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="label">AI模特</div>
+                        <div class="value" id="modelName">亚洲年轻女</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="label">展示姿势</div>
+                        <div class="value" id="poseName">站立展示</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="label">消耗积分</div>
+                        <div class="value">20</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        const CONFIG = {
+            COST: 20,
+            MODEL: 'banana2'
+        };
+
+        let state = {
+            clothingImage: null,
+            productName: '',
+            productDesc: '',
+            model: 'asian-female-young',
+            pose: 'standing',
+            duration: '10',
+            background: 'studio',
+            isGenerating: false
+        };
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state.clothingImage = e.target.result;
+                document.getElementById('uploadPreview').src = e.target.result;
+                document.getElementById('uploadPreview').style.display = 'block';
+                document.getElementById('uploadPlaceholder').style.display = 'none';
+                showToast('图片上传成功', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function selectModel(element) {
+            document.querySelectorAll('.model-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            state.model = element.dataset.model;
+        }
+
+        function selectPose(element) {
+            document.querySelectorAll('.pose-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            state.pose = element.dataset.pose;
+        }
+
+        function selectDuration(element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.param-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            state.duration = element.dataset.duration;
+        }
+
+        function selectBackground(element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.param-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            state.background = element.dataset.background;
+        }
+
+        async function generateVideo() {
+            if (!state.clothingImage) {
+                showToast('请先上传服装图片', 'error');
+                return;
+            }
+
+            if (state.isGenerating) return;
+
+            const currentCredits = parseInt(document.getElementById('creditAmount').textContent.replace(/,/g, ''));
+            if (currentCredits < CONFIG.COST) {
+                showToast('积分不足，请充值后再试', 'error');
+                return;
+            }
+
+            state.isGenerating = true;
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('generateBtn').textContent = '生成中...';
+
+            document.getElementById('resultPlaceholder').style.display = 'none';
+            document.getElementById('resultDisplay').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+
+            const steps = [
+                { percent: 20, status: '正在分析服装款式...' },
+                { percent: 40, status: '正在生成AI模特...' },
+                { percent: 60, status: '正在合成试穿效果...' },
+                { percent: 80, status: '正在渲染视频...' },
+                { percent: 100, status: '生成完成！' }
+            ];
+
+            for (let step of steps) {
+                await new Promise(resolve => setTimeout(resolve, 2500));
+                document.getElementById('progressPercent').textContent = step.percent + '%';
+                document.getElementById('progressFill').style.width = step.percent + '%';
+                document.getElementById('progressStatus').textContent = step.status;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            showResult();
+            deductCredits(CONFIG.COST);
+            state.isGenerating = false;
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('generateBtn').innerHTML = '<span>🎬</span><span>生成模特展示视频</span><span style="font-size: 14px; opacity: 0.8;">（消耗 20 积分）</span>';
+        }
+
+        function showResult() {
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('resultDisplay').style.display = 'block';
+            document.getElementById('videoDuration').textContent = state.duration + '秒';
+            document.getElementById('modelName').textContent = document.querySelector('.model-option.selected .name').textContent;
+            document.getElementById('poseName').textContent = document.querySelector('.pose-option.selected .name').textContent;
+            showToast('🎬 模特展示视频生成功能开发中，API对接后可正常使用', 'warning');
+        }
+
+        function deductCredits(amount) {
+            const creditEl = document.getElementById('creditAmount');
+            const current = parseInt(creditEl.textContent.replace(/,/g, ''));
+            creditEl.textContent = (current - amount).toLocaleString();
+        }
+
+        function downloadVideo() {
+            showToast('下载功能开发中', 'warning');
+        }
+
+        function regenerate() {
+            generateVideo();
+        }
+
+        function goBack() {
+            window.location.href = 'ai-workbench-20260415_162800.html';
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<span>${type === 'success' ? '✅' : '❌'}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+    </script>
+</body>
+</html>

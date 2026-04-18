@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>品宣视频生成 - 华阳智瞰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: rgba(148, 163, 184, 0.2);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            animation: bgPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .header {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .credit-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-area input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+        }
+
+        .upload-placeholder .icon {
+            font-size: 48px;
+            opacity: 0.6;
+        }
+
+        .upload-preview {
+            width: 100%;
+            max-height: 150px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-label .optional {
+            color: var(--text-secondary);
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .video-style-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .video-style-option {
+            padding: 20px 16px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .video-style-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .video-style-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .video-style-option .emoji {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .video-style-option .name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .video-style-option .desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .param-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .param-option {
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .param-option:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .param-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .param-option .label {
+            font-weight: 600;
+        }
+
+        .param-option .desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .result-placeholder {
+            flex: 1;
+            min-height: 500px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-placeholder .icon {
+            font-size: 80px;
+            opacity: 0.4;
+        }
+
+        .progress-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .progress-steps {
+            margin-top: 30px;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .progress-step:last-child {
+            border-bottom: none;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .step-icon.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            animation: pulse 1.5s infinite;
+        }
+
+        .step-icon.completed {
+            background: var(--success);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .step-content {
+            flex: 1;
+            text-align: left;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .step-detail {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .result-display {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .result-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .result-action-btn {
+            padding: 8px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .result-action-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .result-video-container {
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+        }
+
+        .result-video {
+            width: 100%;
+            max-width: 720px;
+            border-radius: 12px;
+            background: #000;
+        }
+
+        .result-info {
+            padding: 20px 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .result-info-item {
+            text-align: center;
+        }
+
+        .result-info-item .label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .result-info-item .value {
+            font-weight: 600;
+        }
+
+        .prompt-preview {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .prompt-preview-title {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .prompt-preview-content {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 14px 24px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .video-style-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .result-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="goBack()">
+                <span>←</span>
+                <span>返回工作台</span>
+            </button>
+            <h1 class="header-title">🎥 品宣视频生成</h1>
+        </div>
+        <div class="header-right">
+            <div class="credit-display">
+                <span>💎</span>
+                <span id="creditAmount">2,580</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="input-section">
+            <!-- 品牌信息 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">🏢</div>
+                    <span>品牌信息</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">品牌名称 <span class="optional">（必填）</span></label>
+                    <input type="text" class="form-input" id="brandName" placeholder="例如：华阳智瞰">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">品牌故事/理念 <span class="optional">（可选）</span></label>
+                    <textarea class="form-textarea" id="brandStory" placeholder="描述品牌故事、核心价值观、愿景等..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">产品/服务简介 <span class="optional">（可选）</span></label>
+                    <textarea class="form-textarea" id="productIntro" placeholder="简要介绍品牌主要产品或服务..."></textarea>
+                </div>
+            </div>
+
+            <!-- 视频素材 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">📷</div>
+                    <span>视频素材</span>
+                </div>
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('videoMaterial').click()">
+                    <input type="file" id="videoMaterial" accept="image/*,video/*" onchange="handleMaterialUpload(event)">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <span class="icon">📤</span>
+                        <p>上传产品图片或视频素材</p>
+                        <p style="font-size: 13px; opacity: 0.7;">支持 JPG、PNG、MP4 格式（可选）</p>
+                    </div>
+                    <img class="upload-preview" id="uploadPreview" style="display: none;">
+                </div>
+            </div>
+
+            <!-- 视频风格 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">🎬</div>
+                    <span>视频风格</span>
+                </div>
+                <div class="video-style-grid">
+                    <div class="video-style-option selected" data-style="corporate" onclick="selectStyle(this)">
+                        <div class="emoji">🏢</div>
+                        <div class="name">企业宣传</div>
+                        <div class="desc">专业大气的企业形象</div>
+                    </div>
+                    <div class="video-style-option" data-style="emotional" onclick="selectStyle(this)">
+                        <div class="emoji">❤️</div>
+                        <div class="name">情感故事</div>
+                        <div class="desc">温情路线，引发共鸣</div>
+                    </div>
+                    <div class="video-style-option" data-style="dynamic" onclick="selectStyle(this)">
+                        <div class="emoji">⚡</div>
+                        <div class="name">动感时尚</div>
+                        <div class="desc">快节奏，年轻人风格</div>
+                    </div>
+                    <div class="video-style-option" data-style="elegant" onclick="selectStyle(this)">
+                        <div class="emoji">✨</div>
+                        <div class="name">优雅简约</div>
+                        <div class="desc">高级感，留白艺术</div>
+                    </div>
+                    <div class="video-style-option" data-style="tech" onclick="selectStyle(this)">
+                        <div class="emoji">🔮</div>
+                        <div class="name">科技未来</div>
+                        <div class="desc">赛博朋克，技术感</div>
+                    </div>
+                    <div class="video-style-option" data-style="nature" onclick="selectStyle(this)">
+                        <div class="emoji">🌿</div>
+                        <div class="name">自然清新</div>
+                        <div class="desc">绿色环保，健康生活</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 视频参数 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">⚙️</div>
+                    <span>视频参数</span>
+                </div>
+                <div class="param-row" style="margin-bottom: 20px;">
+                    <div>
+                        <label class="form-label">视频时长</label>
+                        <div class="param-option selected" data-duration="15" onclick="selectDuration(this)">
+                            <div class="label">15秒</div>
+                            <div class="desc">短视频，适合社交媒体</div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label">分辨率</label>
+                        <div class="param-option selected" data-resolution="720p" onclick="selectResolution(this)">
+                            <div class="label">720P</div>
+                            <div class="desc">推荐，文件小加载快</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="param-row">
+                    <div>
+                        <div class="param-option" data-duration="30" onclick="selectDuration(this)">
+                            <div class="label">30秒</div>
+                            <div class="desc">完整版，适合多平台</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="param-option" data-resolution="1080p" onclick="selectResolution(this)">
+                            <div class="label">1080P</div>
+                            <div class="desc">高清，画质更好</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 提示词预览 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">🔍</div>
+                    <span>生成提示词</span>
+                </div>
+                <div class="prompt-preview">
+                    <div class="prompt-preview-title">AI视频生成提示词</div>
+                    <div class="prompt-preview-content" id="promptPreview">
+                        请填写品牌信息，系统将自动生成视频生成提示词...
+                    </div>
+                </div>
+            </div>
+
+            <button class="generate-btn" id="generateBtn" onclick="generateVideo()">
+                <span>🎬</span>
+                <span>生成品宣视频</span>
+                <span style="font-size: 14px; opacity: 0.8;">（消耗 15 积分）</span>
+            </button>
+        </section>
+
+        <section class="result-section">
+            <div class="result-placeholder" id="resultPlaceholder">
+                <span class="icon">🎥</span>
+                <h3>准备生成品宣视频</h3>
+                <p>填写品牌信息并选择视频风格后，AI将为您创作专业的品牌宣传视频</p>
+            </div>
+
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <h3 style="margin-bottom: 20px;">🎬 正在生成您的品宣视频</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 10px;">预计生成时间：约 60-90 秒</p>
+                <div class="progress-steps">
+                    <div class="progress-step" id="step1">
+                        <div class="step-icon" id="icon1">1</div>
+                        <div class="step-content">
+                            <div class="step-title">分析品牌信息</div>
+                            <div class="step-detail">理解品牌定位和核心价值</div>
+                        </div>
+                    </div>
+                    <div class="progress-step" id="step2">
+                        <div class="step-icon" id="icon2">2</div>
+                        <div class="step-content">
+                            <div class="step-title">生成视频脚本</div>
+                            <div class="step-detail">构建分镜头和场景描述</div>
+                        </div>
+                    </div>
+                    <div class="progress-step" id="step3">
+                        <div class="step-icon" id="icon3">3</div>
+                        <div class="step-content">
+                            <div class="step-title">AI生成视频</div>
+                            <div class="step-detail">使用 banana2 模型生成视频内容</div>
+                        </div>
+                    </div>
+                    <div class="progress-step" id="step4">
+                        <div class="step-icon" id="icon4">4</div>
+                        <div class="step-content">
+                            <div class="step-title">后期处理</div>
+                            <div class="step-detail">添加转场和优化画质</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-display" id="resultDisplay" style="display: none;">
+                <div class="result-header">
+                    <span class="result-title">🎬 生成结果</span>
+                    <div class="result-actions">
+                        <button class="result-action-btn" onclick="downloadVideo()">
+                            <span>⬇️</span>
+                            <span>下载</span>
+                        </button>
+                        <button class="result-action-btn" onclick="shareVideo()">
+                            <span>🔗</span>
+                            <span>分享</span>
+                        </button>
+                        <button class="result-action-btn" onclick="regenerate()">
+                            <span>🔄</span>
+                            <span>重新生成</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="result-video-container">
+                    <video class="result-video" id="resultVideo" controls>
+                        <source src="" type="video/mp4">
+                        您的浏览器不支持视频播放
+                    </video>
+                </div>
+                <div class="result-info">
+                    <div class="result-info-item">
+                        <div class="label">视频时长</div>
+                        <div class="value" id="videoDuration">15秒</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="label">分辨率</div>
+                        <div class="value" id="videoResolution">720P</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="label">使用模型</div>
+                        <div class="value">banana2</div>
+                    </div>
+                    <div class="result-info-item">
+                        <div class="label">消耗积分</div>
+                        <div class="value">15</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // 配置
+        const CONFIG = {
+            COST: 15,
+            MODEL: 'banana2',
+            CHANNEL: 'channel1'
+        };
+
+        // 视频风格提示词模板
+        const VIDEO_STYLE_PROMPTS = {
+            corporate: {
+                name: '企业宣传',
+                template: `Create a professional corporate brand promotional video.
+Brand: {{brandName}}
+Brand Story: {{brandStory}}
+Products/Services: {{productIntro}}
+
+Style Requirements:
+- Professional and authoritative tone
+- Clean, modern corporate aesthetic
+- Smooth camera movements
+- Cinematic lighting
+- Trust and credibility focused
+- Duration: {{duration}} seconds
+- Aspect ratio: 16:9`
+            },
+            emotional: {
+                name: '情感故事',
+                template: `Create an emotional storytelling brand promotional video.
+Brand: {{brandName}}
+Brand Story: {{brandStory}}
+Products/Services: {{productIntro}}
+
+Style Requirements:
+- Emotional, heartwarming narrative
+- Soft, warm color palette
+- Personal, intimate camera angles
+- Authentic human moments
+- Music-driven storytelling
+- Duration: {{duration}} seconds
+- Aspect ratio: 16:9`
+            },
+            dynamic: {
+                name: '动感时尚',
+                template: `Create a dynamic, trendy brand promotional video.
+Brand: {{brandName}}
+Brand Story: {{brandStory}}
+Products/Services: {{productIntro}}
+
+Style Requirements:
+- Energetic, fast-paced editing
+- Vibrant colors and bold visuals
+- Youth-oriented aesthetic
+- Hip music and sound effects
+- Social media ready
+- Duration: {{duration}} seconds
+- Aspect ratio: 16:9`
+            },
+            elegant: {
+                name: '优雅简约',
+                template: `Create an elegant, minimalist brand promotional video.
+Brand: {{brandName}}
+Brand Story: {{brandStory}}
+Products/Services: {{productIntro}}
+
+Style Requirements:
+- Minimalist composition
+- Muted, sophisticated color palette
+- Deliberate, slow movements
+- Premium, luxury feel
+- Generous white space
+- Duration: {{duration}} seconds
+- Aspect ratio: 16:9`
+            },
+            tech: {
+                name: '科技未来',
+                template: `Create a futuristic tech-style brand promotional video.
+Brand: {{brandName}}
+Brand Story: {{brandStory}}
+Products/Services: {{productIntro}}
+
+Style Requirements:
+- Cyberpunk/futuristic aesthetic
+- Dark backgrounds with neon accents
+- Holographic elements
+- Digital/grid patterns
+- High-tech atmosphere
+- Duration: {{duration}} seconds
+- Aspect ratio: 16:9`
+            },
+            nature: {
+                name: '自然清新',
+                template: `Create a fresh, natural brand promotional video.
+Brand: {{brandName}}
+Brand Story: {{brandStory}}
+Products/Services: {{productIntro}}
+
+Style Requirements:
+- Natural, organic feel
+- Green and earth tones
+- Outdoor/lifestyle settings
+- Clean air and sunlight
+- Eco-friendly messaging
+- Duration: {{duration}} seconds
+- Aspect ratio: 16:9`
+            }
+        };
+
+        // 状态
+        let state = {
+            brandName: '',
+            brandStory: '',
+            productIntro: '',
+            material: null,
+            style: 'corporate',
+            duration: '15',
+            resolution: '720p',
+            isGenerating: false,
+            generatedVideo: null
+        };
+
+        // 品牌信息监听
+        ['brandName', 'brandStory', 'productIntro'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', (e) => {
+                state[id] = e.target.value;
+                updatePromptPreview();
+            });
+        });
+
+        function handleMaterialUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state.material = e.target.result;
+                const preview = document.getElementById('uploadPreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('uploadPlaceholder').style.display = 'none';
+                showToast('素材上传成功', 'success');
+                updatePromptPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function selectStyle(element) {
+            document.querySelectorAll('.video-style-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            state.style = element.dataset.style;
+            updatePromptPreview();
+        }
+
+        function selectDuration(element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.param-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            state.duration = element.dataset.duration;
+        }
+
+        function selectResolution(element) {
+            const parent = element.parentElement;
+            parent.querySelectorAll('.param-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            state.resolution = element.dataset.resolution;
+        }
+
+        function updatePromptPreview() {
+            const previewEl = document.getElementById('promptPreview');
+            if (!state.brandName) {
+                previewEl.textContent = '请填写品牌名称，系统将自动生成视频生成提示词...';
+                return;
+            }
+
+            const template = VIDEO_STYLE_PROMPTS[state.style];
+            let prompt = template.template
+                .replace(/{{brandName}}/g, state.brandName || '')
+                .replace(/{{brandStory}}/g, state.brandStory || '')
+                .replace(/{{productIntro}}/g, state.productIntro || '')
+                .replace(/{{duration}}/g, state.duration);
+
+            previewEl.textContent = `[风格: ${template.name}]\n\n${prompt}`;
+        }
+
+        async function generateVideo() {
+            if (!state.brandName) {
+                showToast('请填写品牌名称', 'error');
+                return;
+            }
+
+            if (state.isGenerating) return;
+
+            const currentCredits = parseInt(document.getElementById('creditAmount').textContent.replace(/,/g, ''));
+            if (currentCredits < CONFIG.COST) {
+                showToast('积分不足，请充值后再试', 'error');
+                return;
+            }
+
+            state.isGenerating = true;
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('generateBtn').textContent = '生成中...';
+
+            // 显示进度
+            document.getElementById('resultPlaceholder').style.display = 'none';
+            document.getElementById('resultDisplay').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+
+            // 模拟进度
+            const steps = [
+                { id: 'step1', icon: 'icon1' },
+                { id: 'step2', icon: 'icon2' },
+                { id: 'step3', icon: 'icon3' },
+                { id: 'step4', icon: 'icon4' }
+            ];
+
+            for (let i = 0; i < steps.length; i++) {
+                await animateStep(steps[i].id, steps[i].icon, i > 0 ? steps[i-1].icon : null);
+                await new Promise(resolve => setTimeout(resolve, 3000));
+            }
+
+            // 完成后显示结果
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            showResult();
+            deductCredits(CONFIG.COST);
+            state.isGenerating = false;
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('generateBtn').innerHTML = '<span>🎬</span><span>生成品宣视频</span><span style="font-size: 14px; opacity: 0.8;">（消耗 15 积分）</span>';
+        }
+
+        async function animateStep(stepId, iconId, prevIconId) {
+            if (prevIconId) {
+                document.getElementById(prevIconId).classList.remove('active');
+                document.getElementById(prevIconId).classList.add('completed');
+                document.getElementById(prevIconId).textContent = '✓';
+            }
+            document.getElementById(iconId).classList.add('active');
+        }
+
+        function showResult() {
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('resultDisplay').style.display = 'block';
+            document.getElementById('videoDuration').textContent = state.duration + '秒';
+            document.getElementById('videoResolution').textContent = state.resolution === '720p' ? '720P' : '1080P';
+
+            // 模拟视频URL（实际使用时替换为真实API返回）
+            // state.generatedVideo = '实际视频URL';
+            // document.getElementById('resultVideo').src = state.generatedVideo;
+
+            // 暂时显示提示
+            showToast('🎬 品宣视频生成功能开发中，API对接后可正常使用', 'warning');
+        }
+
+        function deductCredits(amount) {
+            const creditEl = document.getElementById('creditAmount');
+            const current = parseInt(creditEl.textContent.replace(/,/g, ''));
+            creditEl.textContent = (current - amount).toLocaleString();
+        }
+
+        function downloadVideo() {
+            if (!state.generatedVideo) {
+                showToast('视频生成中，请稍候...', 'warning');
+                return;
+            }
+            // 实际下载逻辑
+        }
+
+        function shareVideo() {
+            showToast('分享功能开发中', 'warning');
+        }
+
+        function regenerate() {
+            generateVideo();
+        }
+
+        function goBack() {
+            window.location.href = 'ai-workbench-20260415_162800.html';
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<span>${type === 'success' ? '✅' : '❌'}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', updatePromptPreview);
+    </script>
+</body>
+</html>

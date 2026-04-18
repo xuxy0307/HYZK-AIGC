@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爆款主图生成 - 华阳智瞰</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: rgba(148, 163, 184, 0.2);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* 动态背景 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+            animation: bgPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* 顶部导航 */
+        .header {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .credit-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .credit-display span:first-child {
+            font-size: 18px;
+        }
+
+        /* 主内容区 */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* 左侧：输入区 */
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* 图片上传 */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-area.has-image {
+            padding: 0;
+            border-style: solid;
+        }
+
+        .upload-area input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+        }
+
+        .upload-placeholder .icon {
+            font-size: 48px;
+            opacity: 0.6;
+        }
+
+        .upload-preview {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .upload-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .upload-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .upload-action-btn:hover {
+            background: rgba(239, 68, 68, 0.8);
+        }
+
+        /* 表单元素 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-label .optional {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* 参数选择 */
+        .param-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .param-option {
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .param-option:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .param-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .param-option .label {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .param-option .desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* 风格选择 */
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .style-option {
+            padding: 16px 12px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .style-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .style-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .style-option .emoji {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .style-option .name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* 生成按钮 */
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .generate-btn .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 右侧：结果区 */
+        .result-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .result-placeholder {
+            flex: 1;
+            min-height: 500px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-placeholder .icon {
+            font-size: 80px;
+            opacity: 0.4;
+        }
+
+        .result-placeholder h3 {
+            color: var(--text-primary);
+            font-size: 20px;
+        }
+
+        .result-placeholder p {
+            max-width: 300px;
+            line-height: 1.6;
+        }
+
+        /* 生成结果展示 */
+        .result-display {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .result-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .result-action-btn {
+            padding: 8px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .result-action-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .result-image-container {
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .result-image {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-info {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .result-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .result-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-info-item .label {
+            color: var(--text-secondary);
+        }
+
+        /* 生成进度 */
+        .progress-container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: rgba(148, 163, 184, 0.2);
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#progressGradient);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .progress-status {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .progress-detail {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* 提示词预览 */
+        .prompt-preview {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .prompt-preview-title {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .prompt-preview-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Toast提示 */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 14px 24px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--error);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- SVG渐变定义 -->
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#6366f1"/>
+                <stop offset="100%" style="stop-color:#8b5cf6"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="goBack()">
+                <span>←</span>
+                <span>返回工作台</span>
+            </button>
+            <h1 class="header-title">🛒 爆款主图生成</h1>
+        </div>
+        <div class="header-right">
+            <div class="credit-display">
+                <span>💎</span>
+                <span id="creditAmount">2,580</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="main-container">
+        <!-- 左侧：输入区 -->
+        <section class="input-section">
+            <!-- 产品图片上传 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">📷</div>
+                    <span>产品图片</span>
+                </div>
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('productImage').click()">
+                    <input type="file" id="productImage" accept="image/*" onchange="handleImageUpload(event)">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <span class="icon">📤</span>
+                        <p>点击或拖拽上传产品图片</p>
+                        <p style="font-size: 13px; opacity: 0.7;">支持 JPG、PNG 格式，建议尺寸 800x800 以上</p>
+                    </div>
+                    <img class="upload-preview" id="uploadPreview" style="display: none;">
+                    <div class="upload-actions" id="uploadActions" style="display: none;">
+                        <button class="upload-action-btn" onclick="event.stopPropagation(); removeImage()" title="删除">🗑️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 产品信息 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">📝</div>
+                    <span>产品信息</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">产品名称 <span class="optional">（可选）</span></label>
+                    <input type="text" class="form-input" id="productName" placeholder="例如：无线蓝牙耳机">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">产品卖点 <span class="optional">（可选）</span></label>
+                    <textarea class="form-textarea" id="productSellingPoints" placeholder="例如：降噪功能、超长续航、高清音质..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">目标人群 <span class="optional">（可选）</span></label>
+                    <input type="text" class="form-input" id="targetAudience" placeholder="例如：年轻白领、运动爱好者、学生党...">
+                </div>
+            </div>
+
+            <!-- 图片参数 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">⚙️</div>
+                    <span>图片参数</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">图片比例</label>
+                    <div class="param-grid">
+                        <div class="param-option selected" data-ratio="1:1" onclick="selectRatio(this)">
+                            <div class="label">1:1</div>
+                            <div class="desc">正方形</div>
+                        </div>
+                        <div class="param-option" data-ratio="3:4" onclick="selectRatio(this)">
+                            <div class="label">3:4</div>
+                            <div class="desc">竖版</div>
+                        </div>
+                        <div class="param-option" data-ratio="4:3" onclick="selectRatio(this)">
+                            <div class="label">4:3</div>
+                            <div class="desc">横版</div>
+                        </div>
+                        <div class="param-option" data-ratio="16:9" onclick="selectRatio(this)">
+                            <div class="label">16:9</div>
+                            <div class="desc">宽屏</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 风格选择 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">🎨</div>
+                    <span>主图风格</span>
+                </div>
+                <div class="style-grid">
+                    <div class="style-option selected" data-style="clean" onclick="selectStyle(this)">
+                        <div class="emoji">✨</div>
+                        <div class="name">简约干净</div>
+                    </div>
+                    <div class="style-option" data-style="luxury" onclick="selectStyle(this)">
+                        <div class="emoji">💎</div>
+                        <div class="name">高端奢华</div>
+                    </div>
+                    <div class="style-option" data-style="lifestyle" onclick="selectStyle(this)">
+                        <div class="emoji">🏠</div>
+                        <div class="name">生活场景</div>
+                    </div>
+                    <div class="style-option" data-style="tech" onclick="selectStyle(this)">
+                        <div class="emoji">🔮</div>
+                        <div class="name">科技未来</div>
+                    </div>
+                    <div class="style-option" data-style="cute" onclick="selectStyle(this)">
+                        <div class="emoji">🌸</div>
+                        <div class="name">可爱萌系</div>
+                    </div>
+                    <div class="style-option" data-style="premium" onclick="selectStyle(this)">
+                        <div class="emoji">🎁</div>
+                        <div class="name">礼盒包装</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 提示词预览 -->
+            <div class="section-card">
+                <div class="section-title">
+                    <div class="icon">🔍</div>
+                    <span>生成提示词预览</span>
+                </div>
+                <div class="prompt-preview">
+                    <div class="prompt-preview-title">AI将使用以下提示词生成</div>
+                    <div class="prompt-preview-content" id="promptPreview">
+                        请上传产品图片，系统将自动生成优化后的电商主图...
+                    </div>
+                </div>
+            </div>
+
+            <!-- 生成按钮 -->
+            <button class="generate-btn" id="generateBtn" onclick="generateMainImage()">
+                <span>⚡</span>
+                <span>一键生成爆款主图</span>
+                <span style="font-size: 14px; opacity: 0.8;">（消耗 5 积分）</span>
+            </button>
+        </section>
+
+        <!-- 右侧：结果区 -->
+        <section class="result-section">
+            <!-- 初始状态 -->
+            <div class="result-placeholder" id="resultPlaceholder">
+                <span class="icon">🎨</span>
+                <h3>准备生成您的主图</h3>
+                <p>在左侧上传产品图片并选择参数后，点击"一键生成"按钮，AI将为您创建高点击率的电商主图</p>
+            </div>
+
+            <!-- 生成进度 -->
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-ring">
+                    <svg width="120" height="120">
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="45"/>
+                        <circle class="progress-ring-fill" id="progressRing" cx="60" cy="60" r="45"/>
+                    </svg>
+                    <div class="progress-text" id="progressText">0%</div>
+                </div>
+                <div class="progress-status" id="progressStatus">正在分析产品...</div>
+                <div class="progress-detail" id="progressDetail">预计剩余时间：约 30 秒</div>
+            </div>
+
+            <!-- 生成结果 -->
+            <div class="result-display" id="resultDisplay" style="display: none;">
+                <div class="result-header">
+                    <span class="result-title">✨ 生成结果</span>
+                    <div class="result-actions">
+                        <button class="result-action-btn" onclick="downloadResult()">
+                            <span>⬇️</span>
+                            <span>下载</span>
+                        </button>
+                        <button class="result-action-btn" onclick="regenerate()">
+                            <span>🔄</span>
+                            <span>重新生成</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="result-image-container">
+                    <img class="result-image" id="resultImage" src="" alt="生成的主图">
+                </div>
+                <div class="result-info">
+                    <div class="result-info-item">
+                        <span class="label">生成时间</span>
+                        <span id="resultTime">--</span>
+                    </div>
+                    <div class="result-info-item">
+                        <span class="label">使用模型</span>
+                        <span>banana2</span>
+                    </div>
+                    <div class="result-info-item">
+                        <span class="label">消耗积分</span>
+                        <span>5</span>
+                    </div>
+                    <div class="result-info-item">
+                        <span class="label">图片尺寸</span>
+                        <span id="resultSize">1024x1024</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast容器 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ==================== 配置 ====================
+        const CONFIG = {
+            // 中转API配置 - 请替换为你的API地址
+            API_BASE_URL: 'https://your-api-proxy.com',
+            API_KEY: 'your-api-key-here',
+            // 固定使用banana2模型
+            MODEL: 'banana2',
+            CHANNEL: 'channel1',
+            // 生成成本
+            COST: 5
+        };
+
+        // ==================== 内置提示词模板 ====================
+        const PROMPT_TEMPLATES = {
+            clean: {
+                name: '简约干净',
+                template: `Create a clean and minimalist e-commerce product main image.
+Product: {{productName}}
+Selling points: {{sellingPoints}}
+Target audience: {{targetAudience}}
+
+Requirements:
+- Clean white or light gradient background
+- Professional product photography style
+- Soft, even lighting with subtle shadows
+- Minimal text elements, focus on product
+- High-end, premium feel
+- Centered composition with breathing space
+- Sharp focus on product details
+- Aspect ratio: {{ratio}}`,
+                negativePrompt: 'cluttered background, busy composition, harsh shadows, low quality, blurry, distorted, text overlay, watermark, multiple products'
+            },
+            luxury: {
+                name: '高端奢华',
+                template: `Create a luxury high-end e-commerce product main image.
+Product: {{productName}}
+Selling points: {{sellingPoints}}
+Target audience: {{targetAudience}}
+
+Requirements:
+- Dark, sophisticated background (black, deep blue, or gold tones)
+- Dramatic lighting with highlights
+- Premium, expensive look and feel
+- Elegant reflections and shadows
+- Gold or silver accent elements
+- Cinematic composition
+- Ultra-high quality rendering
+- Aspect ratio: {{ratio}}`,
+                negativePrompt: 'cheap look, plastic appearance, bright colors, cartoon style, simple background, flat lighting, low resolution'
+            },
+            lifestyle: {
+                name: '生活场景',
+                template: `Create a lifestyle e-commerce product main image showing product in use.
+Product: {{productName}}
+Selling points: {{sellingPoints}}
+Target audience: {{targetAudience}}
+
+Requirements:
+- Realistic lifestyle scene/setting
+- Natural lighting (window light or soft ambient)
+- Product in context of use
+- Warm, inviting atmosphere
+- Home or outdoor environment
+- Authentic, relatable scene
+- Professional photography quality
+- Aspect ratio: {{ratio}}`,
+                negativePrompt: 'studio background, isolated product, artificial lighting, plain backdrop, stock photo look, fake environment'
+            },
+            tech: {
+                name: '科技未来',
+                template: `Create a futuristic tech-style e-commerce product main image.
+Product: {{productName}}
+Selling points: {{sellingPoints}}
+Target audience: {{targetAudience}}
+
+Requirements:
+- Dark background with neon/LED accents
+- Holographic or glowing effects
+- Cyberpunk or sci-fi aesthetic
+- Geometric patterns or tech grid
+- Blue, cyan, or purple color scheme
+- High-tech atmosphere
+- Dynamic composition with energy
+- Aspect ratio: {{ratio}}`,
+                negativePrompt: 'natural setting, organic shapes, warm colors, vintage style, soft lighting, traditional background'
+            },
+            cute: {
+                name: '可爱萌系',
+                template: `Create a cute, kawaii-style e-commerce product main image.
+Product: {{productName}}
+Selling points: {{sellingPoints}}
+Target audience: {{targetAudience}}
+
+Requirements:
+- Pastel color palette (pink, mint, lavender)
+- Soft, dreamy background
+- Cute decorative elements (hearts, stars, sparkles)
+- Friendly, approachable vibe
+- Playful composition
+- Soft focus background with bokeh
+- Youthful, fun aesthetic
+- Aspect ratio: {{ratio}}`,
+                negativePrompt: 'dark colors, serious tone, professional corporate style, harsh lighting, complex background, masculine design'
+            },
+            premium: {
+                name: '礼盒包装',
+                template: `Create a premium gift box style e-commerce product main image.
+Product: {{productName}}
+Selling points: {{sellingPoints}}
+Target audience: {{targetAudience}}
+
+Requirements:
+- Elegant gift packaging presentation
+- Ribbon, bow, or gift wrapping elements
+- Festive or celebration atmosphere
+- Rich, warm color tones
+- Unboxing experience feel
+- Premium packaging materials visible
+- Gift-ready presentation
+- Aspect ratio: {{ratio}}`,
+                negativePrompt: 'plain packaging, no decoration, industrial look, minimal packaging, damaged box, cheap materials'
+            }
+        };
+
+        // ==================== 状态管理 ====================
+        let currentState = {
+            uploadedImage: null,
+            selectedRatio: '1:1',
+            selectedStyle: 'clean',
+            isGenerating: false,
+            generatedImage: null
+        };
+
+        // ==================== 图片上传 ====================
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showToast('请上传图片文件', 'error');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showToast('图片大小不能超过10MB', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                currentState.uploadedImage = e.target.result;
+                document.getElementById('uploadPreview').src = e.target.result;
+                document.getElementById('uploadPreview').style.display = 'block';
+                document.getElementById('uploadPlaceholder').style.display = 'none';
+                document.getElementById('uploadActions').style.display = 'flex';
+                document.getElementById('uploadArea').classList.add('has-image');
+                
+                updatePromptPreview();
+                showToast('图片上传成功', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            currentState.uploadedImage = null;
+            document.getElementById('productImage').value = '';
+            document.getElementById('uploadPreview').style.display = 'none';
+            document.getElementById('uploadPlaceholder').style.display = 'flex';
+            document.getElementById('uploadActions').style.display = 'none';
+            document.getElementById('uploadArea').classList.remove('has-image');
+            updatePromptPreview();
+        }
+
+        // ==================== 参数选择 ====================
+        function selectRatio(element) {
+            document.querySelectorAll('.param-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            currentState.selectedRatio = element.dataset.ratio;
+            updatePromptPreview();
+        }
+
+        function selectStyle(element) {
+            document.querySelectorAll('.style-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            currentState.selectedStyle = element.dataset.style;
+            updatePromptPreview();
+        }
+
+        // ==================== 提示词生成 ====================
+        function generatePrompt() {
+            const template = PROMPT_TEMPLATES[currentState.selectedStyle];
+            const productName = document.getElementById('productName').value || '产品';
+            const sellingPoints = document.getElementById('productSellingPoints').value || '优质产品';
+            const targetAudience = document.getElementById('targetAudience').value || '广大消费者';
+
+            let prompt = template.template
+                .replace(/{{productName}}/g, productName)
+                .replace(/{{sellingPoints}}/g, sellingPoints)
+                .replace(/{{targetAudience}}/g, targetAudience)
+                .replace(/{{ratio}}/g, currentState.selectedRatio);
+
+            return {
+                prompt: prompt,
+                negativePrompt: template.negativePrompt,
+                style: template.name
+            };
+        }
+
+        function updatePromptPreview() {
+            const previewEl = document.getElementById('promptPreview');
+            if (!currentState.uploadedImage) {
+                previewEl.textContent = '请上传产品图片，系统将自动生成优化后的电商主图...';
+                return;
+            }
+
+            const promptData = generatePrompt();
+            previewEl.textContent = `[风格: ${promptData.style}]\n\n${promptData.prompt}`;
+        }
+
+        // 监听输入变化
+        ['productName', 'productSellingPoints', 'targetAudience'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', updatePromptPreview);
+        });
+
+        // ==================== 生成主图 ====================
+        async function generateMainImage() {
+            // 验证
+            if (!currentState.uploadedImage) {
+                showToast('请先上传产品图片', 'error');
+                return;
+            }
+
+            if (currentState.isGenerating) {
+                showToast('正在生成中，请稍候...', 'warning');
+                return;
+            }
+
+            // 检查积分（模拟）
+            const currentCredits = parseInt(document.getElementById('creditAmount').textContent.replace(/,/g, ''));
+            if (currentCredits < CONFIG.COST) {
+                showToast('积分不足，请充值后再试', 'error');
+                return;
+            }
+
+            // 开始生成
+            currentState.isGenerating = true;
+            setGenerateButtonState(true);
+
+            // 隐藏占位符，显示进度
+            document.getElementById('resultPlaceholder').style.display = 'none';
+            document.getElementById('resultDisplay').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+
+            // 模拟进度
+            const progressSteps = [
+                { percent: 15, status: '正在分析产品特征...', detail: '识别产品类型和卖点' },
+                { percent: 35, status: '正在优化提示词...', detail: '结合风格模板生成专业描述' },
+                { percent: 55, status: 'AI正在创作主图...', detail: '使用 banana2 模型生成' },
+                { percent: 75, status: '正在优化细节...', detail: '提升画质和视觉效果' },
+                { percent: 95, status: '正在完成...', detail: '准备展示结果' }
+            ];
+
+            let currentStep = 0;
+            
+            const updateProgress = () => {
+                if (currentStep < progressSteps.length) {
+                    const step = progressSteps[currentStep];
+                    setProgress(step.percent, step.status, step.detail);
+                    currentStep++;
+                    setTimeout(updateProgress, 1500);
+                }
+            };
+            
+            updateProgress();
+
+            try {
+                // 准备请求数据
+                const promptData = generatePrompt();
+                const requestData = {
+                    model: CONFIG.MODEL,
+                    prompt: promptData.prompt,
+                    negativePrompt: promptData.negativePrompt,
+                    image: currentState.uploadedImage,
+                    ratio: currentState.selectedRatio,
+                    style: currentState.selectedStyle
+                };
+
+                // 调用API（这里使用模拟，实际使用时替换为真实API调用）
+                const result = await callGenerationAPI(requestData);
+
+                // 完成
+                setProgress(100, '生成完成！', '');
+                
+                setTimeout(() => {
+                    showResult(result);
+                    deductCredits(CONFIG.COST);
+                    currentState.isGenerating = false;
+                    setGenerateButtonState(false);
+                }, 500);
+
+            } catch (error) {
+                console.error('生成失败:', error);
+                showToast('生成失败：' + error.message, 'error');
+                currentState.isGenerating = false;
+                setGenerateButtonState(false);
+                document.getElementById('progressContainer').style.display = 'none';
+                document.getElementById('resultPlaceholder').style.display = 'flex';
+            }
+        }
+
+        // ==================== API调用 ====================
+        async function callGenerationAPI(data) {
+            // TODO: 替换为实际的中转API调用
+            // 示例代码：
+            /*
+            const response = await fetch(`${CONFIG.API_BASE_URL}/api/image/generate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${CONFIG.API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: data.model,
+                    prompt: data.prompt,
+                    negative_prompt: data.negativePrompt,
+                    image: data.image, // base64
+                    width: getWidthFromRatio(data.ratio),
+                    height: getHeightFromRatio(data.ratio)
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('API请求失败');
+            }
+
+            const result = await response.json();
+            return result.image_url;
+            */
+
+            // 模拟API调用（开发测试用）
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // 返回模拟图片URL（实际使用时替换为真实结果）
+                    resolve('https://via.placeholder.com/1024x1024/6366f1/ffffff?text=Generated+Main+Image');
+                }, 8000);
+            });
+        }
+
+        function getWidthFromRatio(ratio) {
+            const ratios = {
+                '1:1': 1024,
+                '3:4': 768,
+                '4:3': 1024,
+                '16:9': 1024
+            };
+            return ratios[ratio] || 1024;
+        }
+
+        function getHeightFromRatio(ratio) {
+            const ratios = {
+                '1:1': 1024,
+                '3:4': 1024,
+                '4:3': 768,
+                '16:9': 576
+            };
+            return ratios[ratio] || 1024;
+        }
+
+        // ==================== 结果显示 ====================
+        function showResult(imageUrl) {
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('resultDisplay').style.display = 'block';
+            document.getElementById('resultImage').src = imageUrl;
+            document.getElementById('resultTime').textContent = new Date().toLocaleString('zh-CN');
+            document.getElementById('resultSize').textContent = getSizeFromRatio(currentState.selectedRatio);
+            
+            currentState.generatedImage = imageUrl;
+            showToast('✨ 主图生成成功！', 'success');
+        }
+
+        function getSizeFromRatio(ratio) {
+            const sizes = {
+                '1:1': '1024x1024',
+                '3:4': '768x1024',
+                '4:3': '1024x768',
+                '16:9': '1024x576'
+            };
+            return sizes[ratio] || '1024x1024';
+        }
+
+        // ==================== 进度控制 ====================
+        function setProgress(percent, status, detail) {
+            const ring = document.getElementById('progressRing');
+            const text = document.getElementById('progressText');
+            const statusEl = document.getElementById('progressStatus');
+            const detailEl = document.getElementById('progressDetail');
+
+            const circumference = 2 * Math.PI * 45;
+            const offset = circumference - (percent / 100) * circumference;
+            
+            ring.style.strokeDashoffset = offset;
+            text.textContent = percent + '%';
+            statusEl.textContent = status;
+            detailEl.textContent = detail;
+        }
+
+        // ==================== 按钮状态 ====================
+        function setGenerateButtonState(loading) {
+            const btn = document.getElementById('generateBtn');
+            if (loading) {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="spinner"></div><span>正在生成中...</span>';
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = '<span>⚡</span><span>一键生成爆款主图</span><span style="font-size: 14px; opacity: 0.8;">（消耗 5 积分）</span>';
+            }
+        }
+
+        // ==================== 积分管理 ====================
+        function deductCredits(amount) {
+            const creditEl = document.getElementById('creditAmount');
+            const current = parseInt(creditEl.textContent.replace(/,/g, ''));
+            const newAmount = current - amount;
+            creditEl.textContent = newAmount.toLocaleString();
+        }
+
+        // ==================== 结果操作 ====================
+        function downloadResult() {
+            if (!currentState.generatedImage) return;
+            
+            const link = document.createElement('a');
+            link.href = currentState.generatedImage;
+            link.download = `main-image-${Date.now()}.png`;
+            link.click();
+            
+            showToast('图片下载已开始', 'success');
+        }
+
+        function regenerate() {
+            generateMainImage();
+        }
+
+        // ==================== 导航 ====================
+        function goBack() {
+            // 返回主工作台
+            window.location.href = 'ai-workbench-20260415_162800.html';
+        }
+
+        // ==================== Toast提示 ====================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ==================== 拖拽上传 ====================
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--primary)';
+            uploadArea.style.background = 'rgba(99, 102, 241, 0.1)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            if (!currentState.uploadedImage) {
+                uploadArea.style.borderColor = '';
+                uploadArea.style.background = '';
+            }
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '';
+            uploadArea.style.background = '';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const input = document.getElementById('productImage');
+                input.files = files;
+                handleImageUpload({ target: input });
+            }
+        });
+
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePromptPreview();
+            console.log('🛒 爆款主图生成器已加载');
+            console.log('📋 可用风格模板:', Object.keys(PROMPT_TEMPLATES));
+        });
+    </script>
+</body>
+</html>
