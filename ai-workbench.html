@@ -1588,22 +1588,22 @@
             
             <div class="input-group">
                 <label>用户名</label>
-                <input type="text" id="username" placeholder="请输入用户名" value="test">
+                <input type="text" id="username" placeholder="请输入用户名">
             </div>
             
             <div class="input-group">
                 <label>密码</label>
-                <input type="password" id="password" placeholder="请输入密码" value="test123">
+                <input type="password" id="password" placeholder="请输入密码">
+            </div>
+            
+            <div class="input-group">
+                <label>邀请码 <span style="color: var(--error);">*</span> <small style="color: var(--text-secondary);">(首次注册需要)</small></label>
+                <input type="text" id="inviteCode" placeholder="请输入邀请码">
             </div>
             
             <button class="login-btn" onclick="handleLogin()">
-                <span>🚀</span> 立即登录
+                <span>🚀</span> 登录 / 注册
             </button>
-            
-            <div class="login-hint">
-                <div class="login-hint-title">🔑 测试账号</div>
-                <div class="login-hint-text">用户名：test | 密码：test123</div>
-            </div>
         </div>
     </div>
 
@@ -1643,26 +1643,6 @@
                     <span class="nav-icon">🌟</span>
                     <span>创意工具箱</span>
                     <span class="nav-badge">NEW</span>
-                </div>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-section-title">快捷入口</div>
-                <div class="nav-item" onclick="openEcommerceTool('video-replica.html')">
-                    <span class="nav-icon">🔥</span>
-                    <span>爆款视频复刻</span>
-                </div>
-                <div class="nav-item" onclick="openEcommerceTool('emotional-video.html')">
-                    <span class="nav-icon">💕</span>
-                    <span>情感视频生产</span>
-                </div>
-                <div class="nav-item" onclick="openEcommerceTool('comic-drama.html')">
-                    <span class="nav-icon">🎭</span>
-                    <span>漫剧一键生产</span>
-                </div>
-                <div class="nav-item" onclick="openEcommerceTool('watermark-remover.html')">
-                    <span class="nav-icon">💧</span>
-                    <span>一键去水印</span>
                 </div>
             </div>
 
@@ -1729,9 +1709,9 @@
                             <label>选择渠道</label>
                             <div class="custom-select">
                                 <select id="channelSelect" onchange="updateChannelAndPrice()">
+                                    <option value="channel3" selected>渠道3 - 经济版</option>
                                     <option value="channel1">渠道1 - 标准版</option>
                                     <option value="channel2">渠道2 - 专业版</option>
-                                    <option value="channel3">渠道3 - 经济版</option>
                                 </select>
                                 <span class="select-arrow">▼</span>
                             </div>
@@ -1922,7 +1902,7 @@
                         <div class="feature-title-group">
                             <h3>
                                 AI图片创作
-                                <span class="cost-badge premium" id="imagePriceBadge">💎 5积分/次</span>
+                                <span class="cost-badge premium" id="imagePriceBadge">💎 3积分/次</span>
                             </h3>
                             <p class="feature-desc">集成Doubao-Image等模型，支持多种艺术风格，可调节比例和风格</p>
                         </div>
@@ -1987,7 +1967,7 @@
                         <div class="feature-title-group">
                             <h3>
                                 AI视频创作
-                                <span class="cost-badge premium" id="videoPriceBadge">💎 10积分/次</span>
+                                <span class="cost-badge premium" id="videoPriceBadge">💎 5积分/次</span>
                             </h3>
                             <p class="feature-desc">基于Doubao-Seedance模型，文本生成高清视频，支持多种分辨率</p>
                         </div>
@@ -2125,8 +2105,8 @@
         // 用户数据
         let userData = {
             credits: 2580,
-            currentChannel: 'channel1',
-            currentModel: 'gpt-4',
+            currentChannel: 'channel3',
+            currentModel: 'gpt-5.4',
             isProcessing: false,
             uploadedFiles: [],
             // 历史任务日志
@@ -2145,8 +2125,8 @@
         const channelConfig = {
             channel1: {
                 name: '渠道1 - 标准版 (APIMart)',
-                textPrice: 1,
-                imagePrice: 5,
+                textPrice: 2,
+                imagePrice: 6,
                 videoPrice: 10,
                 apiKey: 'sk-jxRehKFvNWdK4AubjMKTVjyJJHHpUYAJLiipVYWyZ2ia0vrL',
                 baseUrl: 'https://api.apimart.ai/v1',
@@ -2239,9 +2219,9 @@
             },
             channel2: {
                 name: '渠道2 - 专业版 (火山方舟)',
-                textPrice: 1,
-                imagePrice: 3,
-                videoPrice: 5,
+                textPrice: 4,
+                imagePrice: 12,
+                videoPrice: 20,
                 apiKey: 'd426574e-2254-4af1-b429-3c91d68f9326',
                 baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
                 models: {
@@ -2274,6 +2254,9 @@
                 baseUrl: 'https://api.wenle.ai/v1',
                 models: {
                     text: [
+                        // GPT-5.4系列 - 默认模型，支持多模态
+                        { name: 'GPT-5.4', value: 'gpt-5.4', multimodal: true },
+                        { name: 'GPT-5.4 Mini', value: 'gpt-5.4-mini', multimodal: true },
                         // GPT系列 - 支持多模态
                         { name: 'GPT-4o', value: 'gpt-4o', multimodal: true },
                         { name: 'GPT-4o-mini', value: 'gpt-4o-mini', multimodal: true },
@@ -2281,8 +2264,6 @@
                         { name: 'GPT-5', value: 'gpt-5', multimodal: true },
                         { name: 'GPT-5 Mini', value: 'gpt-5-mini', multimodal: true },
                         { name: 'GPT-5 Nano', value: 'gpt-5-nano', multimodal: true },
-                        { name: 'GPT-5.4', value: 'gpt-5.4', multimodal: true },
-                        { name: 'GPT-5.4 Mini', value: 'gpt-5.4-mini', multimodal: true },
                         { name: 'GPT-5.1', value: 'gpt-5.1' },
                         { name: 'GPT-5.1 Chat Latest', value: 'gpt-5.1-chat-latest' },
                         { name: 'GPT-5 Chat Latest', value: 'gpt-5-chat-latest' },
@@ -2328,12 +2309,14 @@
                         { name: 'Kimi K2 正式版', value: 'kimi-k2-250711' }
                     ],
                     image: [
-                        // 图片生成模型
+                        // 图片生成模型 - banana2为默认
+                        { name: 'Banana 2', value: 'banana2' },
                         { name: 'GPT-Image-1', value: 'gpt-image-1' },
                         { name: 'Seedream 4.0', value: 'seedream-4-0-250828' }
                     ],
                     video: [
-                        // 视频生成模型
+                        // 视频生成模型 - grok-imagine-1.0为默认
+                        { name: 'Grok Imagine 1.0', value: 'grok-imagine-1.0' },
                         { name: 'Sora 2 竖屏', value: 'sora_video' },
                         { name: 'Sora 2 横屏', value: 'sora_video2-landscape' },
                         { name: 'Sora 2 Pro', value: 'sora-2-pro-all' }
@@ -2381,19 +2364,179 @@
             }
         };
 
-        // 登录处理
+        // 邀请码列表（100个）
+        const VALID_INVITE_CODES = [
+            "X7K9M2P4Q8", "B3N6V1C5X9", "H2J8K4L7M1", "T5R9E3W2Q6", "Y1U4I7O3P0",
+            "A6S2D5F8G3", "J9H7G4F2D8", "K1L6M3N8B5", "V4C7X2Z9Q1", "W5E8R3T6Y2",
+            "U9I1O4P7A3", "S6D2F5G8H4", "J7K9L3M6N1", "B5V8C2X4Z7", "Q1W6E3R9T2",
+            "Y4U7I0O5P8", "A3S9D2F6G1", "H8J5K7L4M2", "N6B3V9C1X5", "Z2Q8W4E7R3",
+            "T9Y6U3I1O7", "P4A8S2D5F9", "G1H7J4K6L3", "M9N2B5V8C4", "X7Z1Q6W3E8",
+            "R4T9Y2U5I0", "O7P3A6S9D2", "F5G8H1J4K7", "L3M6N9B2V5", "C8X4Z7Q1W6",
+            "E3R9T2Y5U8", "I1O7P4A3S9", "D6F2G5H8J1", "K4L7M3N6B9", "V2C5X8Z1Q4",
+            "W7E3R6T9Y2", "U5I8O1P7A4", "S9D2F6G3H7", "J1K4L8M5N2", "B6V9C3X7Z0",
+            "Q5W2E8R4T1", "Y9U6I3O7P2", "A5S8D1F4G7", "H3J6K9L2M5", "N8B1V4C7X3",
+            "Z6Q9W5E2R8", "T4Y7U0I3O6", "P9A2S5D8F1", "G4H7J1K6L9", "M3N6B9V2C5",
+            "X8Z1Q4W7E3", "R6T9Y2U5I8", "O1P7A4S3D9", "F2G5H8J1K4", "L7M3N6B9V2",
+            "C5X8Z1Q4W7", "E3R6T9Y2U5", "I8O1P7A4S3", "D9F2G5H8J1", "K4L7M3N6B9",
+            "V2C5X8Z1Q4", "W7E3R6T9Y2", "U5I8O1P7A4", "S3D9F2G5H8", "J1K4L7M3N6",
+            "B9V2C5X8Z1", "Q4W7E3R6T9", "Y2U5I8O1P7", "A4S3D9F2G5", "H8J1K4L7M3",
+            "N6B9V2C5X8", "Z1Q4W7E3R6", "T9Y2U5I8O1", "P7A4S3D9F2", "G5H8J1K4L7",
+            "M3N6B9V2C5", "X8Z1Q4W7E3", "R6T9Y2U5I8", "O1P7A4S3D9", "F2G5H8J1K4",
+            "L7M3N6B9V2", "C5X8Z1Q4W7", "E3R6T9Y2U5", "I8O1P7A4S3", "D9F2G5H8J1",
+            "K4L7M3N6B9", "V2C5X8Z1Q4", "W7E3R6T9Y2", "U5I8O1P7A4", "S3D9F2G5H8",
+            "J1K4L7M3N6", "B9V2C5X8Z1", "Q4W7E3R6T9", "Y2U5I8O1P7", "A4S3D9F2G5",
+            "H8J1K4L7M3", "N6B9V2C5X8", "Z1Q4W7E3R6", "T9Y2U5I8O1", "P7A4S3D9F2",
+            "G5H8J1K4L7", "M3N6B9V2C5", "X8Z1Q4W7E3"
+        ];
+        
+        // 已使用的邀请码（存储在localStorage中）
+        function getUsedInviteCodes() {
+            try {
+                return JSON.parse(localStorage.getItem('used_invite_codes') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+        
+        function markInviteCodeUsed(code) {
+            const used = getUsedInviteCodes();
+            if (!used.includes(code)) {
+                used.push(code);
+                localStorage.setItem('used_invite_codes', JSON.stringify(used));
+            }
+        }
+        
+        // 获取已注册用户列表
+        function getRegisteredUsers() {
+            try {
+                return JSON.parse(localStorage.getItem('registered_users') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+        
+        function saveRegisteredUsers(users) {
+            localStorage.setItem('registered_users', JSON.stringify(users));
+        }
+        
+        // 检查用户是否已存在
+        function isUserExists(username) {
+            const users = getRegisteredUsers();
+            return users.some(u => u.username === username);
+        }
+        
+        // 验证用户登录
+        function validateUser(username, password) {
+            const users = getRegisteredUsers();
+            const user = users.find(u => u.username === username);
+            return user && user.password === password;
+        }
+        
+        // 注册新用户
+        function registerUser(username, password, inviteCode) {
+            const users = getRegisteredUsers();
+            users.push({
+                username: username,
+                password: password,
+                inviteCode: inviteCode,
+                registerTime: new Date().toISOString()
+            });
+            saveRegisteredUsers(users);
+            // 标记邀请码已使用
+            markInviteCodeUsed(inviteCode);
+        }
+        
+        // 检查是否已有用户注册过（用于控制邀请码显示）
+        function hasAnyUserRegistered() {
+            return getRegisteredUsers().length > 0;
+        }
+        
+        // 根据注册状态显示/隐藏邀请码输入框
+        function updateInviteCodeVisibility() {
+            const inviteCodeGroup = document.getElementById('inviteCode')?.closest('.input-group');
+            if (inviteCodeGroup) {
+                if (hasAnyUserRegistered()) {
+                    inviteCodeGroup.style.display = 'none';
+                } else {
+                    inviteCodeGroup.style.display = 'block';
+                }
+            }
+        }
+        
+        // 登录/注册处理
         function handleLogin() {
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
+            const inviteCode = document.getElementById('inviteCode').value.trim().toUpperCase();
             
-            if (username === 'test' && password === 'test123') {
+            // 验证输入
+            if (!username) {
+                showToast('❌ 请输入用户名', 'error');
+                return;
+            }
+            if (!password) {
+                showToast('❌ 请输入密码', 'error');
+                return;
+            }
+            
+            // 检查用户是否已存在
+            const userExists = isUserExists(username);
+            
+            if (userExists) {
+                // 已存在，验证登录
+                if (validateUser(username, password)) {
+                    // 登录成功
+                    localStorage.setItem('current_user', username);
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('appContainer').style.display = 'block';
+                    showToast(`🎉 欢迎回来，${username}！`, 'success');
+                    updateModelSelect('text');
+                    // 更新用户显示
+                    updateUserDisplay(username);
+                } else {
+                    showToast('❌ 密码错误', 'error');
+                }
+            } else {
+                // 新用户注册，需要验证邀请码
+                if (!inviteCode) {
+                    showToast('❌ 首次注册需要输入邀请码', 'error');
+                    return;
+                }
+                
+                // 验证邀请码是否有效
+                if (!VALID_INVITE_CODES.includes(inviteCode)) {
+                    showToast('❌ 邀请码无效', 'error');
+                    return;
+                }
+                
+                // 验证邀请码是否已被使用
+                const usedCodes = getUsedInviteCodes();
+                if (usedCodes.includes(inviteCode)) {
+                    showToast('❌ 该邀请码已被使用', 'error');
+                    return;
+                }
+                
+                // 注册新用户
+                registerUser(username, password, inviteCode);
+                localStorage.setItem('current_user', username);
+                
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'block';
-                showToast('🎉 欢迎回来，Test User！', 'success');
+                showToast(`🎉 注册成功，欢迎 ${username}！`, 'success');
                 updateModelSelect('text');
-            } else {
-                showToast('❌ 用户名或密码错误，请使用 test / test123', 'error');
+                updateUserDisplay(username);
+                
+                // 隐藏邀请码输入框（已有用户注册）
+                updateInviteCodeVisibility();
             }
+        }
+        
+        // 更新页面上的用户显示
+        function updateUserDisplay(username) {
+            const userNameEl = document.querySelector('.user-name');
+            const userAvatarEl = document.querySelector('.user-avatar');
+            if (userNameEl) userNameEl.textContent = username;
+            if (userAvatarEl) userAvatarEl.textContent = username.charAt(0).toUpperCase();
         }
 
         // 退出登录
@@ -3033,9 +3176,65 @@
             renderModelPlaza(channelNum);
         }
 
+        // 热门工具专用API配置
+        const hotToolsConfig = {
+            // 文本和图像使用渠道3
+            channel: 'channel3',
+            channelName: '渠道3 - 经济版',
+            apiKey: 'sk-wcu5MMpIVS6PejN6rk3i6uKjQ1USl6JY5p5zJaeoJ61SHiPd',
+            baseUrl: 'https://api.wenle.ai/v1',
+            models: {
+                text: 'gpt-5.4',      // 文本模型
+                image: 'banana2',     // 图片模型
+                video: 'grok-imagine-1.0-video-apimart'   // 视频模型 (渠道1 - Grok Imagine 1.0)
+            },
+            prices: {
+                text: 1,      // 渠道3文本：1积分
+                image: 3,     // 渠道3图片：3积分
+                video: 5      // 渠道3视频：5积分
+            },
+            // 视频生成使用渠道1配置
+            videoChannel: {
+                channel: 'channel1',
+                channelName: '渠道1 - 标准版 (APIMart)',
+                apiKey: 'sk-jxRehKFvNWdK4AubjMKTVjyJJHHpUYAJLiipVYWyZ2ia0vrL',
+                baseUrl: 'https://api.apimart.ai/v1'
+            }
+        };
+
         // 打开电商工具页面
         function openEcommerceTool(pageUrl) {
-            window.open(pageUrl, '_blank');
+            // 根据页面URL判断工具类型，选择对应模型
+            let toolType = 'text';
+            let model = hotToolsConfig.models.text;
+            let cost = hotToolsConfig.prices.text;
+            
+            if (pageUrl.includes('image') || pageUrl.includes('watermark')) {
+                toolType = 'image';
+                model = hotToolsConfig.models.image;
+                cost = hotToolsConfig.prices.image;
+            } else if (pageUrl.includes('video') || pageUrl.includes('replica') || pageUrl.includes('emotional') || pageUrl.includes('drama')) {
+                toolType = 'video';
+                model = hotToolsConfig.models.video;
+                cost = hotToolsConfig.prices.video;
+            }
+            
+            // 构建带参数的URL
+            const separator = pageUrl.includes('?') ? '&' : '?';
+            
+            // 视频类工具使用渠道1配置
+            const isVideoTool = toolType === 'video';
+            const configParams = new URLSearchParams({
+                channel: isVideoTool ? hotToolsConfig.videoChannel.channel : hotToolsConfig.channel,
+                channel_name: isVideoTool ? hotToolsConfig.videoChannel.channelName : hotToolsConfig.channelName,
+                api_key: isVideoTool ? hotToolsConfig.videoChannel.apiKey : hotToolsConfig.apiKey,
+                base_url: isVideoTool ? hotToolsConfig.videoChannel.baseUrl : hotToolsConfig.baseUrl,
+                model: model,
+                type: toolType,
+                cost: cost
+            });
+            
+            window.open(pageUrl + separator + configParams.toString(), '_blank');
         }
 
         // 扣除积分
@@ -3709,10 +3908,11 @@
                 model: task.model,
                 channel: task.channel,
                 input: task.input,
-                output: '',
-                status: TaskStatus.PENDING,
+                output: task.output || '',
+                status: task.status || TaskStatus.PENDING,
                 cost: task.cost,
-                error: null
+                error: task.error || null,
+                videoUrl: task.videoUrl || null  // 视频URL用于预览
             };
             
             userData.taskLogs.unshift(log); // 添加到列表开头
@@ -3815,6 +4015,12 @@
                 
                 const preview = log.input.length > 60 ? log.input.substring(0, 60) + '...' : log.input;
                 
+                // 视频类型且有URL时显示预览按钮
+                const videoPreviewBtn = (log.type === 'video' && log.videoUrl) ? 
+                    `<button class="btn btn-primary" onclick="event.stopPropagation(); previewVideoFromLog('${log.videoUrl}')" style="margin-left: 10px; padding: 4px 12px; font-size: 12px;">
+                        <span>▶️</span> 预览视频
+                    </button>` : '';
+                
                 return `
                     <div class="log-item" data-id="${log.id}" onclick="toggleLogDetail(${log.id})">
                         <div class="log-header">
@@ -3822,6 +4028,7 @@
                                 <span class="log-icon">${typeIcon}</span>
                                 <span class="log-type">${getTypeName(log.type)}</span>
                                 <span class="log-model">${log.model}</span>
+                                ${videoPreviewBtn}
                             </div>
                             <div class="log-status ${log.status}">
                                 <span>${statusIcon}</span>
@@ -3914,6 +4121,20 @@
                                 </button>
                             </div>
                         ` : ''}
+                        ${log.videoUrl ? `
+                            <div class="detail-section">
+                                <div class="detail-label">🎬 视频预览</div>
+                                <div style="background: #000; border-radius: 8px; overflow: hidden; margin-top: 10px;">
+                                    <video controls style="width: 100%; max-height: 400px;" poster="">
+                                        <source src="${log.videoUrl}" type="video/mp4">
+                                        您的浏览器不支持视频播放
+                                    </video>
+                                </div>
+                                <button class="btn btn-primary" onclick="downloadVideoFromLog('${log.videoUrl}')" style="margin-top: 10px;">
+                                    <span>⬇️</span> 下载视频
+                                </button>
+                            </div>
+                        ` : ''}
                         ${log.error ? `
                             <div class="detail-section">
                                 <div class="detail-label">错误信息</div>
@@ -3953,6 +4174,57 @@
             }
         }
         
+        // 从历史日志预览视频
+        function previewVideoFromLog(videoUrl) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h3>🎬 视频预览</h3>
+                        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+                    </div>
+                    <div class="modal-body" style="padding: 0;">
+                        <div style="background: #000; border-radius: 0 0 8px 8px; overflow: hidden;">
+                            <video controls autoplay style="width: 100%; max-height: 70vh;" poster="">
+                                <source src="${videoUrl}" type="video/mp4">
+                                您的浏览器不支持视频播放
+                            </video>
+                        </div>
+                        <div style="padding: 15px; text-align: center;">
+                            <button class="btn btn-primary" onclick="downloadVideoFromLog('${videoUrl}')">
+                                <span>⬇️</span> 下载视频
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+        
+        // 从历史日志下载视频
+        async function downloadVideoFromLog(videoUrl) {
+            showToast('📥 开始下载视频...', 'success');
+            try {
+                const response = await fetch(videoUrl);
+                const blob = await response.blob();
+                const downloadUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = `视频_${new Date().getTime()}.mp4`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(downloadUrl);
+                showToast('✅ 下载已开始', 'success');
+            } catch (error) {
+                showToast('❌ 下载失败: ' + error.message, 'error');
+            }
+        }
+        
         // 清除所有日志
         function clearAllLogs() {
             if (confirm('确定要清除所有任务日志吗？此操作不可恢复。')) {
@@ -3983,7 +4255,21 @@
 
         // 回车登录
         document.addEventListener('DOMContentLoaded', () => {
+            // 根据注册状态更新邀请码输入框显示
+            updateInviteCodeVisibility();
+            
             document.getElementById('password')?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (!isUserRegistered()) {
+                        document.getElementById('inviteCode')?.focus();
+                    } else {
+                        handleLogin();
+                    }
+                }
+            });
+            
+            document.getElementById('inviteCode')?.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
             });
             
@@ -3992,14 +4278,4 @@
         });
     </script>
 </body>
-        // 回车登录
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('password')?.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') handleLogin();
-            });
-            
-            // 加载任务日志
-            loadTaskLogs();
-        });
-    </script>
 </html>
